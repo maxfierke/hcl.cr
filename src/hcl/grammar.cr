@@ -56,7 +56,7 @@ module HCL
     bool = t_true | t_false
 
     # Define what constitutes a value.
-    value = t_null | bool | number | string | array
+    value = t_null | bool | number | identifier | string | array
 
     # Define what an array is, in terms of zero or more values.
     values = value >> s >> (char(',') >> s >> value).repeat

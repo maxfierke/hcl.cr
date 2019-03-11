@@ -134,5 +134,41 @@ describe HCL::Parser do
         }
       ])
     end
+
+    it "can parse nested identifiers" do
+      hcl_string = <<-HEREDOC
+        resource "aws_instance" "web" {
+          ami = var.something.ami_id
+        }
+      HEREDOC
+
+      parser = HCL::Parser.new(hcl_string)
+      parser.values.should eq([
+        {
+          id: "resource",
+          args: ["aws_instance", "web"],
+          values: {
+            "ami" => {
+              id: "var.something.ami_id",
+              parts: [
+                {
+                  id: "var",
+                  parts: [] of HCL::Token::Identifier::Value
+                },
+                {
+                  id: "something",
+                  parts: [] of HCL::Token::Identifier::Value
+                },
+                {
+                  id: "ami_id",
+                  parts: [] of HCL::Token::Identifier::Value
+                }
+              ]
+            }
+          },
+          blocks: [] of HCL::SimpleType
+        }
+      ])
+    end
   end
 end

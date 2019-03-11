@@ -17,11 +17,12 @@ module HCL
     abstract def value
   end
 
-  alias SimpleType = Nil | Bool | Int64 | Float64 | ::String | Array(SimpleType)
+  alias SimpleType = Nil | Bool | Int64 | Float64 | ::String | Token::Identifier::Value | Array(SimpleType)
   alias SimpleToken =
     Token::False |
     Token::True |
     Token::String |
+    Token::Identifier |
     Token::Number |
     Token::Null |
     Token::List
