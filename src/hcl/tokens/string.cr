@@ -1,5 +1,5 @@
 module HCL
-  class Token::String < Token
+  class Token::String < ValueToken
     def value
       string
     end
