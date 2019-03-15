@@ -22,11 +22,15 @@ describe HCL::Parser do
       ])
     end
 
-    it "can parse floats" do
-      hcl_string = "provider \"foo\" {" \
-                 "foo = 0.1" \
-                 "bar = 1" \
-                 "}"
+    it "can parse numbers" do
+      hcl_string = <<-HCL
+        provider "foo" {
+          foo = 0.1
+          bar = 1
+          baz = "1234"
+          biz = "1234.56"
+        }
+      HCL
       parser = HCL::Parser.new(hcl_string)
 
       parser.values.should eq([
@@ -35,7 +39,9 @@ describe HCL::Parser do
           args: ["foo"],
           values: {
             "foo" => 0.1_f64,
-            "bar" => 1_i64
+            "bar" => 1_i64,
+            "baz" => 1234_i64,
+            "biz" => 1234.56_f64
           },
           blocks: [] of HCL::AST::BlockToken::Value
         }

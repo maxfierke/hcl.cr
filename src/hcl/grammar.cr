@@ -36,7 +36,9 @@ module HCL
       digit
     frac = char('.') >> digits
     exp = (char('e') | char('E')) >> (char('+') | char('-')).maybe >> digits
-    number = (int >> frac.maybe >> exp.maybe).named(:number)
+    numeric = int >> frac.maybe >> exp.maybe
+    numeric_str = char('"') >> numeric >> char('"')
+    number = (numeric | numeric_str).named(:number)
 
     # Define what a string looks like.
     hex = digit | range('a', 'f') | range('A', 'F')
