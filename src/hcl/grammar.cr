@@ -51,7 +51,7 @@ module HCL
 
     identifier = (
       (range('a', 'z') | range('A', 'Z') | char('_')) >>
-      (range('a', 'z') | range('A', 'Z') | digits | char('_') | char('-') | char('.')).repeat
+      (range('a', 'z') | range('A', 'Z') | digits | char('_') | char('.')).repeat
     ).named(:identifier)
 
     t_null = str("null").named(:null)
