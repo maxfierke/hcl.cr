@@ -1,5 +1,5 @@
 module HCL
-  class Token::Identifier < Token
+  class Token::Identifier < ValueToken
     @parts : Nil | Array(Identifier)
     @string_parts : Nil | Array(::String)
 

@@ -1,8 +1,9 @@
 module HCL
   Grammar = Pegmatite::DSL.define do
-    # Forward-declare `array` and `block` to refer to them before defining them.
-    array  = declare
+    # Forward-declare `block`, `list`, and `map` to refer to them before defining them.
     block = declare
+    list  = declare
+    map = declare
 
     comment_char = range(' ', 0x10FFFF_u32)
     comment = (
@@ -56,25 +57,34 @@ module HCL
     bool = t_true | t_false
 
     # Define what constitutes a value.
-    value = t_null | bool | number | identifier | string | array
+    value = t_null | bool | number | identifier | string | map | list
 
-    # Define what an array is, in terms of zero or more values.
+    # Define what an list is, in terms of zero or more values.
     values = value >> s >> (char(',') >> s >> value).repeat
-    array.define \
-      (char('[') >> s >> values.maybe >> s >> char(']')).named(:array)
+    list.define \
+      (char('[') >> s >> values.maybe >> s >> char(']')).named(:list)
 
     # Define what an object is, in terms of zero or more key/value pairs.
     pair = (identifier >> s >> char('=') >> s >> value).named(:assignment)
-    object_item = pair | block
-    object_list = object_item >> s >> (object_item >> s).repeat
-    block_body = (char('{') >> s >> object_list.maybe >> s >> char('}')).named(:block_body)
+
+    # An object with just a set of values is called a `map` in HCL
+    map.define \
+      (char('{') >> s >> pair.maybe >> s >> char('}')).named(:map)
+
+    block_item = pair | block
+    block_item_list = block_item >> s >> (block_item >> s).repeat
+
+    # If we've got both blocks and key-value pairs, it's a block body
+    block_body = (
+      char('{') >> s >> block_item_list.maybe >> s >> char('}')
+    ).named(:block_body)
 
     block_args = (string >> s).maybe.repeat.named(:block_args)
     block.define \
       (identifier >> s >> block_args >> block_body).named(:block)
     blocks = block >> s >> block.repeat
 
-    # An HCL document is an array or object with optional surrounding whitespace.
+    # An HCL document is an list or object with optional surrounding whitespace.
     (s >> blocks >> s).then_eof
   end
 end

@@ -1,6 +1,7 @@
 module HCL
-  class Token::Number < Token
-    @value : Float64? | Int64?
+  class Token::Number < ValueToken
+    alias Value = Nil | Float64 | Int64
+    @value : Value
 
     def value
       @value ||= if string.includes?('.')

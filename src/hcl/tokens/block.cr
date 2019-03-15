@@ -5,7 +5,7 @@ module HCL
     alias Value = NamedTuple(
       id: ::String,
       args: Array(::String),
-      values: Hash(::String, HCL::SimpleType),
+      values: Hash(::String, HCL::ValueType),
       blocks: Array(Value)
     )
 
@@ -14,7 +14,7 @@ module HCL
       string : ::String,
       id : ::String,
       args : Array(Token::String),
-      values : Hash(::String, HCL::SimpleToken),
+      values : Hash(::String, HCL::ValueToken),
       blocks : Array(Token::Block)
     )
       super(peg_tuple, string)
@@ -35,10 +35,10 @@ module HCL
     end
 
     private def values_dict
-      dict = {} of ::String => HCL::SimpleType
+      dict = {} of ::String => HCL::ValueType
 
       values.each do |key, value|
-        dict[key] = value.value.as(HCL::SimpleType)
+        dict[key] = value.value.as(HCL::ValueType)
       end
 
       dict

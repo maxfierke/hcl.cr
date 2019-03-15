@@ -1,5 +1,5 @@
 module HCL
-  class Token::True < Token
+  class Token::True < ValueToken
     STRING_VAL = "true"
 
     def initialize(peg_tuple : Pegmatite::Token)

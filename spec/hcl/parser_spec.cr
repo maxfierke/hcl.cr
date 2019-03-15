@@ -17,7 +17,7 @@ describe HCL::Parser do
           values: {
             "description" => "the AMI to use"
           },
-          blocks: [] of HCL::SimpleType
+          blocks: [] of HCL::ValueType
         }
       ])
     end
@@ -37,7 +37,7 @@ describe HCL::Parser do
             "foo" => 0.1_f64,
             "bar" => 1_i64
           },
-          blocks: [] of HCL::SimpleType
+          blocks: [] of HCL::ValueType
         }
       ])
     end
@@ -61,7 +61,64 @@ describe HCL::Parser do
             "another_boolean"   => true,
             "something_i_want_default" => nil
           },
-          blocks: [] of HCL::SimpleType
+          blocks: [] of HCL::ValueType
+        }
+      ])
+    end
+
+    it "can parse map values" do
+      hcl_string = <<-HCL
+        config "hello" {
+          yoo = "yes"
+          development = {
+            some_setting = true
+          }
+        }
+      HCL
+      parser = HCL::Parser.new(hcl_string)
+
+      parser.values.should eq([
+        {
+          id: "config",
+          args: ["hello"],
+          values: {
+            "yoo" => "yes",
+            "development" => {
+              "some_setting" => true
+            }
+          },
+          blocks: [] of HCL::ValueType
+        }
+      ])
+    end
+
+    it "can parse multiple levels of maps and lists" do
+      hcl_string = <<-HCL
+        test "hello" {
+          resource = [{
+            foo = [{
+              bar = {}
+            }]
+          }]
+        }
+      HCL
+
+      parser = HCL::Parser.new(hcl_string)
+
+      parser.values.should eq([
+        {
+          id: "test",
+          args: ["hello"],
+          values: {
+            "resource" => [{
+              "foo" => [
+                {
+                  "bar" => {} of ::String => HCL::ValueType
+                }
+              ]
+            }]
+          },
+          blocks: [] of HCL::ValueType
         }
       ])
     end
@@ -115,7 +172,7 @@ describe HCL::Parser do
           blocks: [
             {
               id: "connection",
-              args: [] of Hash(::String, HCL::SimpleType),
+              args: [] of Hash(::String, HCL::ValueType),
               values: {
                 "user" => "root"
               },
@@ -166,7 +223,7 @@ describe HCL::Parser do
               ]
             }
           },
-          blocks: [] of HCL::SimpleType
+          blocks: [] of HCL::ValueType
         }
       ])
     end
