@@ -17,7 +17,7 @@ describe HCL::Parser do
           values: {
             "description" => "the AMI to use"
           },
-          blocks: [] of HCL::ValueType
+          blocks: [] of HCL::AST::ValueType
         }
       ])
     end
@@ -37,7 +37,7 @@ describe HCL::Parser do
             "foo" => 0.1_f64,
             "bar" => 1_i64
           },
-          blocks: [] of HCL::ValueType
+          blocks: [] of HCL::AST::ValueType
         }
       ])
     end
@@ -61,7 +61,7 @@ describe HCL::Parser do
             "another_boolean"   => true,
             "something_i_want_default" => nil
           },
-          blocks: [] of HCL::ValueType
+          blocks: [] of HCL::AST::ValueType
         }
       ])
     end
@@ -87,7 +87,7 @@ describe HCL::Parser do
               "some_setting" => true
             }
           },
-          blocks: [] of HCL::ValueType
+          blocks: [] of HCL::AST::ValueType
         }
       ])
     end
@@ -113,12 +113,12 @@ describe HCL::Parser do
             "resource" => [{
               "foo" => [
                 {
-                  "bar" => {} of ::String => HCL::ValueType
+                  "bar" => {} of String => HCL::AST::ValueType
                 }
               ]
             }]
           },
-          blocks: [] of HCL::ValueType
+          blocks: [] of HCL::AST::ValueType
         }
       ])
     end
@@ -157,7 +157,7 @@ describe HCL::Parser do
           values: {
             "description" => "the AMI to use"
           },
-          blocks: [] of HCL::Token::Block::Value
+          blocks: [] of HCL::AST::BlockToken::Value
         },
         {
           id: "resource",
@@ -172,7 +172,7 @@ describe HCL::Parser do
           blocks: [
             {
               id: "connection",
-              args: [] of Hash(::String, HCL::ValueType),
+              args: [] of Hash(String, HCL::AST::ValueType),
               values: {
                 "user" => "root"
               },
@@ -183,7 +183,7 @@ describe HCL::Parser do
                   values: {
                     "foo" => "bar"
                   },
-                  blocks: [] of HCL::Token::Block::Value
+                  blocks: [] of HCL::AST::BlockToken::Value
                 }
               ]
             }
@@ -210,20 +210,20 @@ describe HCL::Parser do
               parts: [
                 {
                   id: "var",
-                  parts: [] of HCL::Token::Identifier::Value
+                  parts: [] of HCL::AST::IdentifierToken::Value
                 },
                 {
                   id: "something",
-                  parts: [] of HCL::Token::Identifier::Value
+                  parts: [] of HCL::AST::IdentifierToken::Value
                 },
                 {
                   id: "ami_id",
-                  parts: [] of HCL::Token::Identifier::Value
+                  parts: [] of HCL::AST::IdentifierToken::Value
                 }
               ]
             }
           },
-          blocks: [] of HCL::ValueType
+          blocks: [] of HCL::AST::ValueType
         }
       ])
     end

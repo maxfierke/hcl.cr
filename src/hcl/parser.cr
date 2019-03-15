@@ -1,8 +1,8 @@
 module HCL
   class Parser
-    @parsed : Nil | Array(Token)
+    @parsed : Nil | Array(AST::Token)
 
-    include Iterator(Token)
+    include Iterator(AST::Token)
 
     getter :source
 
@@ -32,7 +32,7 @@ module HCL
       end
     end
 
-    private def build_token(main, iter, source) : Token
+    private def build_token(main, iter, source) : AST::Token
       kind, start, finish = main
 
       token =
@@ -47,18 +47,18 @@ module HCL
       token
     end
 
-    private def build_value(main, iter, source) : ValueToken
+    private def build_value(main, iter, source) : AST::ValueToken
       kind, start, finish = main
 
       # Build the value from the given main token and possibly further recursion.
       value =
         case kind
-        when :null then Token::Null.new(main)
-        when :true then Token::True.new(main)
-        when :false then Token::False.new(main)
-        when :identifier then Token::Identifier.new(main, source[start...finish])
-        when :string then Token::String.new(main, source[start...finish])
-        when :number then Token::Number.new(main, source[start...finish])
+        when :null then AST::NullToken.new(main)
+        when :true then AST::TrueToken.new(main)
+        when :false then AST::FalseToken.new(main)
+        when :identifier then AST::IdentifierToken.new(main, source[start...finish])
+        when :string then AST::StringToken.new(main, source[start...finish])
+        when :number then AST::NumberToken.new(main, source[start...finish])
         when :list then build_list(main, iter, source)
         when :map then build_map(main, iter, source)
         else raise NotImplementedError.new(kind)
@@ -70,9 +70,9 @@ module HCL
       value
     end
 
-    private def build_list(main, iter, source) : Token::List
+    private def build_list(main, iter, source) : AST::ListToken
       _, start, finish = main
-      list = Token::List.new(main, source[start...finish])
+      list = AST::ListToken.new(main, source[start...finish])
 
       # Gather children as values into the list.
       iter.while_next_is_child_of(main) do |child|
@@ -92,14 +92,14 @@ module HCL
       source[start...finish]
     end
 
-    private def build_map(main, iter, source) : Token::Map
+    private def build_map(main, iter, source) : AST::MapToken
       kind, start, finish = main
 
       if kind != :map
         raise "Expected map, but got #{kind}"
       end
 
-      values = {} of ::String => HCL::ValueToken
+      values = {} of String => AST::ValueToken
 
       iter.while_next_is_child_of(main) do |token|
         kind, _, _ = token
@@ -115,23 +115,23 @@ module HCL
         end
       end
 
-      Token::Map.new(
+      AST::MapToken.new(
         main,
         source[start...finish],
         values
       )
     end
 
-    private def build_block(main, iter, source) : Token::Block
+    private def build_block(main, iter, source) : AST::BlockToken
       _, start, finish = main
-      block_dict = {} of ::String => HCL::ValueToken
-      blocks = [] of Token::Block
+      block_dict = {} of String => AST::ValueToken
+      blocks = [] of AST::BlockToken
 
       block_id = extract_identifier(iter.next_as_child_of(main), iter, source)
       block_args = build_list(iter.next_as_child_of(main), iter, source).children.map do |arg|
-        raise "BUG: Expected 'string', but got Array of HCL::Token. Shouldn't be possible." if arg.is_a?(Array(Token))
-        raise "Expected 'string', but got #{arg.kind}" unless arg.is_a?(Token::String)
-        arg.as(Token::String)
+        raise "BUG: Expected 'string', but got Array of HCL::Token. Shouldn't be possible." if arg.is_a?(Array(AST::Token))
+        raise "Expected 'string', but got #{arg.kind}" unless arg.is_a?(AST::StringToken)
+        arg.as(AST::StringToken)
       end
       block_body = iter.next_as_child_of(main)
 
@@ -157,7 +157,7 @@ module HCL
         end
       end
 
-      Token::Block.new(
+      AST::BlockToken.new(
         main,
         source[start...finish],
         block_id,
