@@ -6,6 +6,7 @@ module HCL
       String |
       NumberToken::Value |
       IdentifierToken::Value |
+      CallToken::Value |
       Hash(String, ValueType) |
       Array(ValueType)
   end

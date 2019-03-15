@@ -56,8 +56,9 @@ TODO: Write development instructions here
 
 ## TODO
 
+- [X] Add support for maps
+- [X] Add support for functions
 - [ ] Add support for heredocs
-- [ ] Add support for functions
 - [ ] More validations
 - [ ] Automatically resolve interpolations
 

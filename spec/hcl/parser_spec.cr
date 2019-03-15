@@ -17,7 +17,7 @@ describe HCL::Parser do
           values: {
             "description" => "the AMI to use"
           },
-          blocks: [] of HCL::AST::ValueType
+          blocks: [] of HCL::AST::BlockToken::Value
         }
       ])
     end
@@ -37,7 +37,7 @@ describe HCL::Parser do
             "foo" => 0.1_f64,
             "bar" => 1_i64
           },
-          blocks: [] of HCL::AST::ValueType
+          blocks: [] of HCL::AST::BlockToken::Value
         }
       ])
     end
@@ -61,7 +61,7 @@ describe HCL::Parser do
             "another_boolean"   => true,
             "something_i_want_default" => nil
           },
-          blocks: [] of HCL::AST::ValueType
+          blocks: [] of HCL::AST::BlockToken::Value
         }
       ])
     end
@@ -87,7 +87,7 @@ describe HCL::Parser do
               "some_setting" => true
             }
           },
-          blocks: [] of HCL::AST::ValueType
+          blocks: [] of HCL::AST::BlockToken::Value
         }
       ])
     end
@@ -118,7 +118,7 @@ describe HCL::Parser do
               ]
             }]
           },
-          blocks: [] of HCL::AST::ValueType
+          blocks: [] of HCL::AST::BlockToken::Value
         }
       ])
     end
@@ -223,7 +223,37 @@ describe HCL::Parser do
               ]
             }
           },
-          blocks: [] of HCL::AST::ValueType
+          blocks: [] of HCL::AST::BlockToken::Value
+        }
+      ])
+    end
+
+    it "can parse function calls" do
+      hcl_string = <<-HCL
+        config "hello" {
+          yoo = some_function(item1, [1, 2, 3], "hello")
+        }
+      HCL
+      parser = HCL::Parser.new(hcl_string)
+
+      parser.values.should eq([
+        {
+          id: "config",
+          args: ["hello"],
+          values: {
+            "yoo" => {
+              id: "some_function",
+              args: [
+                {
+                  id: "item1",
+                  parts: [] of HCL::AST::IdentifierToken::Value
+                },
+                [1_i64, 2_i64, 3_i64],
+                "hello"
+              ]
+            }
+          },
+          blocks: [] of HCL::AST::BlockToken::Value
         }
       ])
     end

@@ -59,6 +59,7 @@ module HCL
         when :identifier then AST::IdentifierToken.new(main, source[start...finish])
         when :string then AST::StringToken.new(main, source[start...finish])
         when :number then AST::NumberToken.new(main, source[start...finish])
+        when :call then build_call(main, iter, source)
         when :list then build_list(main, iter, source)
         when :map then build_map(main, iter, source)
         else raise NotImplementedError.new(kind)
@@ -129,8 +130,7 @@ module HCL
 
       block_id = extract_identifier(iter.next_as_child_of(main), iter, source)
       block_args = build_list(iter.next_as_child_of(main), iter, source).children.map do |arg|
-        raise "BUG: Expected 'string', but got Array of HCL::Token. Shouldn't be possible." if arg.is_a?(Array(AST::Token))
-        raise "Expected 'string', but got #{arg.kind}" unless arg.is_a?(AST::StringToken)
+        raise "Expected 'string', but got '#{arg.kind}'" unless arg.is_a?(AST::StringToken)
         arg.as(AST::StringToken)
       end
       block_body = iter.next_as_child_of(main)
@@ -164,6 +164,24 @@ module HCL
         block_args,
         block_dict,
         blocks
+      )
+    end
+
+    private def build_call(main, iter, source) : AST::CallToken
+      _, start, finish = main
+      args = [] of AST::ValueToken
+
+      function_id = extract_identifier(iter.next_as_child_of(main), iter, source)
+
+      iter.while_next_is_child_of(main) do |child|
+        args << build_value(child, iter, source)
+      end
+
+      AST::CallToken.new(
+        main,
+        source[start...finish],
+        function_id,
+        args
       )
     end
   end

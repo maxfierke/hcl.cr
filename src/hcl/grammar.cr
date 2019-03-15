@@ -2,6 +2,7 @@ module HCL
   Grammar = Pegmatite::DSL.define do
     # Forward-declare `block`, `list`, and `map` to refer to them before defining them.
     block = declare
+    call = declare
     list  = declare
     map = declare
 
@@ -57,12 +58,15 @@ module HCL
     bool = t_true | t_false
 
     # Define what constitutes a value.
-    value = t_null | bool | number | identifier | string | map | list
+    value = t_null | bool | number | call | identifier | string | map | list
 
     # Define what an list is, in terms of zero or more values.
     values = value >> s >> (char(',') >> s >> value).repeat
     list.define \
       (char('[') >> s >> values.maybe >> s >> char(']')).named(:list)
+
+    call.define \
+      (identifier >> char('(') >> s >> values.maybe >> s >> char(')')).named(:call)
 
     # Define what an object is, in terms of zero or more key/value pairs.
     pair = (identifier >> s >> char('=') >> s >> value).named(:assignment)
