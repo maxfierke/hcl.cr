@@ -1,11 +1,10 @@
 module HCL
   module AST
     class NumberToken < ValueToken
-      alias Value = Nil | Float64 | Int64
-      @value : Value
+      alias Value = Float64 | Int64
 
       def value
-        @value ||= if string.includes?('.')
+        if string.includes?('.')
           string.to_f64
         else
           string.to_i64
