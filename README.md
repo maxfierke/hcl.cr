@@ -58,9 +58,13 @@ TODO: Write development instructions here
 
 - [X] Add support for maps
 - [X] Add support for functions
+- [ ] Add support for square-bracket attribute & index access on maps & lists
+- [ ] Add support for arithmetic and logic operators
+- [ ] Add support for conditional expressions
+- [ ] Parse interpolations
 - [ ] Add support for heredocs
 - [ ] More validations
-- [ ] Automatically resolve interpolations
+- [ ] Investigate directives
 
 ## Contributing
 
