@@ -3,11 +3,10 @@ module HCL
     abstract class Token
       @kind : Symbol
 
-      getter :string, :kind
+      getter :string, :kind, :src_start, :src_finish
 
       def initialize(peg_tuple : Pegmatite::Token, string : String)
-        kind, src_start, src_finish = peg_tuple
-        @kind = kind
+        @kind, @src_start, @src_finish = peg_tuple
         @string = string
       end
 

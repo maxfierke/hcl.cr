@@ -56,6 +56,7 @@ module HCL
         when :null then AST::NullToken.new(main)
         when :true then AST::TrueToken.new(main)
         when :false then AST::FalseToken.new(main)
+        when :value_ref then build_value_ref(main, iter, source)
         when :identifier then AST::IdentifierToken.new(main, source[start...finish])
         when :string then AST::StringToken.new(main, source[start...finish])
         when :number then AST::NumberToken.new(main, source[start...finish])
@@ -165,6 +166,16 @@ module HCL
         block_dict,
         blocks
       )
+    end
+
+    private def build_value_ref(main, iter, source) : AST::ValueRefToken
+      _, start, finish = main
+
+      iter.while_next_is_child_of(main) do |child|
+        pp! child
+      end
+
+      AST::ValueRefToken.new(main, source[start...finish])
     end
 
     private def build_call(main, iter, source) : AST::CallToken

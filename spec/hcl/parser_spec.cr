@@ -212,19 +212,71 @@ describe HCL::Parser do
           args: ["aws_instance", "web"],
           values: {
             "ami" => {
-              id: "var.something.ami_id",
+              id: "ami_id",
+              index: nil,
+              path: "var.something.ami_id",
               parts: [
                 {
                   id: "var",
-                  parts: [] of HCL::AST::IdentifierToken::Value
+                  index: nil,
+                  path: "var",
+                  parts: [] of HCL::AST::ValueRefToken::Value
                 },
                 {
                   id: "something",
-                  parts: [] of HCL::AST::IdentifierToken::Value
+                  index: nil,
+                  path: "something",
+                  parts: [] of HCL::AST::ValueRefToken::Value
                 },
                 {
                   id: "ami_id",
-                  parts: [] of HCL::AST::IdentifierToken::Value
+                  index: nil,
+                  path: "ami_id",
+                  parts: [] of HCL::AST::ValueRefToken::Value
+                }
+              ]
+            }
+          },
+          blocks: [] of HCL::AST::BlockToken::Value
+        }
+      ])
+    end
+
+    it "can parse nested identifiers with indicies" do
+      hcl_string = <<-HEREDOC
+        resource "aws_instance" "web" {
+          ami = var.something[2].other_thing["ami_id"]
+        }
+      HEREDOC
+
+      parser = HCL::Parser.new(hcl_string)
+      parser.values.should eq([
+        {
+          id: "resource",
+          args: ["aws_instance", "web"],
+          values: {
+            "ami" => {
+              id: "ami_id",
+              index: nil,
+              path: "var.something[2].other_thing[\"ami_id\"]",
+              parts: [
+                {
+                  id: "var",
+                  index: nil,
+                  path: "var",
+                  parts: [] of HCL::AST::ValueRefToken::Value
+                },
+                {
+                  id: "something",
+                  index: 2,
+                  path: "something[2]",
+                  parts: [] of HCL::AST::ValueRefToken::Value
+                },
+                {
+                  id: "other_thing",
+                  index: "ami_id",
+                  path: "other_thing[\"ami_id\"]",
+                  parts: [] of HCL::AST::ValueRefToken::Value
                 }
               ]
             }

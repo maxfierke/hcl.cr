@@ -51,8 +51,13 @@ module HCL
 
     identifier = (
       (range('a', 'z') | range('A', 'Z') | char('_')) >>
-      (range('a', 'z') | range('A', 'Z') | digits | char('_') | char('.')).repeat
+      (range('a', 'z') | range('A', 'Z') | digits | char('_')).repeat
     ).named(:identifier)
+
+    dot_access = char('.') >> identifier
+    idx_access = char('[') >> (number | string) >> char(']')
+    prop_access = dot_access | idx_access
+    value_ref = (identifier >> prop_access.repeat).named(:value_ref)
 
     t_null = str("null").named(:null)
     t_true = (str("true") | str("\"true\"")).named(:true)
@@ -60,7 +65,7 @@ module HCL
     bool = t_true | t_false
 
     # Define what constitutes a value.
-    value = t_null | bool | number | call | identifier | string | map | list
+    value = t_null | bool | number | call | value_ref | identifier | string | map | list
 
     # Define what an list is, in terms of zero or more values.
     values = value >> s >> (char(',') >> s >> value).repeat

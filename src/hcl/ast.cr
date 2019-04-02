@@ -7,6 +7,7 @@ module HCL
       NumberToken::Value |
       IdentifierToken::Value |
       CallToken::Value |
+      ValueRefToken::Value |
       Hash(String, ValueType) |
       Array(ValueType)
   end

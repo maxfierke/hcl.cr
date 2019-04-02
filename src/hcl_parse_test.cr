@@ -14,6 +14,7 @@ resource "aws_instance" "web" {
   source_dest_check = false
   another_boolean = "true"
   something_i_want_default = null
+  test = var.thing.list[2].other_thing["hello"]
 
   connection {
     user = "root"
