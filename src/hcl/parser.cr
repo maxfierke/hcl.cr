@@ -59,9 +59,9 @@ module HCL
         when :identifier then AST::IdentifierToken.new(main, source[start...finish])
         when :string then AST::StringToken.new(main, source[start...finish])
         when :number then AST::NumberToken.new(main, source[start...finish])
-        when :call then build_call(main, iter, source)
-        when :list then build_list(main, iter, source)
-        when :map then build_map(main, iter, source)
+        when :function_call then build_call(main, iter, source)
+        when :tuple then build_list(main, iter, source)
+        when :object then build_map(main, iter, source)
         else raise NotImplementedError.new(kind)
         end
 
@@ -96,7 +96,7 @@ module HCL
     private def build_map(main, iter, source) : AST::MapToken
       kind, start, finish = main
 
-      if kind != :map
+      if kind != :object
         raise "Expected map, but got #{kind}"
       end
 
@@ -105,7 +105,7 @@ module HCL
       iter.while_next_is_child_of(main) do |token|
         kind, _, _ = token
 
-        if kind == :assignment
+        if kind == :attribute
           # Gather children as pairs of key/values into the map.
           key = build_value(iter.next_as_child_of(token), iter, source).as_s
           val = build_value(iter.next_as_child_of(token), iter, source)
@@ -126,32 +126,42 @@ module HCL
     private def build_block(main, iter, source) : AST::BlockToken
       _, start, finish = main
       block_dict = {} of String => AST::ValueToken
+      block_args = Array(AST::IdentifierToken | AST::StringToken).new
       blocks = [] of AST::BlockToken
 
       block_id = extract_identifier(iter.next_as_child_of(main), iter, source)
-      block_args = build_list(iter.next_as_child_of(main), iter, source).children.map do |arg|
-        raise "Expected 'string', but got '#{arg.kind}'" unless arg.is_a?(AST::StringToken)
-        arg.as(AST::StringToken)
-      end
-      block_body = iter.next_as_child_of(main)
 
-      if block_body[0] != :block_body
-        raise "Expected 'block_body', but got #{block_body[0]}"
-      end
+      has_seen_seen_inner_block = false
 
-      iter.while_next_is_child_of(block_body) do |token|
+      iter.while_next_is_child_of(main) do |token|
         kind, _, _ = token
 
-        if kind == :assignment
+        if kind == :attribute
+          has_seen_seen_inner_block = true
           # Gather children as pairs of key/values into the array.
           key = build_value(iter.next_as_child_of(token), iter, source).as_s
           val = build_value(iter.next_as_child_of(token), iter, source)
           iter.assert_next_not_child_of(token)
           block_dict[key] = val
         elsif kind == :block
+          has_seen_seen_inner_block = true
           new_block = build_block(token, iter, source)
           iter.assert_next_not_child_of(token)
           blocks << new_block
+        elsif kind == :identifier || kind == :string
+          if has_seen_seen_inner_block
+            raise "Found '#{kind}' but expected an attribute assignment or block."
+          else
+            token_node = build_value(token, iter, source)
+
+            if kind == :identifier
+              block_args << token_node.as(AST::IdentifierToken)
+            elsif kind == :string
+              block_args << token_node.as(AST::StringToken)
+            else
+              raise "BUG: Should be identifier or string"
+            end
+          end
         else
           raise "#{kind} is not a supported token within blocks."
         end

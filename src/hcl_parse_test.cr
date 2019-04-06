@@ -21,6 +21,8 @@ resource "aws_instance" "web" {
 }
 HEREDOC
 
+pp! Pegmatite.tokenize(HCL::Grammar, SRC_TEXT)
+
 parser = HCL::Parser.new(SRC_TEXT)
 tokens = parser.parse
 pp! tokens

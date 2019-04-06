@@ -5,7 +5,6 @@ module HCL
       Bool |
       String |
       NumberToken::Value |
-      IdentifierToken::Value |
       CallToken::Value |
       Hash(String, ValueType) |
       Array(ValueType)
