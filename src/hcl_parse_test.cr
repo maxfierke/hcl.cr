@@ -19,6 +19,7 @@ resource "aws_instance" "web" {
     user = "root"
   }
 }
+
 HEREDOC
 
 pp! Pegmatite.tokenize(HCL::Grammar, SRC_TEXT)

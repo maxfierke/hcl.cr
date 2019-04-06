@@ -18,7 +18,7 @@ module HCL
 
     whitespace = char(' ').named(:whitespace, false)
     s = (multi_comment | comment | whitespace).repeat.named(:ignored, false)
-    snl = (s | newline).repeat.named(:ignored_or_newline, true)
+    snl = (s >> newline.maybe >> s).repeat.named(:ignored_or_newline, false)
 
     digit19 = range('1', '9')
     digit = range('0', '9')
@@ -136,15 +136,15 @@ module HCL
       ((string_lit | identifier) >> s).repeat >>
       char('{') >> s >>
       (identifier >> s >> char('=') >> s >> expression >> s).maybe >>
-      char('}') >> s >> newline.repeat(1)
+      char('}') >> s >> newline
     ).named(:one_line_block)
     block = (
       identifier >> s >>
       ((string_lit | identifier) >> s).repeat >>
-      char('{') >> s >> newline >> body >> char('}') >> s >> newline.repeat(1)
+      char('{') >> s >> newline >> body >> char('}') >> s >> newline
     ).named(:block)
     attribute = (
-      identifier >> s >> char('=') >> s >> expression >> s >> newline.repeat(1)
+      identifier >> s >> char('=') >> s >> expression >> s >> newline
     ).named(:attribute)
     body.define \
       (snl >> (attribute | block | one_line_block) >> snl).repeat
