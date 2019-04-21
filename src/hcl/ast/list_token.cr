@@ -12,6 +12,10 @@ module HCL
         @children << token
       end
 
+      def string
+        "[#{children.map(&.string).join(", ")}]"
+      end
+
       def value
         children.map do |item|
           item.value.as(ValueType)

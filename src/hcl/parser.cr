@@ -53,12 +53,12 @@ module HCL
       # Build the value from the given main token and possibly further recursion.
       value =
         case kind
-        when :null then AST::NullToken.new(main)
-        when :true then AST::TrueToken.new(main)
-        when :false then AST::FalseToken.new(main)
+        when :literal then AST::LiteralToken.new(main, source[start...finish])
         when :identifier then AST::IdentifierToken.new(main, source[start...finish])
         when :string then AST::StringToken.new(main, source[start...finish])
         when :number then AST::NumberToken.new(main, source[start...finish])
+        when :expression then build_expression(main, iter, source)
+        when :operation then build_operation(main, iter, source)
         when :function_call then build_call(main, iter, source)
         when :tuple then build_list(main, iter, source)
         when :object then build_map(main, iter, source)
@@ -69,6 +69,62 @@ module HCL
       iter.assert_next_not_child_of(main)
 
       value
+    end
+
+    private def build_expression(main, iter, source) : AST::ExpressionToken
+      _, start, finish = main
+
+      exp_term = nil : AST::ValueToken
+
+      # TODO: This is wrong, but not settled on what this *is* yet.
+      context = HCL::ExpressionContext.new
+
+      iter.while_next_is_child_of(main) do |child|
+        exp_term = build_value(child, iter, source)
+        iter.assert_next_not_child_of(main)
+      end
+
+      unless exp_term
+        raise "BUG: expected 'exp_term' to not be nil"
+      end
+
+      AST::ExpressionToken.new(
+        main,
+        source[start...finish],
+        exp_term,
+        context
+      )
+    end
+
+    private def build_operation(main, iter, source) : AST::OperationToken
+      _, start, finish = main
+
+      exp_term = nil : AST::ValueToken
+
+      # TODO: This is wrong, but not settled on what this *is* yet.
+      context = HCL::ExpressionContext.new
+
+      left_operand = iter.next_as_child_of(main)
+      left_operand_token = build_value(left_operand, iter, source)
+      operator = iter.next_as_child_of(main)
+      right_operand = iter.peek_as_child_of(main)
+
+      right_operand_token = if right_operand
+        right_operand = iter.next_as_child_of(main)
+        build_value(right_operand, iter, source)
+      else
+        nil
+      end
+
+      _, op_start, op_finish = operator
+
+      AST::OperationToken.new(
+        main,
+        source[start...finish],
+        source[op_start...op_finish],
+        left_operand_token,
+        right_operand_token
+      )
     end
 
     private def build_list(main, iter, source) : AST::ListToken
@@ -93,11 +149,11 @@ module HCL
       source[start...finish]
     end
 
-    private def build_map(main, iter, source) : AST::MapToken
+    private def build_map(main, iter, source) : AST::ObjectToken
       kind, start, finish = main
 
       if kind != :object
-        raise "Expected map, but got #{kind}"
+        raise "Expected object, but got '#{kind}'"
       end
 
       values = {} of String => AST::ValueToken
@@ -106,17 +162,17 @@ module HCL
         kind, _, _ = token
 
         if kind == :attribute
-          # Gather children as pairs of key/values into the map.
+          # Gather children as pairs of key/values into the object.
           key = build_value(iter.next_as_child_of(token), iter, source).as_s
           val = build_value(iter.next_as_child_of(token), iter, source)
           iter.assert_next_not_child_of(token)
           values[key] = val
         else
-          raise "#{kind} is not a supported token within maps."
+          raise "'#{kind}' is not supported within objects."
         end
       end
 
-      AST::MapToken.new(
+      AST::ObjectToken.new(
         main,
         source[start...finish],
         values
@@ -163,7 +219,8 @@ module HCL
             end
           end
         else
-          raise "#{kind} is not a supported token within blocks."
+          pp! token
+          raise "'#{kind}' is not supported within blocks."
         end
       end
 

@@ -3,13 +3,6 @@ module HCL
     class BlockToken < Token
       getter :id, :args, :values, :blocks
 
-      alias Value = NamedTuple(
-        id: String,
-        args: Array(String),
-        values: Hash(String, ValueType),
-        blocks: Array(Value)
-      )
-
       # :nodoc:
       # This whole override should be unnecessary, but for some reason
       # parser.cr's build_block isn't typing the array properly, so we're
@@ -56,13 +49,28 @@ module HCL
         @blocks = blocks
       end
 
+      def string
+        String.build do |str|
+          str << "#{id} #{args.map(&.string).join(" ")} {\n"
+
+          values.each do |key, value|
+            str << "  #{key} = #{value.string}\n"
+          end
+
+          blocks.each do |block|
+            block_lines = block.string.split("\n")
+            block_lines.each do |line|
+              str << "  #{line}\n"
+            end
+          end
+
+          str << "}\n"
+        end
+      end
+
       def value
-        {
-          id: id,
-          args: args.map { |arg| arg.value.as(String) },
-          values: values_dict,
-          blocks: blocks.map { |block| block.value.as(Value) }
-        }
+        # :shrugg:
+        nil
       end
 
       private def values_dict

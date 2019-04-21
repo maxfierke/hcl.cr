@@ -57,9 +57,9 @@ module HCL
     _arithetic_operator = char('+') | char('-') | char('*') | char('/') | char('%')
     _compare_operator = str("==") | str("!=") | char('<') |
       char('>') | str("<=") | str(">=")
-    _binary_operator = _compare_operator | _arithetic_operator | _logic_operator
+    _binary_operator = (_compare_operator | _arithetic_operator | _logic_operator).named(:operator)
     _binary_op = expr_term >> s >> _binary_operator >> s >> expr_term
-    _unary_op = (char('=') | char('!')) >> expr_term
+    _unary_op = (char('-') | char('!')).named(:operator) >> expr_term
     operation = (_unary_op | _binary_op).named(:operation)
 
     get_attr = (char('.') >> identifier).named(:get_attr)
@@ -110,12 +110,14 @@ module HCL
 
     literal_value = (
       numeric_lit |
-      str("true") |
-      str("false") |
-      str("null")
-    ).named(:literal)
+      (
+        str("true") |
+        str("false") |
+        str("null")
+      ).named(:literal)
+    )
 
-    expr_term.define (
+    expr_term.define \
       literal_value |
       collection_value |
       template_expr |
@@ -126,18 +128,17 @@ module HCL
       (expr_term >> get_attr) |
       (expr_term >> splat) |
       (char('(') >> s >> expression >> s >> char(')'))
-    )
 
     expression.define \
-      (expr_term | operation | conditional).named(:expression)
+      (operation | expr_term | conditional).named(:expression)
 
     one_line_block = (
       identifier >> s >>
       ((string_lit | identifier) >> s).repeat >>
       char('{') >> s >>
-      (identifier >> s >> char('=') >> s >> expression >> s).maybe >>
+      (identifier >> s >> char('=') >> s >> expression >> s).maybe.named(:attribute) >>
       char('}') >> s >> newline
-    ).named(:one_line_block)
+    ).named(:block)
     block = (
       identifier >> s >>
       ((string_lit | identifier) >> s).repeat >>

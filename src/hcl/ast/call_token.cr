@@ -3,11 +3,6 @@ module HCL
     class CallToken < ValueToken
       getter :id, :args
 
-      alias Value = NamedTuple(
-        id: String,
-        args: Array(ValueType)
-      )
-
       def initialize(
         peg_tuple : Pegmatite::Token,
         string : String,
@@ -20,11 +15,14 @@ module HCL
         @args = args
       end
 
+      def string
+        "#{id}(#{args.map(&.value).join(", ")})"
+      end
+
       def value
-        {
-          id: id,
-          args: args.map { |arg| arg.value.as(ValueType) },
-        }
+        # This is wrong, but haven't implemented function
+        # call evaluation yet.
+        nil
       end
     end
   end

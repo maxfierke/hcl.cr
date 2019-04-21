@@ -17,8 +17,12 @@ resource "aws_instance" "web" {
 
   connection {
     user = "root"
+    port = 100 + 2
   }
 }
+
+# One-line block
+data "a_single_datum" { foo = "bar" }
 
 HEREDOC
 

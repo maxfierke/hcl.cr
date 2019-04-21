@@ -4,8 +4,8 @@ module HCL
       Nil |
       Bool |
       String |
-      NumberToken::Value |
-      CallToken::Value |
+      Int64 |
+      Float64 |
       Hash(String, ValueType) |
       Array(ValueType)
   end
