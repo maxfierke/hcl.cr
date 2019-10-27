@@ -68,16 +68,24 @@ module HCL
         end
       end
 
-      def value
-        # :shrugg:
-        nil
+      def value : ValueType
+        block_header = [id] + args.map(&.value)
+        block_value = value_dict.as(ValueType)
+        block_header.reverse.reduce(block_value) do |acc, val|
+          { val.to_s => acc.as(ValueType) }
+        end.as(Hash(String, ValueType)).as(ValueType)
       end
 
-      private def values_dict
+      private def value_dict
         dict = {} of String => ValueType
 
         values.each do |key, value|
           dict[key] = value.value.as(ValueType)
+        end
+
+        blocks.each do |block|
+          block_dict = block.value.as(Hash(String, ValueType))
+          dict.merge!(block_dict)
         end
 
         dict
