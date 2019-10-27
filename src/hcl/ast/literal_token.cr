@@ -17,7 +17,7 @@ module HCL
         end
       end
 
-      def value
+      def value : ValueType
         @value ||= if source == NULL_STR
           nil
         elsif source == TRUE_STR

@@ -16,7 +16,7 @@ module HCL
         "[#{children.map(&.string).join(", ")}]"
       end
 
-      def value
+      def value : ValueType
         children.map do |item|
           item.value.as(ValueType)
         end

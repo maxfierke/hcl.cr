@@ -5,8 +5,6 @@ module HCL
 
       @value : Value
 
-      getter :value
-
       def initialize(peg_tuple : Pegmatite::Token, string : String)
         stripped_string = string.strip('"')
         super(peg_tuple, stripped_string)
@@ -20,6 +18,10 @@ module HCL
 
       def string
         value.to_s
+      end
+
+      def value : ValueType
+        @value
       end
     end
   end

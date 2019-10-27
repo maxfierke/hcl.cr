@@ -25,7 +25,7 @@ module HCL
         end
       end
 
-      def value
+      def value : ValueType
         expression.value
       end
     end

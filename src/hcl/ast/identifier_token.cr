@@ -5,7 +5,7 @@ module HCL
         source
       end
 
-      def value
+      def value : ValueType
         string
       end
     end

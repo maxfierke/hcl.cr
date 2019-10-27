@@ -19,7 +19,7 @@ module HCL
         "#{id}(#{args.map(&.value).join(", ")})"
       end
 
-      def value
+      def value : ValueType
         # This is wrong, but haven't implemented function
         # call evaluation yet.
         nil

@@ -28,7 +28,7 @@ module HCL
         end
       end
 
-      def value
+      def value : ValueType
         dict = {} of String => ValueType
 
         values.each do |key, value|
