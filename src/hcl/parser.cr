@@ -6,8 +6,8 @@ module HCL
 
     getter :source
 
-    def initialize(@source : String)
-      @peg_tokens = Pegmatite.tokenize(HCL::Grammar, source)
+    def initialize(@source : String, offset = 0, io : IO? = nil)
+      @peg_tokens = Pegmatite.tokenize(HCL::Grammar, source, offset, io)
       @peg_iter = Pegmatite::TokenIterator.new(@peg_tokens)
     end
 
