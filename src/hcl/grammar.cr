@@ -87,7 +87,9 @@ module HCL
     _quoted_template = string_lit
     template_expr = _quoted_template | _heredoc_template
 
-    _object_elem = (identifier | expression) >> s >> char('=') >> s >> expression
+    _object_elem = (
+      (identifier | expression) >> s >> char('=') >> s >> expression
+    ).named(:attribute)
     _object = (
       char('{') >> snl >> (
         (

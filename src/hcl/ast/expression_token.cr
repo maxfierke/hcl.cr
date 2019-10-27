@@ -26,6 +26,7 @@ module HCL
       end
 
       def value : ValueType
+        # TODO: This is wrong.
         expression.value
       end
     end
