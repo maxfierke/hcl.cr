@@ -6,13 +6,13 @@ RELEASE     ?=
 STATIC      ?=
 SOURCES      = src/*.cr src/**/*.cr
 
-override CRFLAGS += $(if $(RELEASE),--release ,--debug )$(if $(STATIC),--static )$(if $(LDFLAGS),--link-flags="$(LDFLAGS)" )
+override CRFLAGS += --error-on-warnings $(if $(RELEASE),--release ,--debug --error-trace )$(if $(STATIC),--static )$(if $(LDFLAGS),--link-flags="$(LDFLAGS)" )
 
 .PHONY: all
 all: bin/hcl_parse_test
 
 bin/hcl_parse_test: $(SOURCES)
-	$(CRYSTAL_BIN) build -o bin/hcl_parse_test src/hcl_parse_test.cr
+	$(CRYSTAL_BIN) build $(CRFLAGS) -o bin/hcl_parse_test src/hcl_parse_test.cr
 
 .PHONY: deps
 deps:
@@ -24,7 +24,7 @@ clean:
 
 .PHONY: test
 test: deps $(SOURCES)
-	$(CRYSTAL_BIN) spec
+	$(CRYSTAL_BIN) spec $(CRFLAGS)
 
 .PHONY: spec
 spec: test
