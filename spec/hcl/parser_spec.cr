@@ -79,7 +79,9 @@ describe HCL::Parser do
         config "hello" {
           yoo = "yes"
           development = {
-            some_setting = true
+            some_setting = true,
+            another_prop = 123,
+            maybe_a_list = [123, 231]
           }
         }
 
@@ -92,7 +94,12 @@ describe HCL::Parser do
             "hello" => {
               "yoo" => "yes",
               "development" => {
-                "some_setting" => true
+                "some_setting" => true,
+                "another_prop" => 123_i64,
+                "maybe_a_list" => [
+                  123_i64,
+                  231_i64
+                ]
               }
             }
           }
@@ -100,7 +107,7 @@ describe HCL::Parser do
       ])
     end
 
-    pending "can parse multiple levels of maps and lists" do
+    it "can parse multiple levels of maps and lists" do
       hcl_string = <<-HCL
         test "hello" {
           resource = [{
@@ -109,6 +116,7 @@ describe HCL::Parser do
             }]
           }]
         }
+
       HCL
 
       parser = HCL::Parser.new(hcl_string)

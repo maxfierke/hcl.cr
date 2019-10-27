@@ -87,36 +87,31 @@ module HCL
     _quoted_template = string_lit
     template_expr = _quoted_template | _heredoc_template
 
+    # TODO: Spec says expression should work w/ identifier too, but Pegmatite is
+    # getting a stack overflow w/ this:
+    # (identifier | expression)
     _object_elem = (
-      (identifier | expression) >> s >> char('=') >> s >> expression
+      identifier >> s >> char('=') >> s >> expression
     ).named(:attribute)
     _object = (
       char('{') >> snl >> (
-        (
-          _object_elem >>
-          (char(',') >> snl >> _object_elem >> snl).repeat >>
-          char(',').maybe
-        ).maybe
-      ) >> snl >> char('}')
+        _object_elem >>
+        (char(',') >> snl >> _object_elem >> snl).repeat >>
+        char(',').maybe
+      ).maybe >> snl >> char('}')
     ).named(:object)
     _tuple = (
       char('[') >> snl >> (
-        (
-          expression >>
-          (char(',') >> snl >> expression >> snl).repeat >>
-          char(',').maybe
-        ).maybe
-      ) >> snl >> char(']')
+        expression >>
+        (char(',') >> snl >> expression >> snl).repeat >>
+        char(',').maybe
+      ).maybe >> snl >> char(']')
     ).named(:tuple)
     collection_value = _tuple | _object
 
     literal_value = (
       numeric_lit |
-      (
-        str("true") |
-        str("false") |
-        str("null")
-      ).named(:literal)
+      (str("true") | str("false") | str("null")).named(:literal)
     )
 
     expr_term.define \
