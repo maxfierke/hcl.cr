@@ -123,8 +123,8 @@ module HCL
       literal_value |
       collection_value |
       template_expr |
-      variable_expr |
       function_call |
+      variable_expr |
       # for_expr |
       (expr_term >> index) |
       (expr_term >> get_attr) |

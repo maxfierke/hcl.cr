@@ -240,7 +240,14 @@ module HCL
 
       function_id = extract_identifier(iter.next_as_child_of(main), iter, source)
 
-      iter.while_next_is_child_of(main) do |child|
+      next_token = iter.next_as_child_of(main)
+      kind, _, _ = next_token
+
+      if kind != :arguments
+        raise "Expected arguments, but got '#{kind}'"
+      end
+
+      iter.while_next_is_child_of(next_token) do |child|
         args << build_value(child, iter, source)
       end
 

@@ -212,11 +212,12 @@ describe HCL::Parser do
       ])
     end
 
-    pending "can parse function calls" do
+    it "can parse function calls" do
       hcl_string = <<-HCL
         config "hello" {
           yoo = some_function(item1, [1, 2, 3], "hello")
         }
+
       HCL
       parser = HCL::Parser.new(hcl_string)
 
