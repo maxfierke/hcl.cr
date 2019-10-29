@@ -99,21 +99,30 @@ module HCL
     private def build_operation(main, iter, source) : AST::OperationToken
       _, start, finish = main
 
-      exp_term = nil : AST::ValueToken
-
       # TODO: This is wrong, but not settled on what this *is* yet.
       context = HCL::ExpressionContext.new
 
-      left_operand = iter.next_as_child_of(main)
-      left_operand_token = build_value(left_operand, iter, source)
-      operator = iter.next_as_child_of(main)
-      right_operand = iter.peek_as_child_of(main)
+      next_token = iter.peek_as_child_of(main)
 
-      right_operand_token = if right_operand
+      unless next_token
+        raise "BUG: expected 'next_token' to not be nil"
+      end
+
+      kind, _, _ = next_token
+
+      if kind == :operator
+        operator = iter.next_as_child_of(main)
+        left_operand = iter.next_as_child_of(main)
+        left_operand_token = build_value(left_operand, iter, source)
+        right_operand_token = nil
+      elsif kind == :number || kind == :literal
+        left_operand = iter.next_as_child_of(main)
+        left_operand_token = build_value(left_operand, iter, source)
+        operator = iter.next_as_child_of(main)
         right_operand = iter.next_as_child_of(main)
-        build_value(right_operand, iter, source)
+        right_operand_token = build_value(right_operand, iter, source)
       else
-        nil
+        raise "BUG: Expected operator, number, or literal, but got #{kind}"
       end
 
       _, op_start, op_finish = operator

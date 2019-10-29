@@ -42,6 +42,7 @@ module HCL
       (~char('"') >> ~char('\\') >> range(' ', 0x10FFFF_u32))
     string_lit = char('"') >> string_char.repeat.named(:string) >> char('"')
 
+    # TODO: support the spec fully: https://github.com/hashicorp/hcl/blob/hcl2/hclsyntax/spec.md#identifiers
     identifier = (
       (range('a', 'z') | range('A', 'Z') | char('_')) >>
       (range('a', 'z') | range('A', 'Z') | digits | char('_') | char('-')).repeat
@@ -55,8 +56,8 @@ module HCL
 
     _logic_operator = str("&&") | str("||") | char('!')
     _arithetic_operator = char('+') | char('-') | char('*') | char('/') | char('%')
-    _compare_operator = str("==") | str("!=") | char('<') |
-      char('>') | str("<=") | str(">=")
+    _compare_operator = str("==") | str("!=") | str("<=") | str(">=") |
+      char('<') | char('>')
     _binary_operator = (_compare_operator | _arithetic_operator | _logic_operator).named(:operator)
     _binary_op = expr_term >> s >> _binary_operator >> s >> expr_term
     _unary_op = (char('-') | char('!')).named(:operator) >> expr_term
@@ -115,6 +116,7 @@ module HCL
     )
 
     expr_term.define \
+      (char('(') >> s >> expression >> s >> char(')')) |
       literal_value |
       collection_value |
       template_expr |
@@ -123,8 +125,7 @@ module HCL
       # for_expr |
       (expr_term >> index) |
       (expr_term >> get_attr) |
-      (expr_term >> splat) |
-      (char('(') >> s >> expression >> s >> char(')'))
+      (expr_term >> splat)
 
     expression.define \
       (operation | expr_term | conditional).named(:expression)

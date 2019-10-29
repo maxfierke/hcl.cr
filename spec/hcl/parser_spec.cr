@@ -29,6 +29,7 @@ describe HCL::Parser do
           bar = 1
           baz = "1234"
           biz = "1234.56"
+          flim = -6
         }
 
       HCL
@@ -41,7 +42,58 @@ describe HCL::Parser do
               "foo" => 0.1_f64,
               "bar" => 1_i64,
               "baz" => "1234",
-              "biz" => "1234.56"
+              "biz" => "1234.56",
+              "flim" => -6_i64
+            }
+          }
+        }
+      ])
+    end
+
+    it "can parse operators" do
+      hcl_string = <<-HCL
+        provider "foo" {
+          foo = 0.1 * 0.5
+          bar = 1 + 8
+          baz = 4 % 3
+          biz = 9 - 3
+          boingo = 6 / 2
+          flim = 9 / 4
+          flam = !false
+          bim = false || true
+          bam = null && true
+          gt = 2 > 1
+          gte = 3 >= 3
+          lt = 6 < 7
+          lte = 12 <= 6
+          eq = 0 == 0
+          neq = 12 != 12
+          double_not = !(!false)
+        }
+
+      HCL
+      parser = HCL::Parser.new(hcl_string)
+
+      parser.values.should eq([
+        {
+          "provider" => {
+            "foo" => {
+              "foo" => 0.1_f64 * 0.5_f64,
+              "bar" => 9_i64,
+              "baz" => 1_i64,
+              "biz" => 6_i64,
+              "boingo" => 3_f64,
+              "flim" => 9.0_f64 / 4.0_f64,
+              "flam" => true,
+              "bim"  => true,
+              "bam"  => nil,
+              "gt"   => true,
+              "gte"  => true,
+              "lt"   => true,
+              "lte"  => false,
+              "eq"   => true,
+              "neq"  => false,
+              "double_not" => false
             }
           }
         }
