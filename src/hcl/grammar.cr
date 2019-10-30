@@ -64,7 +64,7 @@ module HCL
     operation = (_unary_op | _binary_op).named(:operation)
 
     get_attr = (char('.') >> identifier).named(:get_attr)
-    index = (char('[') >> expression >> char(']')).named(:index)
+    index = (char('[') >> snl >> expression >> snl >> char(']')).named(:index)
     splat = (
       (char('.') >> char('*') >> get_attr.repeat) |
       (char('[') >> char('*') >> char(']') >> (get_attr | index).repeat)
@@ -115,17 +115,35 @@ module HCL
       (str("true") | str("false") | str("null")).named(:literal)
     )
 
+    # ExprTerm that may have properties
+    _nested_expr_term = (char('(') >> snl >> expression >> snl >> char(')'))
+    _prop_expr_term =
+      _nested_expr_term |
+      literal_value |
+      _object |
+      function_call |
+      variable_expr
+
+    _index_expr_term =
+      _nested_expr_term |
+      collection_value |
+      function_call |
+      variable_expr
+
+    _splat_expr_term =
+      _index_expr_term | _prop_expr_term
+
     expr_term.define \
-      (char('(') >> s >> expression >> s >> char(')')) |
+      _nested_expr_term |
+      (_index_expr_term >> index) |
+      (_prop_expr_term >> get_attr) |
+      (_splat_expr_term >> splat) |
+      template_expr |
       literal_value |
       collection_value |
-      template_expr |
       function_call |
-      variable_expr |
       # for_expr |
-      (expr_term >> index) |
-      (expr_term >> get_attr) |
-      (expr_term >> splat)
+      variable_expr
 
     expression.define \
       (operation | expr_term | conditional).named(:expression)

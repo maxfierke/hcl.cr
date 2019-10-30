@@ -53,15 +53,17 @@ module HCL
       # Build the value from the given main token and possibly further recursion.
       value =
         case kind
-        when :literal then AST::LiteralToken.new(main, source[start...finish])
-        when :identifier then AST::IdentifierToken.new(main, source[start...finish])
-        when :string then AST::StringToken.new(main, source[start...finish])
-        when :number then AST::NumberToken.new(main, source[start...finish])
         when :expression then build_expression(main, iter, source)
-        when :operation then build_operation(main, iter, source)
         when :function_call then build_call(main, iter, source)
-        when :tuple then build_list(main, iter, source)
+        when :get_attr then build_get_attr(main, iter, source)
+        when :identifier then AST::IdentifierToken.new(main, source[start...finish])
+        when :index then build_index(main, iter, source)
+        when :literal then AST::LiteralToken.new(main, source[start...finish])
+        when :number then AST::NumberToken.new(main, source[start...finish])
         when :object then build_map(main, iter, source)
+        when :operation then build_operation(main, iter, source)
+        when :string then AST::StringToken.new(main, source[start...finish])
+        when :tuple then build_list(main, iter, source)
         else raise NotImplementedError.new(kind)
         end
 
@@ -74,25 +76,62 @@ module HCL
     private def build_expression(main, iter, source) : AST::ExpressionToken
       _, start, finish = main
 
-      exp_term = nil : AST::ValueToken
+      exp_terms = [] of AST::Token
 
       # TODO: This is wrong, but not settled on what this *is* yet.
       context = HCL::ExpressionContext.new
 
       iter.while_next_is_child_of(main) do |child|
-        exp_term = build_value(child, iter, source)
-        iter.assert_next_not_child_of(main)
+        exp_terms << build_token(child, iter, source)
       end
 
-      unless exp_term
-        raise "BUG: expected 'exp_term' to not be nil"
+      unless exp_terms.any?
+        raise "BUG: expected expression to have content"
       end
 
       AST::ExpressionToken.new(
         main,
         source[start...finish],
-        exp_term,
+        exp_terms,
         context
+      )
+    end
+
+    private def build_get_attr(main, iter, source) : AST::GetAttrToken
+      _, start, finish = main
+
+      next_token = iter.next_as_child_of(main)
+      kind, _, _ = next_token
+
+      if kind != :identifier
+        raise "BUG: expected identifier, got #{kind}"
+      end
+
+      identifier_token = build_value(next_token, iter, source).as(AST::IdentifierToken)
+
+      AST::GetAttrToken.new(
+        main,
+        source[start...finish],
+        identifier_token
+      )
+    end
+
+    private def build_index(main, iter, source) : AST::IndexToken
+      _, start, finish = main
+
+      next_token = iter.next_as_child_of(main)
+      kind, _, _ = next_token
+
+      if kind != :expression
+        raise "BUG: expected expression, got #{kind}"
+      end
+
+      expr_token = build_value(next_token, iter, source).as(AST::ExpressionToken)
+
+      AST::IndexToken.new(
+        main,
+        source[start...finish],
+        expr_token
       )
     end
 

@@ -20,7 +20,7 @@ module HCL
           pairs = [] of String
 
           values.each do |key, value|
-            pairs << "#{key}: #{value.string}"
+            pairs << "#{key} = #{value.string}"
           end
 
           str << pairs.join(", ")

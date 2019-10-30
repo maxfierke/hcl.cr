@@ -250,11 +250,36 @@ describe HCL::Parser do
       ])
     end
 
+    it "can parse property & index access" do
+      hcl_string = <<-HEREDOC
+        resource "aws_instance" "web" {
+          ami = { something = "evil this way comes" }.something
+          security_group_id = [1, 2, 3][0]
+        }
+
+      HEREDOC
+
+      parser = HCL::Parser.new(hcl_string)
+      parser.values.should eq([
+        {
+          "resource" => {
+            "aws_instance" => {
+              "web" => {
+                "ami" => "evil this way comes",
+                "security_group_id" => 1_i64
+              }
+            }
+          }
+        }
+      ])
+    end
+
     pending "can parse nested identifiers" do
       hcl_string = <<-HEREDOC
         resource "aws_instance" "web" {
           ami = var.something.ami_id
         }
+
       HEREDOC
 
       parser = HCL::Parser.new(hcl_string)
