@@ -1,7 +1,10 @@
 # hcl.cr
 
-A general-purpose HCL parser written in Crystal. Does not make any domain assumptions.
-Supports the standard HCL types, including blocks and lists. Does not support functions.
+A general-purpose HCL2 parser written in Crystal. Does not make any domain assumptions.
+Aims to supports the standard HCL2 types and map to the HCL2 informational model.
+
+This is considered a work-in-progress, though may work already for simple HCL2
+documents that don't depend on any dynamic evaluation (function calls, variables, interpolation)
 
 ## Installation
 
@@ -56,15 +59,23 @@ TODO: Write development instructions here
 
 ## TODO
 
-- [X] Add support for maps
-- [X] Add support for functions
-- [ ] Add support for square-bracket attribute & index access on maps & lists
-- [ ] Add support for arithmetic and logic operators
+- [X] Add support for literals (numbers, strings, booleans, null)
+- [X] Add support for blocks
+- [X] Add support for identifer parsing
+- [X] Add support for lists
+- [X] Add support for maps/objects
+- [X] Add support for function parsing
+- [X] Add support for square-bracket attribute & index access on maps & lists
+- [X] Add support for arithmetic and logic operators
 - [ ] Add support for conditional expressions
-- [ ] Parse interpolations
+- [ ] Add support for identifier evaluation
+- [ ] Add support for function evaluation
+- [ ] Add support for parsing interpolations/templates
+- [ ] Add support for evaluating interpolations/templates
 - [ ] Add support for heredocs
-- [ ] More validations
+- [ ] More validations, better parse errors
 - [ ] Investigate directives
+- [ ] Add support for `for` expressions
 
 ## Contributing
 
@@ -73,6 +84,10 @@ TODO: Write development instructions here
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create a new Pull Request
+
+## License
+
+Licensed under The MIT License. See [LICENSE](LICENSE) for more information.
 
 ## Contributors
 
