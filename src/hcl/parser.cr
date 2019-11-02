@@ -53,6 +53,7 @@ module HCL
       # Build the value from the given main token and possibly further recursion.
       value =
         case kind
+        when :conditional then build_conditional(main, iter, source)
         when :expression then build_expression(main, iter, source)
         when :function_call then build_call(main, iter, source)
         when :get_attr then build_get_attr(main, iter, source)
@@ -71,6 +72,27 @@ module HCL
       iter.assert_next_not_child_of(main)
 
       value
+    end
+
+    private def build_conditional(main, iter, source) : AST::ConditionalToken
+      _, start, finish = main
+
+      predicate = iter.next_as_child_of(main)
+      predicate_token = build_value(predicate, iter, source).as(AST::ExpressionToken)
+
+      true_expr = iter.next_as_child_of(main)
+      true_expr_token = build_value(true_expr, iter, source).as(AST::ExpressionToken)
+
+      false_expr = iter.next_as_child_of(main)
+      false_expr_token = build_value(false_expr, iter, source).as(AST::ExpressionToken)
+
+      AST::ConditionalToken.new(
+        main,
+        source[start...finish],
+        predicate_token,
+        true_expr_token,
+        false_expr_token
+      )
     end
 
     private def build_expression(main, iter, source) : AST::ExpressionToken

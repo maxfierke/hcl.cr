@@ -126,6 +126,38 @@ describe HCL::Parser do
       ])
     end
 
+    it "can parse conditional expressions" do
+      hcl_string = <<-HEREDOC
+        resource "aws_instance" "web" {
+          ami_id = true ? "spatula" : 5
+          size = false ? 1 : 9
+          region = null ? "hello" : "world"
+          something_numeric = 0 ? 2 : 8
+          an_op = 3 > 2 ? 5 : 3
+          an_array = [1, 2] ? 8 : 1
+        }
+
+      HEREDOC
+
+      parser = HCL::Parser.new(hcl_string)
+      parser.values.should eq([
+        {
+          "resource" => {
+            "aws_instance" => {
+              "web" => {
+                "ami_id" => "spatula",
+                "size"   => 9,
+                "region" => "world",
+                "something_numeric" => 8,
+                "an_op" => 5,
+                "an_array" => 8
+              }
+            }
+          }
+        }
+      ])
+    end
+
     it "can parse map values" do
       hcl_string = <<-HCL
         config "hello" {

@@ -48,12 +48,6 @@ module HCL
       (range('a', 'z') | range('A', 'Z') | digits | char('_') | char('-')).repeat
     ).named(:identifier)
 
-    conditional = (
-      expression >> s >>
-      char('?') >> s >> expression >> s >>
-      char(':') >> s >> expression
-    ).named(:conditional)
-
     _logic_operator = str("&&") | str("||") | char('!')
     _arithetic_operator = char('+') | char('-') | char('*') | char('/') | char('%')
     _compare_operator = str("==") | str("!=") | str("<=") | str(">=") |
@@ -133,6 +127,20 @@ module HCL
     _splat_expr_term =
       _index_expr_term | _prop_expr_term
 
+    _conditional_expr_term =
+      _nested_expr_term |
+      (
+        operation |
+        (_index_expr_term >> index) |
+        (_prop_expr_term >> get_attr) |
+        (_splat_expr_term >> splat) |
+        template_expr |
+        literal_value |
+        collection_value |
+        function_call |
+        variable_expr
+      ).named(:expression)
+
     expr_term.define \
       _nested_expr_term |
       (_index_expr_term >> index) |
@@ -145,8 +153,14 @@ module HCL
       # for_expr |
       variable_expr
 
+    conditional = (
+      _conditional_expr_term >> snl >>
+      char('?') >> snl >> _conditional_expr_term >> snl >>
+      char(':') >> snl >> _conditional_expr_term
+    ).named(:conditional)
+
     expression.define \
-      (operation | expr_term | conditional).named(:expression)
+      (conditional | operation | expr_term).named(:expression)
 
     one_line_block = (
       identifier >> s >>

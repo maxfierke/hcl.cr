@@ -67,7 +67,7 @@ TODO: Write development instructions here
 - [X] Add support for function parsing
 - [X] Add support for square-bracket attribute & index access on maps & lists
 - [X] Add support for arithmetic and logic operators
-- [ ] Add support for conditional expressions
+- [X] Add support for conditional expressions
 - [ ] Add support for identifier evaluation
 - [ ] Add support for function evaluation
 - [ ] Add support for parsing interpolations/templates
