@@ -1,31 +1,25 @@
 module HCL
   Grammar = Pegmatite::DSL.define do
-    # Forward-declare `block`, `list`, and `map` to refer to them before defining them.
-    block = declare
-    call = declare
-    list  = declare
-    map = declare
+    # Forward-declare `body`, `expression`, and `expr_term` to refer to them before defining them.
+    body = declare
+    expression = declare
+    expr_term = declare
+
+    newline = (char('\r').maybe >> char('\n')).named(:newline, false)
 
     comment_char = range(' ', 0x10FFFF_u32)
     comment = (
-      char('#') >> (~char('\n') >> comment_char).maybe.repeat >> char('\n')
+      char('#') >> (~newline >> comment_char).repeat >> newline
     ).named(:comment, false)
-    multi_comment_char = ~str("*/") >> (
-      comment_char | char('\n') | char('\r') | char('\t')
-    )
+    multi_comment_char = ~str("*/") >> (comment_char | newline)
     multi_comment = (
-      char('/') >> char('*') >>
-      multi_comment_char.maybe.repeat >>
-      char('*') >> char('/')
+      str("/*") >> multi_comment_char.repeat >> str("*/")
     ).named(:multi_comment, false)
 
-    line_break = char('\r') | char('\n').named(:line_break, false)
-    whitespace = (char(' ') | char('\t')).named(:whitespace, false)
+    whitespace = char(' ').named(:whitespace, false)
+    s = (multi_comment | comment | whitespace).repeat.named(:ignored, false)
+    snl = (s >> newline.maybe >> s).repeat.named(:ignored_or_newline, false)
 
-    # Define what optional whitespace looks like.
-    s = (multi_comment | comment | whitespace | line_break).repeat.named(:ignored, false)
-
-    # Define what a number looks like.
     digit19 = range('1', '9')
     digit = range('0', '9')
     digits = digit.repeat(1)
@@ -37,60 +31,155 @@ module HCL
     frac = char('.') >> digits
     exp = (char('e') | char('E')) >> (char('+') | char('-')).maybe >> digits
     numeric = int >> frac.maybe >> exp.maybe
-    numeric_str = char('"') >> numeric >> char('"')
-    number = (numeric | numeric_str).named(:number)
+    numeric_lit = numeric.named(:number)
 
-    # Define what a string looks like.
     hex = digit | range('a', 'f') | range('A', 'F')
     string_char =
-      str("\\\"") | str("\\\\") | str("\\|") |
-      str("\\b") | str("\\f") | str("\\n") | str("\\r") | str("\\t") |
+      str("\\\"") | str("\\\\") |
+      str("\\n") | str("\\r") | str("\\t") |
       (str("\\u") >> hex >> hex >> hex >> hex) |
+      (str("\\U") >> hex >> hex >> hex >> hex >> hex >> hex >> hex >> hex) |
       (~char('"') >> ~char('\\') >> range(' ', 0x10FFFF_u32))
-    string = char('"') >> string_char.repeat.named(:string) >> char('"')
+    string_lit = char('"') >> string_char.repeat.named(:string) >> char('"')
 
+    # TODO: support the spec fully: https://github.com/hashicorp/hcl/blob/hcl2/hclsyntax/spec.md#identifiers
     identifier = (
       (range('a', 'z') | range('A', 'Z') | char('_')) >>
-      (range('a', 'z') | range('A', 'Z') | digits | char('_') | char('-') | char('.')).repeat
+      (range('a', 'z') | range('A', 'Z') | digits | char('_') | char('-')).repeat
     ).named(:identifier)
 
-    t_null = str("null").named(:null)
-    t_true = (str("true") | str("\"true\"")).named(:true)
-    t_false = (str("false") | str("\"false\"")).named(:false)
-    bool = t_true | t_false
+    _logic_operator = str("&&") | str("||") | char('!')
+    _arithetic_operator = char('+') | char('-') | char('*') | char('/') | char('%')
+    _compare_operator = str("==") | str("!=") | str("<=") | str(">=") |
+      char('<') | char('>')
+    _binary_operator = (_compare_operator | _arithetic_operator | _logic_operator).named(:operator)
+    _binary_op = expr_term >> s >> _binary_operator >> s >> expr_term
+    _unary_op = (char('-') | char('!')).named(:operator) >> expr_term
+    operation = (_unary_op | _binary_op).named(:operation)
 
-    # Define what constitutes a value.
-    value = t_null | bool | number | call | identifier | string | map | list
+    get_attr = (char('.') >> identifier).named(:get_attr)
+    index = (char('[') >> snl >> expression >> snl >> char(']')).named(:index)
+    splat = (
+      (char('.') >> char('*') >> get_attr.repeat) |
+      (char('[') >> char('*') >> char(']') >> (get_attr | index).repeat)
+    ).named(:splat)
 
-    # Define what an list is, in terms of zero or more values.
-    values = value >> s >> (char(',') >> s >> value).repeat
-    list.define \
-      (char('[') >> s >> values.maybe >> s >> char(']')).named(:list)
+    arguments = (
+      expression >> (char(',') >> s >> expression).repeat >>
+      (char(',') | str("...")).maybe
+    ).named(:arguments)
+    function_call = (
+      identifier >> char('(') >> arguments.maybe >> char(')')
+    ).named(:function_call)
 
-    call.define \
-      (identifier >> char('(') >> s >> values.maybe >> s >> char(')')).named(:call)
+    variable_expr = identifier
 
-    # Define what an object is, in terms of zero or more key/value pairs.
-    pair = (identifier >> s >> char('=') >> s >> value).named(:assignment)
+    _heredoc_template = (
+      (str("<<") | str("<<-")) >> identifier >> newline >>
+      (string_char.repeat >> newline).repeat >>
+      identifier >> newline
+    )
+    _quoted_template = string_lit
+    template_expr = _quoted_template | _heredoc_template
 
-    # An object with just a set of values is called a `map` in HCL
-    map.define \
-      (char('{') >> s >> pair.maybe >> s >> char('}')).named(:map)
+    # TODO: Spec says expression should work w/ identifier too, but Pegmatite is
+    # getting a stack overflow w/ this:
+    # (identifier | expression)
+    _object_elem = (
+      identifier >> s >> char('=') >> s >> expression
+    ).named(:attribute)
+    _object = (
+      char('{') >> snl >> (
+        _object_elem >>
+        (char(',') >> snl >> _object_elem >> snl).repeat >>
+        char(',').maybe
+      ).maybe >> snl >> char('}')
+    ).named(:object)
+    _tuple = (
+      char('[') >> snl >> (
+        expression >>
+        (char(',') >> snl >> expression >> snl).repeat >>
+        char(',').maybe
+      ).maybe >> snl >> char(']')
+    ).named(:tuple)
+    collection_value = _tuple | _object
 
-    block_item = pair | block
-    block_item_list = block_item >> s >> (block_item >> s).repeat
+    literal_value = (
+      numeric_lit |
+      (str("true") | str("false") | str("null")).named(:literal)
+    )
 
-    # If we've got both blocks and key-value pairs, it's a block body
-    block_body = (
-      char('{') >> s >> block_item_list.maybe >> s >> char('}')
-    ).named(:block_body)
+    # ExprTerm that may have properties
+    _nested_expr_term = (char('(') >> snl >> expression >> snl >> char(')'))
+    _prop_expr_term =
+      _nested_expr_term |
+      literal_value |
+      _object |
+      function_call |
+      variable_expr
 
-    block_args = (string >> s).maybe.repeat.named(:block_args)
-    block.define \
-      (identifier >> s >> block_args >> block_body).named(:block)
-    blocks = block >> s >> block.repeat
+    _index_expr_term =
+      _nested_expr_term |
+      collection_value |
+      function_call |
+      variable_expr
 
-    # An HCL document is an list or object with optional surrounding whitespace.
-    (s >> blocks >> s).then_eof
+    _splat_expr_term =
+      _index_expr_term | _prop_expr_term
+
+    _conditional_expr_term =
+      _nested_expr_term |
+      (
+        operation |
+        (_index_expr_term >> index) |
+        (_prop_expr_term >> get_attr) |
+        (_splat_expr_term >> splat) |
+        template_expr |
+        literal_value |
+        collection_value |
+        function_call |
+        variable_expr
+      ).named(:expression)
+
+    expr_term.define \
+      _nested_expr_term |
+      (_index_expr_term >> index) |
+      (_prop_expr_term >> get_attr) |
+      (_splat_expr_term >> splat) |
+      template_expr |
+      literal_value |
+      collection_value |
+      function_call |
+      # for_expr |
+      variable_expr
+
+    conditional = (
+      _conditional_expr_term >> snl >>
+      char('?') >> snl >> _conditional_expr_term >> snl >>
+      char(':') >> snl >> _conditional_expr_term
+    ).named(:conditional)
+
+    expression.define \
+      (conditional | operation | expr_term).named(:expression)
+
+    one_line_block = (
+      identifier >> s >>
+      ((string_lit | identifier) >> s).repeat >>
+      char('{') >> s >>
+      (identifier >> s >> char('=') >> s >> expression >> s).maybe.named(:attribute) >>
+      char('}') >> s >> newline
+    ).named(:block)
+    block = (
+      identifier >> s >>
+      ((string_lit | identifier) >> s).repeat >>
+      char('{') >> s >> newline >> body >> char('}') >> s >> newline
+    ).named(:block)
+    attribute = (
+      identifier >> s >> char('=') >> s >> expression >> s >> newline
+    ).named(:attribute)
+    body.define \
+      (snl >> (attribute | block | one_line_block) >> snl).repeat
+
+    config_file = body.then_eof
   end
 end

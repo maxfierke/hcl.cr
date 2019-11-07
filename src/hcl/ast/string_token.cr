@@ -1,8 +1,12 @@
 module HCL
   module AST
     class StringToken < ValueToken
-      def value
-        string
+      def string
+        "\"#{source}\""
+      end
+
+      def value : ValueType
+        source
       end
     end
   end
