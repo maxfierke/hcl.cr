@@ -20,13 +20,13 @@ module HCL
         "#{predicate.string} ? #{true_expr.string} : #{false_expr.string}"
       end
 
-      def value : ValueType
-        predicate_value = predicate.value
+      def value(ctx : ExpressionContext) : ValueType
+        predicate_value = predicate.value(ctx)
 
         if truthy?(predicate_value)
-          true_expr.value
+          true_expr.value(ctx)
         else
-          false_expr.value
+          false_expr.value(ctx)
         end
       end
 

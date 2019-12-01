@@ -5,7 +5,7 @@ module HCL
         "\"#{source}\""
       end
 
-      def value : ValueType
+      def value(ctx : ExpressionContext) : ValueType
         source
       end
     end

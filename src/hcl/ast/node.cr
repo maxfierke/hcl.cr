@@ -16,7 +16,7 @@ module HCL
       end
 
       abstract def string : String
-      abstract def value : ValueType
+      abstract def value(ctx : ExpressionContext) : ValueType
     end
   end
 end

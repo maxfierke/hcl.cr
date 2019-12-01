@@ -32,15 +32,19 @@ module HCL
         end
       end
 
-      def value : ValueType
+      def value
+        value(ExpressionContext.new)
+      end
+
+      def value(ctx : ExpressionContext) : ValueType
         dict = {} of String => ValueType
 
         attributes.each do |key, value|
-          dict[key] = value.value.as(ValueType)
+          dict[key] = value.value(ctx).as(ValueType)
         end
 
         blocks.each do |block|
-          block_dict = block.value.as(Hash(String, ValueType))
+          block_dict = block.value(ctx).as(Hash(String, ValueType))
           dict.merge!(block_dict)
         end
 

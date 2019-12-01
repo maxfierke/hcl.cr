@@ -40,23 +40,25 @@ module HCL
         end
       end
 
-      def value : ValueType
-        block_header = [id] + labels.map(&.value)
-        block_value = value_dict.as(ValueType)
+      def value(ctx : ExpressionContext) : ValueType
+        block_header = [id] + labels.map do |label|
+          label.value(ctx)
+        end
+        block_value = value_dict(ctx).as(ValueType)
         block_header.reverse.reduce(block_value) do |acc, val|
           { val.to_s => acc.as(ValueType) }
         end.as(Hash(String, ValueType)).as(ValueType)
       end
 
-      private def value_dict
+      private def value_dict(ctx)
         dict = {} of String => ValueType
 
         attributes.each do |key, value|
-          dict[key] = value.value.as(ValueType)
+          dict[key] = value.value(ctx).as(ValueType)
         end
 
         blocks.each do |block|
-          block_dict = block.value.as(Hash(String, ValueType))
+          block_dict = block.value(ctx).as(Hash(String, ValueType))
           dict.merge!(block_dict)
         end
 

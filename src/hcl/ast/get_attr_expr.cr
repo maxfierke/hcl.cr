@@ -19,7 +19,7 @@ module HCL
         ".#{attribute_name}"
       end
 
-      def value : ValueType
+      def value(ctx : ExpressionContext) : ValueType
         raise "BUG: This should not be called, as there is no value to represent."
       end
     end

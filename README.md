@@ -69,8 +69,8 @@ TODO: Write development instructions here
 - [X] Add support for arithmetic and logic operators
 - [X] Add support for conditional expressions
 - [X] Add support for top-level attributes
-- [ ] Add support for identifier evaluation
-- [ ] Add support for function evaluation
+- [X] Add support for identifier/variable evaluation
+- [X] Add support for function evaluation
 - [ ] Add support for parsing interpolations/templates
 - [ ] Add support for evaluating interpolations/templates
 - [ ] Add support for heredocs

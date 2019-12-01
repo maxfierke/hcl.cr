@@ -5,8 +5,8 @@ module HCL
         source
       end
 
-      def value : ValueType
-        string
+      def value(ctx : ExpressionContext) : ValueType
+        ctx.lookup_var(string)
       end
     end
   end

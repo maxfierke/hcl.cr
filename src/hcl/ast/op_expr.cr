@@ -57,13 +57,13 @@ module HCL
         end
       end
 
-      def value : ValueType
+      def value(ctx : ExpressionContext) : ValueType
         # This is wrong. Need to figure out order of operations stuff, probably.
         left_op = left_operand
         right_op = right_operand
         if right_op.nil?
           left_op = left_operand
-          left_op_val = left_op.value
+          left_op_val = left_op.value(ctx)
           raise "Parser bug: Cannot perform unary operation on array" if left_op_val.responds_to?(:[])
           case operator
           when NOT
@@ -74,8 +74,8 @@ module HCL
             -left_op_val
           end
         else
-          left_op_val = left_op.value
-          right_op_val = right_op.value
+          left_op_val = left_op.value(ctx)
+          right_op_val = right_op.value(ctx)
 
           case operator
           when ADDITION

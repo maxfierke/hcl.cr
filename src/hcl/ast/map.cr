@@ -28,11 +28,11 @@ module HCL
         end
       end
 
-      def value : ValueType
+      def value(ctx : ExpressionContext) : ValueType
         dict = {} of String => ValueType
 
         attributes.each do |key, value|
-          dict[key] = value.value
+          dict[key] = value.value(ctx)
         end
 
         dict

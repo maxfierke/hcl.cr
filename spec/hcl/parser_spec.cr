@@ -1,5 +1,19 @@
 require "../spec_helper"
 
+class SomeFunction < HCL::Function
+  def initialize
+    super("some_function", 3)
+  end
+
+  def call(args)
+    arg1 = args[0]
+    arg2 = args[1]
+    arg3 = args[2]
+
+    "#{arg3} #{arg1} #{arg2}"
+  end
+end
+
 describe HCL::Parser do
   describe "#parse" do
     it "can parse strings" do
@@ -341,11 +355,15 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+
+      ctx = HCL::ExpressionContext.new
+      ctx.functions["some_function"] = SomeFunction.new
+      ctx.variables["item1"] = "world"
+
+      doc.value(ctx).should eq({
         "config" => {
           "hello" => {
-            # TODO: This is wrong.
-            "yoo" => nil
+            "yoo" => "hello world [1, 2, 3]"
           }
         }
       })
