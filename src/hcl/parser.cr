@@ -251,8 +251,8 @@ module HCL
 
     private def build_block(main, iter, source) : AST::BlockToken
       _, start, finish = main
-      block_dict = {} of String => AST::ValueToken
-      block_args = Array(AST::IdentifierToken | AST::StringToken).new
+      block_attributes = {} of String => AST::ValueToken
+      block_labels = Array(AST::IdentifierToken | AST::StringToken).new
       blocks = [] of AST::BlockToken
 
       block_id = extract_identifier(iter.next_as_child_of(main), iter, source)
@@ -268,7 +268,7 @@ module HCL
           key = build_value(iter.next_as_child_of(token), iter, source).as_s
           val = build_value(iter.next_as_child_of(token), iter, source)
           iter.assert_next_not_child_of(token)
-          block_dict[key] = val
+          block_attributes[key] = val
         elsif kind == :block
           has_seen_seen_inner_block = true
           new_block = build_block(token, iter, source)
@@ -281,9 +281,9 @@ module HCL
             token_node = build_value(token, iter, source)
 
             if kind == :identifier
-              block_args << token_node.as(AST::IdentifierToken)
+              block_labels << token_node.as(AST::IdentifierToken)
             elsif kind == :string
-              block_args << token_node.as(AST::StringToken)
+              block_labels << token_node.as(AST::StringToken)
             else
               raise "BUG: Should be identifier or string"
             end
@@ -298,8 +298,8 @@ module HCL
         main,
         source[start...finish],
         block_id,
-        block_args,
-        block_dict,
+        block_labels,
+        block_attributes,
         blocks
       )
     end

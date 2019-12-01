@@ -1,7 +1,7 @@
 module HCL
   module AST
     class BlockToken < Token
-      getter :id, :args, :values, :blocks
+      getter :id, :labels, :attributes, :blocks
 
       # :nodoc:
       # This whole override should be unnecessary, but for some reason
@@ -11,11 +11,11 @@ module HCL
         peg_tuple : Pegmatite::Token,
         string : String,
         id : String,
-        args : Array(ValueToken),
-        values : Hash(String, ValueToken),
+        labels : Array(ValueToken),
+        attributes : Hash(String, ValueToken),
         blocks : Array(BlockToken)
       )
-        block_args = args.map! do |arg|
+        block_labels = labels.map! do |arg|
           if arg.is_a?(AST::StringToken)
             arg.as(AST::StringToken)
           elsif arg.is_a?(AST::IdentifierToken)
@@ -28,8 +28,8 @@ module HCL
         super(peg_tuple, string)
 
         @id = id
-        @args = block_args
-        @values = values
+        @labels = block_labels
+        @attributes = attributes
         @blocks = blocks
       end
 
@@ -37,23 +37,23 @@ module HCL
         peg_tuple : Pegmatite::Token,
         string : String,
         id : String,
-        args : Array(StringToken | IdentifierToken),
-        values : Hash(String, ValueToken),
+        labels : Array(StringToken | IdentifierToken),
+        attributes : Hash(String, ValueToken),
         blocks : Array(BlockToken)
       )
         super(peg_tuple, string)
 
         @id = id
-        @args = args
-        @values = values
+        @labels = labels
+        @attributes = attributes
         @blocks = blocks
       end
 
       def string
         String.build do |str|
-          str << "#{id} #{args.map(&.string).join(" ")} {\n"
+          str << "#{id} #{labels.map(&.string).join(" ")} {\n"
 
-          values.each do |key, value|
+          attributes.each do |key, value|
             str << "  #{key} = #{value.string}\n"
           end
 
@@ -69,7 +69,7 @@ module HCL
       end
 
       def value : ValueType
-        block_header = [id] + args.map(&.value)
+        block_header = [id] + labels.map(&.value)
         block_value = value_dict.as(ValueType)
         block_header.reverse.reduce(block_value) do |acc, val|
           { val.to_s => acc.as(ValueType) }
@@ -79,7 +79,7 @@ module HCL
       private def value_dict
         dict = {} of String => ValueType
 
-        values.each do |key, value|
+        attributes.each do |key, value|
           dict[key] = value.value.as(ValueType)
         end
 
