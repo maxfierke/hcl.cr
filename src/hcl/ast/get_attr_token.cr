@@ -1,6 +1,6 @@
 module HCL
   module AST
-    class GetAttrToken < ValueToken
+    class GetAttrToken < Token
       @attribute_name : String
 
       getter :attribute_name
@@ -15,7 +15,7 @@ module HCL
         @attribute_name = attribute.string
       end
 
-      def string
+      def string : String
         ".#{attribute_name}"
       end
 

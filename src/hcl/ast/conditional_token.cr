@@ -1,6 +1,6 @@
 module HCL
   module AST
-    class ConditionalToken < ValueToken
+    class ConditionalToken < Token
       getter :predicate, :true_expr, :false_expr
 
       def initialize(
@@ -16,7 +16,7 @@ module HCL
         @false_expr = false_expr
       end
 
-      def string
+      def string : String
         "#{predicate.string} ? #{true_expr.string} : #{false_expr.string}"
       end
 

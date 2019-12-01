@@ -1,7 +1,7 @@
 module HCL
   module AST
-    class IdentifierToken < ValueToken
-      def string
+    class IdentifierToken < Token
+      def string : String
         source
       end
 

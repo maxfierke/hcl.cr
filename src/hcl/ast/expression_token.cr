@@ -1,6 +1,6 @@
 module HCL
   module AST
-    class ExpressionToken < ValueToken
+    class ExpressionToken < Token
       getter :children, :context
 
       def initialize(
@@ -15,7 +15,7 @@ module HCL
         @context = context
       end
 
-      def string
+      def string : String
         children.map do |exp|
           case exp
           when ExpressionToken
@@ -49,7 +49,7 @@ module HCL
             else
               raise "Cannot read member #{child_val} from #{typeof(result)}"
             end
-          elsif child.is_a?(ValueToken)
+          elsif child.is_a?(Token)
             result = child.value
           else
             raise "BUG: Cannot evaluate token #{child.class}"

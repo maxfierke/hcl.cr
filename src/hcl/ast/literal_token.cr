@@ -1,13 +1,13 @@
 module HCL
   module AST
-    class LiteralToken < ValueToken
+    class LiteralToken < Token
       @value : Nil | Bool
 
       NULL_STR = "null"
       TRUE_STR = "true"
       FALSE_STR = "false"
 
-      def string
+      def string : String
         if value == true
           TRUE_STR
         elsif value == false

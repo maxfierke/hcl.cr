@@ -1,7 +1,7 @@
 module HCL
   module AST
-    class StringToken < ValueToken
-      def string
+    class StringToken < Token
+      def string : String
         "\"#{source}\""
       end
 

@@ -35,24 +35,10 @@ module HCL
     private def build_token(main, iter, source) : AST::Token
       kind, start, finish = main
 
-      token =
-        case kind
-        when :block then build_block(main, iter, source)
-        else build_value(main, iter, source)
-        end
-
-        # Assert that we have consumed all child tokens.
-      iter.assert_next_not_child_of(main)
-
-      token
-    end
-
-    private def build_value(main, iter, source) : AST::ValueToken
-      kind, start, finish = main
-
       # Build the value from the given main token and possibly further recursion.
       value =
         case kind
+        when :block then build_block(main, iter, source)
         when :conditional then build_conditional(main, iter, source)
         when :expression then build_expression(main, iter, source)
         when :function_call then build_call(main, iter, source)
@@ -78,13 +64,13 @@ module HCL
       _, start, finish = main
 
       predicate = iter.next_as_child_of(main)
-      predicate_token = build_value(predicate, iter, source).as(AST::ExpressionToken)
+      predicate_token = build_token(predicate, iter, source).as(AST::ExpressionToken)
 
       true_expr = iter.next_as_child_of(main)
-      true_expr_token = build_value(true_expr, iter, source).as(AST::ExpressionToken)
+      true_expr_token = build_token(true_expr, iter, source).as(AST::ExpressionToken)
 
       false_expr = iter.next_as_child_of(main)
-      false_expr_token = build_value(false_expr, iter, source).as(AST::ExpressionToken)
+      false_expr_token = build_token(false_expr, iter, source).as(AST::ExpressionToken)
 
       AST::ConditionalToken.new(
         main,
@@ -129,7 +115,7 @@ module HCL
         raise "BUG: expected identifier, got #{kind}"
       end
 
-      identifier_token = build_value(next_token, iter, source).as(AST::IdentifierToken)
+      identifier_token = build_token(next_token, iter, source).as(AST::IdentifierToken)
 
       AST::GetAttrToken.new(
         main,
@@ -148,7 +134,7 @@ module HCL
         raise "BUG: expected expression, got #{kind}"
       end
 
-      expr_token = build_value(next_token, iter, source).as(AST::ExpressionToken)
+      expr_token = build_token(next_token, iter, source).as(AST::ExpressionToken)
 
       AST::IndexToken.new(
         main,
@@ -174,14 +160,14 @@ module HCL
       if kind == :operator
         operator = iter.next_as_child_of(main)
         left_operand = iter.next_as_child_of(main)
-        left_operand_token = build_value(left_operand, iter, source)
+        left_operand_token = build_token(left_operand, iter, source)
         right_operand_token = nil
       elsif kind == :number || kind == :literal
         left_operand = iter.next_as_child_of(main)
-        left_operand_token = build_value(left_operand, iter, source)
+        left_operand_token = build_token(left_operand, iter, source)
         operator = iter.next_as_child_of(main)
         right_operand = iter.next_as_child_of(main)
-        right_operand_token = build_value(right_operand, iter, source)
+        right_operand_token = build_token(right_operand, iter, source)
       else
         raise "BUG: Expected operator, number, or literal, but got #{kind}"
       end
@@ -203,7 +189,7 @@ module HCL
 
       # Gather children as values into the list.
       iter.while_next_is_child_of(main) do |child|
-        list << build_value(child, iter, source)
+        list << build_token(child, iter, source)
       end
 
       list
@@ -226,15 +212,15 @@ module HCL
         raise "Expected object, but got '#{kind}'"
       end
 
-      values = {} of String => AST::ValueToken
+      values = {} of String => AST::Token
 
       iter.while_next_is_child_of(main) do |token|
         kind, _, _ = token
 
         if kind == :attribute
           # Gather children as pairs of key/values into the object.
-          key = build_value(iter.next_as_child_of(token), iter, source).as_s
-          val = build_value(iter.next_as_child_of(token), iter, source)
+          key = build_token(iter.next_as_child_of(token), iter, source).as_s
+          val = build_token(iter.next_as_child_of(token), iter, source)
           iter.assert_next_not_child_of(token)
           values[key] = val
         else
@@ -251,7 +237,7 @@ module HCL
 
     private def build_block(main, iter, source) : AST::BlockToken
       _, start, finish = main
-      block_attributes = {} of String => AST::ValueToken
+      block_attributes = {} of String => AST::Token
       block_labels = Array(AST::IdentifierToken | AST::StringToken).new
       blocks = [] of AST::BlockToken
 
@@ -265,8 +251,8 @@ module HCL
         if kind == :attribute
           has_seen_seen_inner_block = true
           # Gather children as pairs of key/values into the array.
-          key = build_value(iter.next_as_child_of(token), iter, source).as_s
-          val = build_value(iter.next_as_child_of(token), iter, source)
+          key = build_token(iter.next_as_child_of(token), iter, source).as_s
+          val = build_token(iter.next_as_child_of(token), iter, source)
           iter.assert_next_not_child_of(token)
           block_attributes[key] = val
         elsif kind == :block
@@ -278,7 +264,7 @@ module HCL
           if has_seen_seen_inner_block
             raise "Found '#{kind}' but expected an attribute assignment or block."
           else
-            token_node = build_value(token, iter, source)
+            token_node = build_token(token, iter, source)
 
             if kind == :identifier
               block_labels << token_node.as(AST::IdentifierToken)
@@ -306,7 +292,7 @@ module HCL
 
     private def build_call(main, iter, source) : AST::CallToken
       _, start, finish = main
-      args = [] of AST::ValueToken
+      args = [] of AST::Token
 
       function_id = extract_identifier(iter.next_as_child_of(main), iter, source)
 
@@ -318,7 +304,7 @@ module HCL
       end
 
       iter.while_next_is_child_of(next_token) do |child|
-        args << build_value(child, iter, source)
+        args << build_token(child, iter, source)
       end
 
       AST::CallToken.new(

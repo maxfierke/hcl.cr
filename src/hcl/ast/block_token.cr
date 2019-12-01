@@ -11,8 +11,8 @@ module HCL
         peg_tuple : Pegmatite::Token,
         string : String,
         id : String,
-        labels : Array(ValueToken),
-        attributes : Hash(String, ValueToken),
+        labels : Array(Token),
+        attributes : Hash(String, Token),
         blocks : Array(BlockToken)
       )
         block_labels = labels.map! do |arg|
@@ -38,7 +38,7 @@ module HCL
         string : String,
         id : String,
         labels : Array(StringToken | IdentifierToken),
-        attributes : Hash(String, ValueToken),
+        attributes : Hash(String, Token),
         blocks : Array(BlockToken)
       )
         super(peg_tuple, string)
@@ -49,7 +49,7 @@ module HCL
         @blocks = blocks
       end
 
-      def string
+      def string : String
         String.build do |str|
           str << "#{id} #{labels.map(&.string).join(" ")} {\n"
 

@@ -5,6 +5,5 @@ module HCL
 end
 
 require "./hcl/ast/token"
-require "./hcl/ast/value_token"
 require "./hcl/ast/*"
 require "./hcl/*"

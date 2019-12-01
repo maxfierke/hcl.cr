@@ -1,19 +1,19 @@
 module HCL
   module AST
-    class ObjectToken < ValueToken
+    class ObjectToken < Token
       getter :values
 
       def initialize(
         peg_tuple : Pegmatite::Token,
         source : String,
-        values : Hash(String, ValueToken)
+        values : Hash(String, Token)
       )
         super(peg_tuple, source)
 
         @values = values
       end
 
-      def string
+      def string : String
         String.build do |str|
           str << "{ "
 

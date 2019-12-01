@@ -1,13 +1,13 @@
 module HCL
   module AST
-    class CallToken < ValueToken
+    class CallToken < Token
       getter :id, :args
 
       def initialize(
         peg_tuple : Pegmatite::Token,
         string : String,
         id : String,
-        args : Array(ValueToken),
+        args : Array(Token),
       )
         super(peg_tuple, string)
 
@@ -15,7 +15,7 @@ module HCL
         @args = args
       end
 
-      def string
+      def string : String
         "#{id}(#{args.map(&.value).join(", ")})"
       end
 

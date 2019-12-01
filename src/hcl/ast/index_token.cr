@@ -1,6 +1,6 @@
 module HCL
   module AST
-    class IndexToken < ValueToken
+    class IndexToken < Token
       getter :index_exp
 
       def initialize(
@@ -13,7 +13,7 @@ module HCL
         @index_exp = index_exp
       end
 
-      def string
+      def string : String
         "[#{index_exp.string}]"
       end
 
