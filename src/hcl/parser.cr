@@ -1,39 +1,49 @@
 module HCL
   class Parser
-    @nodes : Nil | Array(AST::Node)
+    @document : AST::Document?
 
-    include Iterator(AST::Node)
-
-    getter :source
+    getter :document, :source
 
     def initialize(@source : String, offset = 0, io : IO? = nil)
       @peg_tokens = Pegmatite.tokenize(HCL::Grammar, source, offset, io)
       @peg_iter = Pegmatite::TokenIterator.new(@peg_tokens)
     end
 
-    def parse
-      nodes
+    def parse!
+      @document ||= build_document(@peg_iter, source)
     end
 
-    def nodes
-      @nodes ||= to_a
-    end
+    private def build_document(iter, source) : AST::Document
+      attributes = {} of String => AST::Node
+      blocks = [] of AST::Block
 
-    def string
-      nodes.map { |token| token.string }.join('\n')
-    end
+      while token = iter.peek
+        kind, _, _ = token
 
-    def values
-      nodes.map { |token| token.value }
-    end
+        # Advance iterator now that we've seen the next token
+        iter.next
 
-    def next
-      if peg_main = @peg_iter.peek
-        @peg_iter.next
-        build_node(peg_main, @peg_iter, source)
-      else
-        stop
+        if kind == :attribute
+          # Gather children as pairs of key/values into the array.
+          key = build_node(iter.next_as_child_of(token), iter, source).as_s
+          val = build_node(iter.next_as_child_of(token), iter, source)
+          iter.assert_next_not_child_of(token)
+          attributes[key] = val
+        elsif kind == :block
+          new_block = build_block(token, iter, source)
+          iter.assert_next_not_child_of(token)
+          blocks << new_block
+        else
+          raise "Found '#{kind}' but expected an attribute assignment or block."
+        end
       end
+
+      AST::Document.new(
+        Pegmatite::Token.new(:document, 0, source.size),
+        source,
+        attributes,
+        blocks
+      )
     end
 
     private def build_node(main, iter, source) : AST::Node

@@ -11,15 +11,14 @@ describe HCL::Parser do
       HEREDOC
 
       parser = HCL::Parser.new(hcl_string)
-      parser.values.should eq([
-        {
-          "variable" => {
-            "ami" => {
-              "description" => "the AMI to use"
-            }
+      doc = parser.parse!
+      doc.value.should eq({
+        "variable" => {
+          "ami" => {
+            "description" => "the AMI to use"
           }
         }
-      ])
+      })
     end
 
     it "can parse numbers" do
@@ -33,21 +32,20 @@ describe HCL::Parser do
         }
 
       HCL
-      parser = HCL::Parser.new(hcl_string)
 
-      parser.values.should eq([
-        {
-          "provider" => {
-            "foo" => {
-              "foo" => 0.1_f64,
-              "bar" => 1_i64,
-              "baz" => "1234",
-              "biz" => "1234.56",
-              "flim" => -6_i64
-            }
+      parser = HCL::Parser.new(hcl_string)
+      doc = parser.parse!
+      doc.value.should eq({
+        "provider" => {
+          "foo" => {
+            "foo" => 0.1_f64,
+            "bar" => 1_i64,
+            "baz" => "1234",
+            "biz" => "1234.56",
+            "flim" => -6_i64
           }
         }
-      ])
+      })
     end
 
     it "can parse operators" do
@@ -72,32 +70,31 @@ describe HCL::Parser do
         }
 
       HCL
-      parser = HCL::Parser.new(hcl_string)
 
-      parser.values.should eq([
-        {
-          "provider" => {
-            "foo" => {
-              "foo" => 0.1_f64 * 0.5_f64,
-              "bar" => 9_i64,
-              "baz" => 1_i64,
-              "biz" => 6_i64,
-              "boingo" => 3_f64,
-              "flim" => 9.0_f64 / 4.0_f64,
-              "flam" => true,
-              "bim"  => true,
-              "bam"  => nil,
-              "gt"   => true,
-              "gte"  => true,
-              "lt"   => true,
-              "lte"  => false,
-              "eq"   => true,
-              "neq"  => false,
-              "double_not" => false
-            }
+      parser = HCL::Parser.new(hcl_string)
+      doc = parser.parse!
+      doc.value.should eq({
+        "provider" => {
+          "foo" => {
+            "foo" => 0.1_f64 * 0.5_f64,
+            "bar" => 9_i64,
+            "baz" => 1_i64,
+            "biz" => 6_i64,
+            "boingo" => 3_f64,
+            "flim" => 9.0_f64 / 4.0_f64,
+            "flam" => true,
+            "bim"  => true,
+            "bam"  => nil,
+            "gt"   => true,
+            "gte"  => true,
+            "lt"   => true,
+            "lte"  => false,
+            "eq"   => true,
+            "neq"  => false,
+            "double_not" => false
           }
         }
-      ])
+      })
     end
 
     it "can parse booleans & nulls" do
@@ -111,19 +108,33 @@ describe HCL::Parser do
       HEREDOC
 
       parser = HCL::Parser.new(hcl_string)
-      parser.values.should eq([
-        {
-          "resource" => {
-            "aws_instance" => {
-              "web" => {
-                "source_dest_check" => false,
-                "another_boolean"   => "true",
-                "something_i_want_default" => nil
-              }
+      doc = parser.parse!
+      doc.value.should eq({
+        "resource" => {
+          "aws_instance" => {
+            "web" => {
+              "source_dest_check" => false,
+              "another_boolean"   => "true",
+              "something_i_want_default" => nil
             }
           }
         }
-      ])
+      })
+    end
+
+    it "can parse attributes set at the root level" do
+      hcl_string = <<-HEREDOC
+        hello = "it's me"
+        works = true
+
+      HEREDOC
+
+      parser = HCL::Parser.new(hcl_string)
+      doc = parser.parse!
+      doc.value.should eq({
+        "hello" => "it's me",
+        "works" => true
+      })
     end
 
     it "can parse conditional expressions" do
@@ -140,22 +151,21 @@ describe HCL::Parser do
       HEREDOC
 
       parser = HCL::Parser.new(hcl_string)
-      parser.values.should eq([
-        {
-          "resource" => {
-            "aws_instance" => {
-              "web" => {
-                "ami_id" => "spatula",
-                "size"   => 9,
-                "region" => "world",
-                "something_numeric" => 8,
-                "an_op" => 5,
-                "an_array" => 8
-              }
+      doc = parser.parse!
+      doc.value.should eq({
+        "resource" => {
+          "aws_instance" => {
+            "web" => {
+              "ami_id" => "spatula",
+              "size"   => 9,
+              "region" => "world",
+              "something_numeric" => 8,
+              "an_op" => 5,
+              "an_array" => 8
             }
           }
         }
-      ])
+      })
     end
 
     it "can parse map values" do
@@ -170,25 +180,24 @@ describe HCL::Parser do
         }
 
       HCL
-      parser = HCL::Parser.new(hcl_string)
 
-      parser.values.should eq([
-        {
-          "config" => {
-            "hello" => {
-              "yoo" => "yes",
-              "development" => {
-                "some_setting" => true,
-                "another_prop" => 123_i64,
-                "maybe_a_list" => [
-                  123_i64,
-                  231_i64
-                ]
-              }
+      parser = HCL::Parser.new(hcl_string)
+      doc = parser.parse!
+      doc.value.should eq({
+        "config" => {
+          "hello" => {
+            "yoo" => "yes",
+            "development" => {
+              "some_setting" => true,
+              "another_prop" => 123_i64,
+              "maybe_a_list" => [
+                123_i64,
+                231_i64
+              ]
             }
           }
         }
-      ])
+      })
     end
 
     it "can parse multiple levels of maps and lists" do
@@ -204,24 +213,22 @@ describe HCL::Parser do
       HCL
 
       parser = HCL::Parser.new(hcl_string)
-
-      parser.values.should eq([
-        {
-          "test" => {
-            "hello" => {
-              "resource" => [
-                {
-                  "foo" => [
-                    {
-                      "bar" => {} of String => HCL::AST::ValueType
-                    }
-                  ]
-                }
-              ]
-            }
+      doc = parser.parse!
+      doc.value.should eq({
+        "test" => {
+          "hello" => {
+            "resource" => [
+              {
+                "foo" => [
+                  {
+                    "bar" => {} of String => HCL::AST::ValueType
+                  }
+                ]
+              }
+            ]
           }
         }
-      ])
+      })
     end
 
     it "can parse multiple blocks with nesting" do
@@ -252,34 +259,31 @@ describe HCL::Parser do
       HEREDOC
 
       parser = HCL::Parser.new(hcl_string)
-      parser.values.should eq([
-        {
-          "variable" => {
-            "ami" => {"description" => "the AMI to use"}
-          }
+      doc = parser.parse!
+      doc.value.should eq({
+        "variable" => {
+          "ami" => {"description" => "the AMI to use"}
         },
-        {
-          "resource" => {
-            "aws_instance" => {
-              "web" => {
-                "ami" => "${var.ami}",
-                "count" => 2,
-                "source_dest_check" => false,
-                "another_boolean" => "true",
-                "something_i_want_default" => nil,
-                "connection" => {
-                  "user" => "root",
-                  "something" => {
-                    "else" => {
-                      "foo" => "bar"
-                    }
+        "resource" => {
+          "aws_instance" => {
+            "web" => {
+              "ami" => "${var.ami}",
+              "count" => 2,
+              "source_dest_check" => false,
+              "another_boolean" => "true",
+              "something_i_want_default" => nil,
+              "connection" => {
+                "user" => "root",
+                "something" => {
+                  "else" => {
+                    "foo" => "bar"
                   }
                 }
               }
             }
           }
         }
-      ])
+      })
     end
 
     it "can parse property & index access" do
@@ -292,18 +296,17 @@ describe HCL::Parser do
       HEREDOC
 
       parser = HCL::Parser.new(hcl_string)
-      parser.values.should eq([
-        {
-          "resource" => {
-            "aws_instance" => {
-              "web" => {
-                "ami" => "evil this way comes",
-                "security_group_id" => 1_i64
-              }
+      doc = parser.parse!
+      doc.value.should eq({
+        "resource" => {
+          "aws_instance" => {
+            "web" => {
+              "ami" => "evil this way comes",
+              "security_group_id" => 1_i64
             }
           }
         }
-      ])
+      })
     end
 
     pending "can parse nested identifiers" do
@@ -315,18 +318,17 @@ describe HCL::Parser do
       HEREDOC
 
       parser = HCL::Parser.new(hcl_string)
-      parser.values.should eq([
-        {
-          "resource" => {
-            "aws_instance" => {
-              "web" => {
-                # TODO: This is a bit wrong
-                "ami" => "var.something.ami_id"
-              }
+      doc = parser.parse!
+      doc.value.should eq({
+        "resource" => {
+          "aws_instance" => {
+            "web" => {
+              # TODO: This is a bit wrong
+              "ami" => "var.something.ami_id"
             }
           }
         }
-      ])
+      })
     end
 
     it "can parse function calls" do
@@ -336,18 +338,17 @@ describe HCL::Parser do
         }
 
       HCL
-      parser = HCL::Parser.new(hcl_string)
 
-      parser.values.should eq([
-        {
-          "config" => {
-            "hello" => {
-              # TODO: This is wrong.
-              "yoo" => nil
-            }
+      parser = HCL::Parser.new(hcl_string)
+      doc = parser.parse!
+      doc.value.should eq({
+        "config" => {
+          "hello" => {
+            # TODO: This is wrong.
+            "yoo" => nil
           }
         }
-      ])
+      })
     end
   end
 end
