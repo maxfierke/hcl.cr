@@ -1,9 +1,9 @@
 module HCL
   module AST
-    alias OperandToken =
-      LiteralToken |
-      NumberToken |
-      ExpressionToken
+    alias OperandNode =
+      LiteralNode |
+      NumberNode |
+      ExpressionNode
     alias ValueType =
       Nil |
       Bool |

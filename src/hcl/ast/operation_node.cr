@@ -1,6 +1,6 @@
 module HCL
   module AST
-    class OperationToken < Token
+    class OperationNode < Node
       getter :operator, :left_operand, :right_operand
 
       ADDITION = :+
@@ -22,8 +22,8 @@ module HCL
         peg_tuple : Pegmatite::Token,
         string : String,
         operator : String,
-        left_operand : Token,
-        right_operand : Token?
+        left_operand : Node,
+        right_operand : Node?
       )
         super(peg_tuple, string)
 

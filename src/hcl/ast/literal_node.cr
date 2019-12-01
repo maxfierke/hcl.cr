@@ -1,6 +1,6 @@
 module HCL
   module AST
-    class LiteralToken < Token
+    class LiteralNode < Node
       @value : Nil | Bool
 
       NULL_STR = "null"

@@ -1,6 +1,6 @@
 module HCL
   module AST
-    abstract class Token
+    abstract class Node
       @kind : Symbol
 
       getter :source, :kind

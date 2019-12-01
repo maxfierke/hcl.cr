@@ -46,7 +46,7 @@ HEREDOC
 
 parser = HCL::Parser.new(SRC_TEXT) # Parser object. Is also an Iterator of tokens.
 
-tokens = parser.parse # Returns an Array(HCL::Token)
+nodes = parser.parse # Returns an Array(HCL::AST::Node)
 values = parser.value # Returns the HCL structure as Crystal data types
 string = parser.string # Returns string reconstruction of HCL configuration
 ```

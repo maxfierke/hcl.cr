@@ -1,13 +1,13 @@
 module HCL
   module AST
-    class CallToken < Token
+    class CallNode < Node
       getter :id, :args
 
       def initialize(
         peg_tuple : Pegmatite::Token,
         string : String,
         id : String,
-        args : Array(Token),
+        args : Array(Node),
       )
         super(peg_tuple, string)
 

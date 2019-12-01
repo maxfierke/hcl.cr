@@ -1,6 +1,6 @@
 module HCL
   module AST
-    class NumberToken < Token
+    class NumberNode < Node
       alias Value = Float64 | Int64
 
       @value : Value

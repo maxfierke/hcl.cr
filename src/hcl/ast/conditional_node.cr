@@ -1,14 +1,14 @@
 module HCL
   module AST
-    class ConditionalToken < Token
+    class ConditionalNode < Node
       getter :predicate, :true_expr, :false_expr
 
       def initialize(
         peg_tuple : Pegmatite::Token,
         string : String,
-        predicate : ExpressionToken,
-        true_expr : ExpressionToken,
-        false_expr : ExpressionToken
+        predicate : ExpressionNode,
+        true_expr : ExpressionNode,
+        false_expr : ExpressionNode
       )
         super(peg_tuple, string)
         @predicate = predicate

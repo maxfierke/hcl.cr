@@ -1,12 +1,12 @@
 module HCL
   module AST
-    class ObjectToken < Token
+    class ObjectNode < Node
       getter :values
 
       def initialize(
         peg_tuple : Pegmatite::Token,
         source : String,
-        values : Hash(String, Token)
+        values : Hash(String, Node)
       )
         super(peg_tuple, source)
 
