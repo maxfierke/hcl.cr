@@ -47,13 +47,13 @@ module HCL
         when :expression then build_expression(main, iter, source)
         when :function_call then build_call(main, iter, source)
         when :get_attr then build_get_attr(main, iter, source)
-        when :identifier then AST::Identifier.new(main, source[start...finish])
+        when :identifier then build_identifier(main, iter, source)
         when :index then build_index(main, iter, source)
         when :literal then AST::Literal.new(main, source[start...finish])
         when :number then AST::Number.new(main, source[start...finish])
         when :object then build_map(main, iter, source)
         when :operation then build_operation(main, iter, source)
-        when :string then AST::StringValue.new(main, source[start...finish])
+        when :string then build_string(main, iter, source)
         when :tuple then build_list(main, iter, source)
         else raise NotImplementedError.new(kind)
         end
@@ -128,6 +128,11 @@ module HCL
       )
     end
 
+    private def build_identifier(main, iter, source) : AST::Identifier
+      kind, start, finish = main
+      AST::Identifier.new(main, source[start...finish])
+    end
+
     private def build_index(main, iter, source) : AST::IndexExpr
       _, start, finish = main
 
@@ -187,6 +192,11 @@ module HCL
       )
     end
 
+    private def build_string(main, iter, source) : AST::StringValue
+      kind, start, finish = main
+      AST::StringValue.new(main, source[start...finish])
+    end
+
     private def build_list(main, iter, source) : AST::List
       _, start, finish = main
       list = AST::List.new(main, source[start...finish])
@@ -242,7 +252,7 @@ module HCL
     private def build_block(main, iter, source) : AST::Block
       _, start, finish = main
       block_attributes = {} of String => AST::Node
-      block_labels = Array(AST::Identifier | AST::StringValue).new
+      block_labels = [] of AST::BlockLabel
       blocks = [] of AST::Block
 
       block_id = extract_identifier(iter.next_as_child_of(main), iter, source)
@@ -268,12 +278,12 @@ module HCL
           if has_seen_seen_inner_block
             raise "Found '#{kind}' but expected an attribute assignment or block."
           else
-            label_node = build_node(token, iter, source)
-
             if kind == :identifier
-              block_labels << label_node.as(AST::Identifier)
+              label_node = build_identifier(token, iter, source)
+              block_labels << label_node
             elsif kind == :string
-              block_labels << label_node.as(AST::StringValue)
+              label_node = build_string(token, iter, source)
+              block_labels << label_node
             else
               raise "BUG: Should be identifier or string"
             end

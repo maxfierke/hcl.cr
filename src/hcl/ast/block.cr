@@ -1,43 +1,15 @@
 module HCL
   module AST
     class Block < Node
+      @labels : Array(BlockLabel)
+
       getter :id, :labels, :attributes, :blocks
 
-      # :nodoc:
-      # This whole override should be unnecessary, but for some reason
-      # parser.cr's build_block isn't typing the array properly, so we're
-      # casting it here.
       def initialize(
         peg_tuple : Pegmatite::Token,
         string : String,
         id : String,
-        labels : Array(Node),
-        attributes : Hash(String, Node),
-        blocks : Array(Block)
-      )
-        block_labels = labels.map! do |arg|
-          if arg.is_a?(AST::StringValue)
-            arg.as(AST::StringValue)
-          elsif arg.is_a?(AST::Identifier)
-            arg.as(AST::Identifier)
-          else
-            raise "PARSER BUG"
-          end
-        end
-
-        super(peg_tuple, string)
-
-        @id = id
-        @labels = block_labels
-        @attributes = attributes
-        @blocks = blocks
-      end
-
-      def initialize(
-        peg_tuple : Pegmatite::Token,
-        string : String,
-        id : String,
-        labels : Array(StringValue | Identifier),
+        labels : Array(BlockLabel),
         attributes : Hash(String, Node),
         blocks : Array(Block)
       )
