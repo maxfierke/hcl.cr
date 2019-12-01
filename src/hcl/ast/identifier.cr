@@ -1,6 +1,6 @@
 module HCL
   module AST
-    class IdentifierNode < Node
+    class Identifier < Node
       def string : String
         source
       end

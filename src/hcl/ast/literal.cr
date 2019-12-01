@@ -1,6 +1,6 @@
 module HCL
   module AST
-    class LiteralNode < Node
+    class Literal < Node
       @value : Nil | Bool
 
       NULL_STR = "null"
@@ -18,14 +18,12 @@ module HCL
       end
 
       def value : ValueType
-        @value ||= if source == NULL_STR
-          nil
-        elsif source == TRUE_STR
+        @value ||= if source == TRUE_STR
           true
         elsif source == FALSE_STR
           false
         else
-          raise "BUG: Unexpected literal value"
+          nil
         end
       end
     end

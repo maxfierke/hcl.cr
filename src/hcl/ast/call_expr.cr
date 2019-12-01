@@ -1,6 +1,6 @@
 module HCL
   module AST
-    class CallNode < Node
+    class CallExpr < Node
       getter :id, :args
 
       def initialize(

@@ -1,6 +1,6 @@
 module HCL
   module AST
-    class ListNode < Node
+    class List < Node
       getter :children
 
       def initialize(peg_tuple : Pegmatite::Token, string : String)

@@ -1,6 +1,6 @@
 module HCL
   module AST
-    class OperationNode < Node
+    class OpExpr < Node
       getter :operator, :left_operand, :right_operand
 
       ADDITION = :+

@@ -1,6 +1,6 @@
 module HCL
   module AST
-    class BlockNode < Node
+    class Block < Node
       getter :id, :labels, :attributes, :blocks
 
       # :nodoc:
@@ -13,13 +13,13 @@ module HCL
         id : String,
         labels : Array(Node),
         attributes : Hash(String, Node),
-        blocks : Array(BlockNode)
+        blocks : Array(Block)
       )
         block_labels = labels.map! do |arg|
-          if arg.is_a?(AST::StringNode)
-            arg.as(AST::StringNode)
-          elsif arg.is_a?(AST::IdentifierNode)
-            arg.as(AST::IdentifierNode)
+          if arg.is_a?(AST::StringValue)
+            arg.as(AST::StringValue)
+          elsif arg.is_a?(AST::Identifier)
+            arg.as(AST::Identifier)
           else
             raise "PARSER BUG"
           end
@@ -37,9 +37,9 @@ module HCL
         peg_tuple : Pegmatite::Token,
         string : String,
         id : String,
-        labels : Array(StringNode | IdentifierNode),
+        labels : Array(StringValue | Identifier),
         attributes : Hash(String, Node),
-        blocks : Array(BlockNode)
+        blocks : Array(Block)
       )
         super(peg_tuple, string)
 

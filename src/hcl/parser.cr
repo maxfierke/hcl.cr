@@ -47,13 +47,13 @@ module HCL
         when :expression then build_expression(main, iter, source)
         when :function_call then build_call(main, iter, source)
         when :get_attr then build_get_attr(main, iter, source)
-        when :identifier then AST::IdentifierNode.new(main, source[start...finish])
+        when :identifier then AST::Identifier.new(main, source[start...finish])
         when :index then build_index(main, iter, source)
-        when :literal then AST::LiteralNode.new(main, source[start...finish])
-        when :number then AST::NumberNode.new(main, source[start...finish])
+        when :literal then AST::Literal.new(main, source[start...finish])
+        when :number then AST::Number.new(main, source[start...finish])
         when :object then build_map(main, iter, source)
         when :operation then build_operation(main, iter, source)
-        when :string then AST::StringNode.new(main, source[start...finish])
+        when :string then AST::StringValue.new(main, source[start...finish])
         when :tuple then build_list(main, iter, source)
         else raise NotImplementedError.new(kind)
         end
@@ -64,19 +64,19 @@ module HCL
       value
     end
 
-    private def build_conditional(main, iter, source) : AST::ConditionalNode
+    private def build_conditional(main, iter, source) : AST::CondExpr
       _, start, finish = main
 
       predicate = iter.next_as_child_of(main)
-      predicate_node = build_node(predicate, iter, source).as(AST::ExpressionNode)
+      predicate_node = build_node(predicate, iter, source).as(AST::Expression)
 
       true_expr = iter.next_as_child_of(main)
-      true_expr_node = build_node(true_expr, iter, source).as(AST::ExpressionNode)
+      true_expr_node = build_node(true_expr, iter, source).as(AST::Expression)
 
       false_expr = iter.next_as_child_of(main)
-      false_expr_node = build_node(false_expr, iter, source).as(AST::ExpressionNode)
+      false_expr_node = build_node(false_expr, iter, source).as(AST::Expression)
 
-      AST::ConditionalNode.new(
+      AST::CondExpr.new(
         main,
         source[start...finish],
         predicate_node,
@@ -85,7 +85,7 @@ module HCL
       )
     end
 
-    private def build_expression(main, iter, source) : AST::ExpressionNode
+    private def build_expression(main, iter, source) : AST::Expression
       _, start, finish = main
 
       exp_terms = [] of AST::Node
@@ -101,7 +101,7 @@ module HCL
         raise "BUG: expected expression to have content"
       end
 
-      AST::ExpressionNode.new(
+      AST::Expression.new(
         main,
         source[start...finish],
         exp_terms,
@@ -109,7 +109,7 @@ module HCL
       )
     end
 
-    private def build_get_attr(main, iter, source) : AST::GetAttrNode
+    private def build_get_attr(main, iter, source) : AST::GetAttrExpr
       _, start, finish = main
 
       next_token = iter.next_as_child_of(main)
@@ -119,16 +119,16 @@ module HCL
         raise "BUG: expected identifier, got #{kind}"
       end
 
-      identifier_node = build_node(next_token, iter, source).as(AST::IdentifierNode)
+      identifier_node = build_node(next_token, iter, source).as(AST::Identifier)
 
-      AST::GetAttrNode.new(
+      AST::GetAttrExpr.new(
         main,
         source[start...finish],
         identifier_node
       )
     end
 
-    private def build_index(main, iter, source) : AST::IndexNode
+    private def build_index(main, iter, source) : AST::IndexExpr
       _, start, finish = main
 
       next_token = iter.next_as_child_of(main)
@@ -138,16 +138,16 @@ module HCL
         raise "BUG: expected expression, got #{kind}"
       end
 
-      expr_node = build_node(next_token, iter, source).as(AST::ExpressionNode)
+      expr_node = build_node(next_token, iter, source).as(AST::Expression)
 
-      AST::IndexNode.new(
+      AST::IndexExpr.new(
         main,
         source[start...finish],
         expr_node
       )
     end
 
-    private def build_operation(main, iter, source) : AST::OperationNode
+    private def build_operation(main, iter, source) : AST::OpExpr
       _, start, finish = main
 
       # TODO: This is wrong, but not settled on what this *is* yet.
@@ -178,7 +178,7 @@ module HCL
 
       _, op_start, op_finish = operator
 
-      AST::OperationNode.new(
+      AST::OpExpr.new(
         main,
         source[start...finish],
         source[op_start...op_finish],
@@ -187,9 +187,9 @@ module HCL
       )
     end
 
-    private def build_list(main, iter, source) : AST::ListNode
+    private def build_list(main, iter, source) : AST::List
       _, start, finish = main
-      list = AST::ListNode.new(main, source[start...finish])
+      list = AST::List.new(main, source[start...finish])
 
       # Gather children as values into the list.
       iter.while_next_is_child_of(main) do |child|
@@ -209,7 +209,7 @@ module HCL
       source[start...finish]
     end
 
-    private def build_map(main, iter, source) : AST::ObjectNode
+    private def build_map(main, iter, source) : AST::Map
       kind, start, finish = main
 
       if kind != :object
@@ -232,18 +232,18 @@ module HCL
         end
       end
 
-      AST::ObjectNode.new(
+      AST::Map.new(
         main,
         source[start...finish],
         values
       )
     end
 
-    private def build_block(main, iter, source) : AST::BlockNode
+    private def build_block(main, iter, source) : AST::Block
       _, start, finish = main
       block_attributes = {} of String => AST::Node
-      block_labels = Array(AST::IdentifierNode | AST::StringNode).new
-      blocks = [] of AST::BlockNode
+      block_labels = Array(AST::Identifier | AST::StringValue).new
+      blocks = [] of AST::Block
 
       block_id = extract_identifier(iter.next_as_child_of(main), iter, source)
 
@@ -271,9 +271,9 @@ module HCL
             label_node = build_node(token, iter, source)
 
             if kind == :identifier
-              block_labels << label_node.as(AST::IdentifierNode)
+              block_labels << label_node.as(AST::Identifier)
             elsif kind == :string
-              block_labels << label_node.as(AST::StringNode)
+              block_labels << label_node.as(AST::StringValue)
             else
               raise "BUG: Should be identifier or string"
             end
@@ -284,7 +284,7 @@ module HCL
         end
       end
 
-      AST::BlockNode.new(
+      AST::Block.new(
         main,
         source[start...finish],
         block_id,
@@ -294,7 +294,7 @@ module HCL
       )
     end
 
-    private def build_call(main, iter, source) : AST::CallNode
+    private def build_call(main, iter, source) : AST::CallExpr
       _, start, finish = main
       args = [] of AST::Node
 
@@ -311,7 +311,7 @@ module HCL
         args << build_node(child, iter, source)
       end
 
-      AST::CallNode.new(
+      AST::CallExpr.new(
         main,
         source[start...finish],
         function_id,

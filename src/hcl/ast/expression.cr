@@ -1,6 +1,6 @@
 module HCL
   module AST
-    class ExpressionNode < Node
+    class Expression < Node
       getter :children, :context
 
       def initialize(
@@ -18,7 +18,7 @@ module HCL
       def string : String
         children.map do |exp|
           case exp
-          when ExpressionNode
+          when Expression
             "(#{exp.string})"
           else
             exp.string
@@ -30,14 +30,14 @@ module HCL
         # TODO: This is wrong.
         result : ValueType = nil
         children.reduce(result) do |result, child|
-          if child.is_a?(GetAttrNode)
+          if child.is_a?(GetAttrExpr)
             if result && result.is_a?(Hash(String, ValueType))
               attr = result[child.attribute_name]
               result = attr
             else
               raise "Cannot read attribute #{child.attribute_name} from #{typeof(result)}"
             end
-          elsif child.is_a?(IndexNode)
+          elsif child.is_a?(IndexExpr)
             child_val = child.index_exp.value
 
             if child_val.is_a?(String) && result && result.is_a?(Hash(String, ValueType))

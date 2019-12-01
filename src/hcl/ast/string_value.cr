@@ -1,6 +1,6 @@
 module HCL
   module AST
-    class StringNode < Node
+    class StringValue < Node
       def string : String
         "\"#{source}\""
       end
