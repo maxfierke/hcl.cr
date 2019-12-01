@@ -1,9 +1,10 @@
 module HCL
   module AST
-    alias OperandToken =
-      LiteralToken |
-      NumberToken |
-      ExpressionToken
+    alias BlockLabel = Identifier | StringValue
+    alias Operand =
+      Literal |
+      Number |
+      Expression
     alias ValueType =
       Nil |
       Bool |

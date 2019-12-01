@@ -35,29 +35,29 @@ puts "END PEGMATITE"
 puts "#" * 80
 
 parser = HCL::Parser.new(SRC_TEXT)
-tokens = parser.parse
+doc = parser.parse!
 puts "#" * 80
-puts "START TOKEN DUMP"
+puts "START DOCUMENT DUMP"
 puts "#" * 80
-pp! tokens
+pp! doc
 puts "#" * 80
-puts "END TOKEN DUMP"
-puts "#" * 80
-
-values = tokens.map { |token| token.value }
-puts "#" * 80
-puts "START TOKEN VALUE DUMP"
-puts "#" * 80
-pp! values
-puts "#" * 80
-puts "END TOKEN VALUE DUMP"
+puts "END DOCUMENT DUMP"
 puts "#" * 80
 
-string = tokens.map { |token| token.string }.join('\n')
+doc_value = doc.value
 puts "#" * 80
-puts "START TOKEN STRING DUMP"
+puts "START DOC VALUE DUMP"
+puts "#" * 80
+pp! doc_value
+puts "#" * 80
+puts "END DOC VALUE DUMP"
+puts "#" * 80
+
+string = doc.string
+puts "#" * 80
+puts "START DOC STRING DUMP"
 puts "#" * 80
 puts string
 puts "#" * 80
-puts "END TOKEN STRING DUMP"
+puts "END DOC STRING DUMP"
 puts "#" * 80

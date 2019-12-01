@@ -1,6 +1,6 @@
 module HCL
   module AST
-    class NumberToken < ValueToken
+    class Number < Node
       alias Value = Float64 | Int64
 
       @value : Value
@@ -16,7 +16,7 @@ module HCL
         end
       end
 
-      def string
+      def string : String
         value.to_s
       end
 

@@ -1,12 +1,12 @@
 module HCL
   module AST
-    class ExpressionToken < ValueToken
+    class Expression < Node
       getter :children, :context
 
       def initialize(
         peg_tuple : Pegmatite::Token,
         source : String,
-        children : Array(Token),
+        children : Array(Node),
         context : ExpressionContext
       )
         super(peg_tuple, source)
@@ -15,10 +15,10 @@ module HCL
         @context = context
       end
 
-      def string
+      def string : String
         children.map do |exp|
           case exp
-          when ExpressionToken
+          when Expression
             "(#{exp.string})"
           else
             exp.string
@@ -30,14 +30,14 @@ module HCL
         # TODO: This is wrong.
         result : ValueType = nil
         children.reduce(result) do |result, child|
-          if child.is_a?(GetAttrToken)
+          if child.is_a?(GetAttrExpr)
             if result && result.is_a?(Hash(String, ValueType))
               attr = result[child.attribute_name]
               result = attr
             else
               raise "Cannot read attribute #{child.attribute_name} from #{typeof(result)}"
             end
-          elsif child.is_a?(IndexToken)
+          elsif child.is_a?(IndexExpr)
             child_val = child.index_exp.value
 
             if child_val.is_a?(String) && result && result.is_a?(Hash(String, ValueType))
@@ -49,7 +49,7 @@ module HCL
             else
               raise "Cannot read member #{child_val} from #{typeof(result)}"
             end
-          elsif child.is_a?(ValueToken)
+          elsif child.is_a?(Node)
             result = child.value
           else
             raise "BUG: Cannot evaluate token #{child.class}"

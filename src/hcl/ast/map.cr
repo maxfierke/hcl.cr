@@ -1,25 +1,25 @@
 module HCL
   module AST
-    class ObjectToken < ValueToken
-      getter :values
+    class Map < Node
+      getter :attributes
 
       def initialize(
         peg_tuple : Pegmatite::Token,
         source : String,
-        values : Hash(String, ValueToken)
+        attributes : Hash(String, Node)
       )
         super(peg_tuple, source)
 
-        @values = values
+        @attributes = attributes
       end
 
-      def string
+      def string : String
         String.build do |str|
           str << "{ "
 
           pairs = [] of String
 
-          values.each do |key, value|
+          attributes.each do |key, value|
             pairs << "#{key} = #{value.string}"
           end
 
@@ -31,7 +31,7 @@ module HCL
       def value : ValueType
         dict = {} of String => ValueType
 
-        values.each do |key, value|
+        attributes.each do |key, value|
           dict[key] = value.value
         end
 

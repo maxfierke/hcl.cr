@@ -1,69 +1,69 @@
 module HCL
   class Parser
-    @parsed : Nil | Array(AST::Token)
+    @document : AST::Document?
 
-    include Iterator(AST::Token)
-
-    getter :source
+    getter :document, :source
 
     def initialize(@source : String, offset = 0, io : IO? = nil)
       @peg_tokens = Pegmatite.tokenize(HCL::Grammar, source, offset, io)
       @peg_iter = Pegmatite::TokenIterator.new(@peg_tokens)
     end
 
-    def parse
-      @parsed ||= to_a
+    def parse!
+      @document ||= build_document(@peg_iter, source)
     end
 
-    def string
-      parse.map { |token| token.string }.join('\n')
-    end
+    private def build_document(iter, source) : AST::Document
+      attributes = {} of String => AST::Node
+      blocks = [] of AST::Block
 
-    def values
-      parse.map { |token| token.value }
-    end
+      while token = iter.peek
+        kind, _, _ = token
 
-    def next
-      if peg_main = @peg_iter.peek
-        @peg_iter.next
-        build_token(peg_main, @peg_iter, source)
-      else
-        stop
-      end
-    end
+        # Advance iterator now that we've seen the next token
+        iter.next
 
-    private def build_token(main, iter, source) : AST::Token
-      kind, start, finish = main
-
-      token =
-        case kind
-        when :block then build_block(main, iter, source)
-        else build_value(main, iter, source)
+        if kind == :attribute
+          # Gather children as pairs of key/values into the array.
+          key = build_node(iter.next_as_child_of(token), iter, source).as_s
+          val = build_node(iter.next_as_child_of(token), iter, source)
+          iter.assert_next_not_child_of(token)
+          attributes[key] = val
+        elsif kind == :block
+          new_block = build_block(token, iter, source)
+          iter.assert_next_not_child_of(token)
+          blocks << new_block
+        else
+          raise "Found '#{kind}' but expected an attribute assignment or block."
         end
+      end
 
-        # Assert that we have consumed all child tokens.
-      iter.assert_next_not_child_of(main)
-
-      token
+      AST::Document.new(
+        Pegmatite::Token.new(:document, 0, source.size),
+        source,
+        attributes,
+        blocks
+      )
     end
 
-    private def build_value(main, iter, source) : AST::ValueToken
+    private def build_node(main, iter, source) : AST::Node
       kind, start, finish = main
 
-      # Build the value from the given main token and possibly further recursion.
+      # Build the node from the given main token and possibly further recursion.
       value =
         case kind
+        when :block then build_block(main, iter, source)
         when :conditional then build_conditional(main, iter, source)
         when :expression then build_expression(main, iter, source)
         when :function_call then build_call(main, iter, source)
         when :get_attr then build_get_attr(main, iter, source)
-        when :identifier then AST::IdentifierToken.new(main, source[start...finish])
+        when :identifier then build_identifier(main, iter, source)
         when :index then build_index(main, iter, source)
-        when :literal then AST::LiteralToken.new(main, source[start...finish])
-        when :number then AST::NumberToken.new(main, source[start...finish])
+        when :literal then AST::Literal.new(main, source[start...finish])
+        when :number then AST::Number.new(main, source[start...finish])
         when :object then build_map(main, iter, source)
         when :operation then build_operation(main, iter, source)
-        when :string then AST::StringToken.new(main, source[start...finish])
+        when :string then build_string(main, iter, source)
         when :tuple then build_list(main, iter, source)
         else raise NotImplementedError.new(kind)
         end
@@ -74,44 +74,44 @@ module HCL
       value
     end
 
-    private def build_conditional(main, iter, source) : AST::ConditionalToken
+    private def build_conditional(main, iter, source) : AST::CondExpr
       _, start, finish = main
 
       predicate = iter.next_as_child_of(main)
-      predicate_token = build_value(predicate, iter, source).as(AST::ExpressionToken)
+      predicate_node = build_node(predicate, iter, source).as(AST::Expression)
 
       true_expr = iter.next_as_child_of(main)
-      true_expr_token = build_value(true_expr, iter, source).as(AST::ExpressionToken)
+      true_expr_node = build_node(true_expr, iter, source).as(AST::Expression)
 
       false_expr = iter.next_as_child_of(main)
-      false_expr_token = build_value(false_expr, iter, source).as(AST::ExpressionToken)
+      false_expr_node = build_node(false_expr, iter, source).as(AST::Expression)
 
-      AST::ConditionalToken.new(
+      AST::CondExpr.new(
         main,
         source[start...finish],
-        predicate_token,
-        true_expr_token,
-        false_expr_token
+        predicate_node,
+        true_expr_node,
+        false_expr_node
       )
     end
 
-    private def build_expression(main, iter, source) : AST::ExpressionToken
+    private def build_expression(main, iter, source) : AST::Expression
       _, start, finish = main
 
-      exp_terms = [] of AST::Token
+      exp_terms = [] of AST::Node
 
       # TODO: This is wrong, but not settled on what this *is* yet.
       context = HCL::ExpressionContext.new
 
       iter.while_next_is_child_of(main) do |child|
-        exp_terms << build_token(child, iter, source)
+        exp_terms << build_node(child, iter, source)
       end
 
       unless exp_terms.any?
         raise "BUG: expected expression to have content"
       end
 
-      AST::ExpressionToken.new(
+      AST::Expression.new(
         main,
         source[start...finish],
         exp_terms,
@@ -119,7 +119,7 @@ module HCL
       )
     end
 
-    private def build_get_attr(main, iter, source) : AST::GetAttrToken
+    private def build_get_attr(main, iter, source) : AST::GetAttrExpr
       _, start, finish = main
 
       next_token = iter.next_as_child_of(main)
@@ -129,16 +129,21 @@ module HCL
         raise "BUG: expected identifier, got #{kind}"
       end
 
-      identifier_token = build_value(next_token, iter, source).as(AST::IdentifierToken)
+      identifier_node = build_node(next_token, iter, source).as(AST::Identifier)
 
-      AST::GetAttrToken.new(
+      AST::GetAttrExpr.new(
         main,
         source[start...finish],
-        identifier_token
+        identifier_node
       )
     end
 
-    private def build_index(main, iter, source) : AST::IndexToken
+    private def build_identifier(main, iter, source) : AST::Identifier
+      kind, start, finish = main
+      AST::Identifier.new(main, source[start...finish])
+    end
+
+    private def build_index(main, iter, source) : AST::IndexExpr
       _, start, finish = main
 
       next_token = iter.next_as_child_of(main)
@@ -148,16 +153,16 @@ module HCL
         raise "BUG: expected expression, got #{kind}"
       end
 
-      expr_token = build_value(next_token, iter, source).as(AST::ExpressionToken)
+      expr_node = build_node(next_token, iter, source).as(AST::Expression)
 
-      AST::IndexToken.new(
+      AST::IndexExpr.new(
         main,
         source[start...finish],
-        expr_token
+        expr_node
       )
     end
 
-    private def build_operation(main, iter, source) : AST::OperationToken
+    private def build_operation(main, iter, source) : AST::OpExpr
       _, start, finish = main
 
       # TODO: This is wrong, but not settled on what this *is* yet.
@@ -174,36 +179,41 @@ module HCL
       if kind == :operator
         operator = iter.next_as_child_of(main)
         left_operand = iter.next_as_child_of(main)
-        left_operand_token = build_value(left_operand, iter, source)
-        right_operand_token = nil
+        left_operand_node = build_node(left_operand, iter, source)
+        right_operand_node = nil
       elsif kind == :number || kind == :literal
         left_operand = iter.next_as_child_of(main)
-        left_operand_token = build_value(left_operand, iter, source)
+        left_operand_node = build_node(left_operand, iter, source)
         operator = iter.next_as_child_of(main)
         right_operand = iter.next_as_child_of(main)
-        right_operand_token = build_value(right_operand, iter, source)
+        right_operand_node = build_node(right_operand, iter, source)
       else
         raise "BUG: Expected operator, number, or literal, but got #{kind}"
       end
 
       _, op_start, op_finish = operator
 
-      AST::OperationToken.new(
+      AST::OpExpr.new(
         main,
         source[start...finish],
         source[op_start...op_finish],
-        left_operand_token,
-        right_operand_token
+        left_operand_node,
+        right_operand_node
       )
     end
 
-    private def build_list(main, iter, source) : AST::ListToken
+    private def build_string(main, iter, source) : AST::StringValue
+      kind, start, finish = main
+      AST::StringValue.new(main, source[start...finish])
+    end
+
+    private def build_list(main, iter, source) : AST::List
       _, start, finish = main
-      list = AST::ListToken.new(main, source[start...finish])
+      list = AST::List.new(main, source[start...finish])
 
       # Gather children as values into the list.
       iter.while_next_is_child_of(main) do |child|
-        list << build_value(child, iter, source)
+        list << build_node(child, iter, source)
       end
 
       list
@@ -219,22 +229,22 @@ module HCL
       source[start...finish]
     end
 
-    private def build_map(main, iter, source) : AST::ObjectToken
+    private def build_map(main, iter, source) : AST::Map
       kind, start, finish = main
 
       if kind != :object
         raise "Expected object, but got '#{kind}'"
       end
 
-      values = {} of String => AST::ValueToken
+      values = {} of String => AST::Node
 
       iter.while_next_is_child_of(main) do |token|
         kind, _, _ = token
 
         if kind == :attribute
           # Gather children as pairs of key/values into the object.
-          key = build_value(iter.next_as_child_of(token), iter, source).as_s
-          val = build_value(iter.next_as_child_of(token), iter, source)
+          key = build_node(iter.next_as_child_of(token), iter, source).as_s
+          val = build_node(iter.next_as_child_of(token), iter, source)
           iter.assert_next_not_child_of(token)
           values[key] = val
         else
@@ -242,18 +252,18 @@ module HCL
         end
       end
 
-      AST::ObjectToken.new(
+      AST::Map.new(
         main,
         source[start...finish],
         values
       )
     end
 
-    private def build_block(main, iter, source) : AST::BlockToken
+    private def build_block(main, iter, source) : AST::Block
       _, start, finish = main
-      block_dict = {} of String => AST::ValueToken
-      block_args = Array(AST::IdentifierToken | AST::StringToken).new
-      blocks = [] of AST::BlockToken
+      block_attributes = {} of String => AST::Node
+      block_labels = [] of AST::BlockLabel
+      blocks = [] of AST::Block
 
       block_id = extract_identifier(iter.next_as_child_of(main), iter, source)
 
@@ -265,10 +275,10 @@ module HCL
         if kind == :attribute
           has_seen_seen_inner_block = true
           # Gather children as pairs of key/values into the array.
-          key = build_value(iter.next_as_child_of(token), iter, source).as_s
-          val = build_value(iter.next_as_child_of(token), iter, source)
+          key = build_node(iter.next_as_child_of(token), iter, source).as_s
+          val = build_node(iter.next_as_child_of(token), iter, source)
           iter.assert_next_not_child_of(token)
-          block_dict[key] = val
+          block_attributes[key] = val
         elsif kind == :block
           has_seen_seen_inner_block = true
           new_block = build_block(token, iter, source)
@@ -278,12 +288,12 @@ module HCL
           if has_seen_seen_inner_block
             raise "Found '#{kind}' but expected an attribute assignment or block."
           else
-            token_node = build_value(token, iter, source)
-
             if kind == :identifier
-              block_args << token_node.as(AST::IdentifierToken)
+              label_node = build_identifier(token, iter, source)
+              block_labels << label_node
             elsif kind == :string
-              block_args << token_node.as(AST::StringToken)
+              label_node = build_string(token, iter, source)
+              block_labels << label_node
             else
               raise "BUG: Should be identifier or string"
             end
@@ -294,19 +304,19 @@ module HCL
         end
       end
 
-      AST::BlockToken.new(
+      AST::Block.new(
         main,
         source[start...finish],
         block_id,
-        block_args,
-        block_dict,
+        block_labels,
+        block_attributes,
         blocks
       )
     end
 
-    private def build_call(main, iter, source) : AST::CallToken
+    private def build_call(main, iter, source) : AST::CallExpr
       _, start, finish = main
-      args = [] of AST::ValueToken
+      args = [] of AST::Node
 
       function_id = extract_identifier(iter.next_as_child_of(main), iter, source)
 
@@ -318,10 +328,10 @@ module HCL
       end
 
       iter.while_next_is_child_of(next_token) do |child|
-        args << build_value(child, iter, source)
+        args << build_node(child, iter, source)
       end
 
-      AST::CallToken.new(
+      AST::CallExpr.new(
         main,
         source[start...finish],
         function_id,

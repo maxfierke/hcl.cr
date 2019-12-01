@@ -1,13 +1,13 @@
 module HCL
   module AST
-    class LiteralToken < ValueToken
+    class Literal < Node
       @value : Nil | Bool
 
       NULL_STR = "null"
       TRUE_STR = "true"
       FALSE_STR = "false"
 
-      def string
+      def string : String
         if value == true
           TRUE_STR
         elsif value == false
@@ -18,14 +18,12 @@ module HCL
       end
 
       def value : ValueType
-        @value ||= if source == NULL_STR
-          nil
-        elsif source == TRUE_STR
+        @value ||= if source == TRUE_STR
           true
         elsif source == FALSE_STR
           false
         else
-          raise "BUG: Unexpected literal value"
+          nil
         end
       end
     end

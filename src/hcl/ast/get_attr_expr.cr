@@ -1,20 +1,22 @@
 module HCL
   module AST
-    class IndexToken < ValueToken
-      getter :index_exp
+    class GetAttrExpr < Node
+      @attribute_name : String
+
+      getter :attribute_name
 
       def initialize(
         peg_tuple : Pegmatite::Token,
         source : String,
-        index_exp : ExpressionToken
+        attribute : Identifier
       )
         super(peg_tuple, source)
 
-        @index_exp = index_exp
+        @attribute_name = attribute.string
       end
 
-      def string
-        "[#{index_exp.string}]"
+      def string : String
+        ".#{attribute_name}"
       end
 
       def value : ValueType

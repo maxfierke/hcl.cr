@@ -46,9 +46,9 @@ HEREDOC
 
 parser = HCL::Parser.new(SRC_TEXT) # Parser object. Is also an Iterator of tokens.
 
-tokens = parser.parse # Returns an Array(HCL::Token)
-values = parser.value # Returns the HCL structure as Crystal data types
-string = parser.string # Returns string reconstruction of HCL configuration
+document = parser.parse! # Returns an HCL::AST::Document
+value = document.value   # Returns the HCL structure as Crystal data types
+string = document.string # Returns string reconstruction of HCL configuration
 ```
 
 TODO: Write usage instructions here
@@ -68,6 +68,7 @@ TODO: Write development instructions here
 - [X] Add support for square-bracket attribute & index access on maps & lists
 - [X] Add support for arithmetic and logic operators
 - [X] Add support for conditional expressions
+- [X] Add support for top-level attributes
 - [ ] Add support for identifier evaluation
 - [ ] Add support for function evaluation
 - [ ] Add support for parsing interpolations/templates
