@@ -1,18 +1,16 @@
 module HCL
   module AST
     class Expression < Node
-      getter :children, :context
+      getter :children
 
       def initialize(
         peg_tuple : Pegmatite::Token,
         source : String,
-        children : Array(Node),
-        context : ExpressionContext
+        children : Array(Node)
       )
         super(peg_tuple, source)
 
         @children = children
-        @context = context
       end
 
       def string : String
