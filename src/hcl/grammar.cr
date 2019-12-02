@@ -124,16 +124,17 @@ module HCL
       function_call |
       variable_expr
 
-    _splat_expr_term =
+    _access_expr_term =
       _index_expr_term | _prop_expr_term
+
+    _traversal_expr_term =
+      _access_expr_term >> (splat | index | get_attr) >> (splat | index | get_attr).repeat
 
     _conditional_expr_term =
       _nested_expr_term |
       (
         operation |
-        (_index_expr_term >> index) |
-        (_prop_expr_term >> get_attr) |
-        (_splat_expr_term >> splat) |
+        _traversal_expr_term |
         template_expr |
         literal_value |
         collection_value |
@@ -143,9 +144,7 @@ module HCL
 
     expr_term.define \
       _nested_expr_term |
-      (_index_expr_term >> index) |
-      (_prop_expr_term >> get_attr) |
-      (_splat_expr_term >> splat) |
+      _traversal_expr_term |
       template_expr |
       literal_value |
       collection_value |

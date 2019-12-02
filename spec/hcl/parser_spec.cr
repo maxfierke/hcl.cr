@@ -1,5 +1,19 @@
 require "../spec_helper"
 
+class SomeFunction < HCL::Function
+  def initialize
+    super("some_function", 3)
+  end
+
+  def call(args)
+    arg1 = args[0]
+    arg2 = args[1]
+    arg3 = args[2]
+
+    "#{arg3} #{arg1} #{arg2}"
+  end
+end
+
 describe HCL::Parser do
   describe "#parse" do
     it "can parse strings" do
@@ -309,7 +323,7 @@ describe HCL::Parser do
       })
     end
 
-    pending "can parse nested identifiers" do
+    it "can parse nested identifiers" do
       hcl_string = <<-HEREDOC
         resource "aws_instance" "web" {
           ami = var.something.ami_id
@@ -319,12 +333,58 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+
+      ctx = HCL::ExpressionContext.new
+      ctx.variables["var"] = Hash(String, HCL::AST::ValueType).new.tap do |hsh|
+        hsh["something"] = Hash(String, HCL::AST::ValueType).new.tap do |nested|
+          nested["ami_id"] = "ami-1234"
+        end
+      end
+
+      doc.value(ctx).should eq({
         "resource" => {
           "aws_instance" => {
             "web" => {
-              # TODO: This is a bit wrong
-              "ami" => "var.something.ami_id"
+              "ami" => "ami-1234"
+            }
+          }
+        }
+      })
+    end
+
+    it "can parse complex nested structure traversals" do
+      hcl_string = <<-HEREDOC
+        resource "aws_instance" "web" {
+          ami = var.something[0].other_thing.some_list[0].ami_id
+        }
+
+      HEREDOC
+
+      parser = HCL::Parser.new(hcl_string)
+      doc = parser.parse!
+
+      ctx = HCL::ExpressionContext.new
+      ctx.variables["var"] = Hash(String, HCL::AST::ValueType).new.tap do |var|
+        something = [] of HCL::AST::ValueType
+        something << Hash(String, HCL::AST::ValueType).new.tap do |something_0|
+          other_thing = Hash(String, HCL::AST::ValueType).new.tap do |other_thing|
+            some_list = [] of HCL::AST::ValueType
+            some_list << Hash(String, HCL::AST::ValueType).new.tap do |nested|
+              nested["ami_id"] = "ami-1234"
+            end
+            other_thing["some_list"] = some_list
+          end
+
+          something_0["other_thing"] = other_thing
+        end
+        var["something"] = something
+      end
+
+      doc.value(ctx).should eq({
+        "resource" => {
+          "aws_instance" => {
+            "web" => {
+              "ami" => "ami-1234"
             }
           }
         }
@@ -341,11 +401,15 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+
+      ctx = HCL::ExpressionContext.new
+      ctx.functions["some_function"] = SomeFunction.new
+      ctx.variables["item1"] = "world"
+
+      doc.value(ctx).should eq({
         "config" => {
           "hello" => {
-            # TODO: This is wrong.
-            "yoo" => nil
+            "yoo" => "hello world [1, 2, 3]"
           }
         }
       })

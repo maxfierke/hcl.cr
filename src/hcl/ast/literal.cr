@@ -8,16 +8,10 @@ module HCL
       FALSE_STR = "false"
 
       def string : String
-        if value == true
-          TRUE_STR
-        elsif value == false
-          FALSE_STR
-        else
-          NULL_STR
-        end
+        source
       end
 
-      def value : ValueType
+      def value(ctx : ExpressionContext) : ValueType
         @value ||= if source == TRUE_STR
           true
         elsif source == FALSE_STR

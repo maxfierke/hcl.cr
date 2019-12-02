@@ -17,10 +17,10 @@ module HCL
       end
 
       def string : String
-        value.to_s
+        @value.to_s
       end
 
-      def value : ValueType
+      def value(ctx : ExpressionContext) : ValueType
         @value
       end
     end

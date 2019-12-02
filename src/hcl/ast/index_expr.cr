@@ -17,7 +17,7 @@ module HCL
         "[#{index_exp.string}]"
       end
 
-      def value : ValueType
+      def value(ctx : ExpressionContext) : ValueType
         raise "BUG: This should not be called, as there is no value to represent."
       end
     end

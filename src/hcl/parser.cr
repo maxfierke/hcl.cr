@@ -100,9 +100,6 @@ module HCL
 
       exp_terms = [] of AST::Node
 
-      # TODO: This is wrong, but not settled on what this *is* yet.
-      context = HCL::ExpressionContext.new
-
       iter.while_next_is_child_of(main) do |child|
         exp_terms << build_node(child, iter, source)
       end
@@ -114,8 +111,7 @@ module HCL
       AST::Expression.new(
         main,
         source[start...finish],
-        exp_terms,
-        context
+        exp_terms
       )
     end
 
@@ -164,9 +160,6 @@ module HCL
 
     private def build_operation(main, iter, source) : AST::OpExpr
       _, start, finish = main
-
-      # TODO: This is wrong, but not settled on what this *is* yet.
-      context = HCL::ExpressionContext.new
 
       next_token = iter.peek_as_child_of(main)
 

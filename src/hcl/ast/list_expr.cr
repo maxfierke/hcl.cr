@@ -16,9 +16,9 @@ module HCL
         "[#{children.map(&.string).join(", ")}]"
       end
 
-      def value : ValueType
+      def value(ctx : ExpressionContext) : ValueType
         children.map do |item|
-          item.value.as(ValueType)
+          item.value(ctx).as(ValueType)
         end
       end
     end
