@@ -46,6 +46,38 @@ module HCL
       )
     end
 
+    private def build_heredoc(main, iter, source) : AST::StringValue
+      kind, start, finish = main
+
+      start_ident = iter.next_as_child_of(main)
+      if start_ident[0] != :identifier
+        raise "BUG: expected identifier, got #{kind}"
+      end
+
+      content_token = iter.next_as_child_of(main)
+      if content_token[0] != :string
+        raise "BUG: expected identifier, got #{kind}"
+      end
+
+      end_ident = iter.next_as_child_of(main)
+      if end_ident[0] != :identifier
+        raise "BUG: expected identifier, got #{kind}"
+      end
+
+      _, content_start, content_finish = content_token
+      content = source[content_start..content_finish]
+
+      if m = content.match(/^\s/)
+        indent = m[0]
+
+        content = content.split(/[\n\r]/).map do |content_part|
+          content_part.lstrip(indent)
+        end.join("\n")
+      end
+
+      AST::StringValue.new(main, content)
+    end
+
     private def build_node(main, iter, source) : AST::Node
       kind, start, finish = main
 
@@ -57,6 +89,7 @@ module HCL
         when :expression then build_expression(main, iter, source)
         when :function_call then build_call(main, iter, source)
         when :get_attr then build_get_attr(main, iter, source)
+        when :heredoc then build_heredoc(main, iter, source)
         when :identifier then build_identifier(main, iter, source)
         when :index then build_index(main, iter, source)
         when :literal then AST::Literal.new(main, source[start...finish])
