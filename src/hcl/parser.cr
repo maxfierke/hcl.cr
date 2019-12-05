@@ -13,6 +13,15 @@ module HCL
       @document ||= build_document(@peg_iter, source)
     end
 
+    private def assert_token_kind!(token : Pegmatite::Token, expected_kind)
+      kind, _, _ = token
+      assert_token_kind!(kind, expected_kind)
+    end
+
+    private def assert_token_kind!(kind : Symbol, expected_kind)
+      raise "Expected #{expected_kind}, but got #{kind}." unless kind == expected_kind
+    end
+
     private def build_document(iter, source) : AST::Document
       attributes = {} of String => AST::Node
       blocks = [] of AST::Block
@@ -50,19 +59,13 @@ module HCL
       kind, start, finish = main
 
       start_ident = iter.next_as_child_of(main)
-      if start_ident[0] != :identifier
-        raise "BUG: expected identifier, got #{kind}"
-      end
+      assert_token_kind!(start_ident, :identifier)
 
       content_token = iter.next_as_child_of(main)
-      if content_token[0] != :string
-        raise "BUG: expected identifier, got #{kind}"
-      end
+      assert_token_kind!(content_token, :string)
 
       end_ident = iter.next_as_child_of(main)
-      if end_ident[0] != :identifier
-        raise "BUG: expected identifier, got #{kind}"
-      end
+      assert_token_kind!(end_ident, :identifier)
 
       _, content_start, content_finish = content_token
       content = source[content_start..content_finish]
@@ -70,6 +73,7 @@ module HCL
       if m = content.match(/^\s/)
         indent = m[0]
 
+        # TODO: Do more efficiently
         content = content.split(/[\n\r]/).map do |content_part|
           content_part.lstrip(indent)
         end.join("\n")
@@ -152,11 +156,7 @@ module HCL
       _, start, finish = main
 
       next_token = iter.next_as_child_of(main)
-      kind, _, _ = next_token
-
-      if kind != :identifier
-        raise "BUG: expected identifier, got #{kind}"
-      end
+      assert_token_kind!(next_token, :identifier)
 
       identifier_node = build_node(next_token, iter, source).as(AST::Identifier)
 
@@ -176,11 +176,7 @@ module HCL
       _, start, finish = main
 
       next_token = iter.next_as_child_of(main)
-      kind, _, _ = next_token
-
-      if kind != :expression
-        raise "BUG: expected expression, got #{kind}"
-      end
+      assert_token_kind!(next_token, :expression)
 
       expr_node = build_node(next_token, iter, source).as(AST::Expression)
 
@@ -247,35 +243,26 @@ module HCL
 
     private def extract_identifier(main, iter, source)
       kind, start, finish = main
-
-      if kind != :identifier
-        raise "Expected identifer, but got #{kind}"
-      end
+      assert_token_kind!(kind, :identifier)
 
       source[start...finish]
     end
 
     private def build_map(main, iter, source) : AST::Map
       kind, start, finish = main
-
-      if kind != :object
-        raise "Expected object, but got '#{kind}'"
-      end
+      assert_token_kind!(kind, :object)
 
       values = {} of String => AST::Node
 
       iter.while_next_is_child_of(main) do |token|
         kind, _, _ = token
+        assert_token_kind!(kind, :attribute)
 
-        if kind == :attribute
-          # Gather children as pairs of key/values into the object.
-          key = build_node(iter.next_as_child_of(token), iter, source).as_s
-          val = build_node(iter.next_as_child_of(token), iter, source)
-          iter.assert_next_not_child_of(token)
-          values[key] = val
-        else
-          raise "'#{kind}' is not supported within objects."
-        end
+        # Gather children as pairs of key/values into the object.
+        key = build_node(iter.next_as_child_of(token), iter, source).as_s
+        val = build_node(iter.next_as_child_of(token), iter, source)
+        iter.assert_next_not_child_of(token)
+        values[key] = val
       end
 
       AST::Map.new(
@@ -320,12 +307,9 @@ module HCL
             elsif kind == :string
               label_node = build_string(token, iter, source)
               block_labels << label_node
-            else
-              raise "BUG: Should be identifier or string"
             end
           end
         else
-          pp! token
           raise "'#{kind}' is not supported within blocks."
         end
       end
@@ -347,11 +331,8 @@ module HCL
       function_id = extract_identifier(iter.next_as_child_of(main), iter, source)
 
       next_token = iter.next_as_child_of(main)
-      kind, _, _ = next_token
+      assert_token_kind!(next_token, :arguments)
 
-      if kind != :arguments
-        raise "Expected arguments, but got '#{kind}'"
-      end
 
       iter.while_next_is_child_of(next_token) do |child|
         args << build_node(child, iter, source)
