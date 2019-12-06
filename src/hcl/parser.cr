@@ -70,13 +70,9 @@ module HCL
       _, content_start, content_finish = content_token
       content = source[content_start..content_finish]
 
-      if m = content.match(/^\s/)
-        indent = m[0]
-
-        # TODO: Do more efficiently
-        content = content.split(/[\n\r]/).map do |content_part|
-          content_part.lstrip(indent)
-        end.join("\n")
+      if m = content.match(/^\s+/)
+        indent_size = m[0].size
+        content = content.gsub(/^\s{1,#{indent_size}}/m, "")
       end
 
       AST::StringValue.new(main, content)
