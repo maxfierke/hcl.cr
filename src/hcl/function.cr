@@ -19,6 +19,6 @@ module HCL
       arity == args_size
     end
 
-    abstract def call(args : Array(ValueType), varadic_args : Array(ValueType)? = nil) : ValueType
+    abstract def call(args : Array(ValueType)) : AST::ValueType
   end
 end

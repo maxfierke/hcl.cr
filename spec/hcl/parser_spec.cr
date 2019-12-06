@@ -2,15 +2,29 @@ require "../spec_helper"
 
 class SomeFunction < HCL::Function
   def initialize
-    super("some_function", 3)
+    super("some_function", arity: 3)
   end
 
-  def call(args)
+  def call(args) : HCL::AST::ValueType
     arg1 = args[0]
     arg2 = args[1]
     arg3 = args[2]
 
     "#{arg3} #{arg1} #{arg2}"
+  end
+end
+
+class SomeVaradicFunction < HCL::Function
+  def initialize
+    super("some_varadic_function", arity: 4, varadic: true)
+  end
+
+  def call(args) : HCL::AST::ValueType
+    arg1 = args[0]
+    arg2 = args[1]
+    arg3 = args[2]
+    arg4 = args[3]
+    "#{arg1} #{arg2} #{arg3} #{arg4}"
   end
 end
 
@@ -448,6 +462,30 @@ describe HCL::Parser do
         "config" => {
           "hello" => {
             "yoo" => "hello world [1, 2, 3]"
+          }
+        }
+      })
+    end
+
+    it "can parse varadic function calls" do
+      hcl_string = <<-HCL
+        config "hello" {
+          yoo = some_varadic_function("hello", numbers...)
+        }
+
+      HCL
+
+      parser = HCL::Parser.new(hcl_string)
+      doc = parser.parse!
+
+      ctx = HCL::ExpressionContext.new
+      ctx.functions["some_varadic_function"] = SomeVaradicFunction.new
+      ctx.variables["numbers"] = [1_i64, 2_i64, 3_i64].map { |i| i.as(HCL::AST::ValueType) }
+
+      doc.value(ctx).should eq({
+        "config" => {
+          "hello" => {
+            "yoo" => "hello 1 2 3"
           }
         }
       })

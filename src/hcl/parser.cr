@@ -329,16 +329,25 @@ module HCL
       next_token = iter.next_as_child_of(main)
       assert_token_kind!(next_token, :arguments)
 
+      varadic = false
 
       iter.while_next_is_child_of(next_token) do |child|
-        args << build_node(child, iter, source)
+        kind, _, _ = child
+
+        if kind == :varadic
+          varadic = true
+        else
+          raise "Cannot specify additional arguments after a varadic argument (...)" if varadic
+          args << build_node(child, iter, source)
+        end
       end
 
       AST::CallExpr.new(
         main,
         source[start...finish],
         function_id,
-        args
+        args,
+        varadic
       )
     end
   end
