@@ -64,7 +64,7 @@ TODO: Write development instructions here
 - [X] Add support for identifer parsing
 - [X] Add support for lists
 - [X] Add support for maps/objects
-- [X] Add support for function parsing
+- [X] Add support for function parsing, including varadic arguments
 - [X] Add support for square-bracket attribute & index access on maps & lists
 - [X] Add support for arithmetic and logic operators
 - [X] Add support for conditional expressions

@@ -66,7 +66,7 @@ module HCL
 
     arguments = (
       expression >> (char(',') >> s >> expression).repeat >>
-      (char(',') | str("...")).maybe
+      (char(',') | str("...").named(:varadic)).maybe
     ).named(:arguments)
     function_call = (
       identifier >> char('(') >> arguments.maybe >> char(')')
