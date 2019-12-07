@@ -1,6 +1,6 @@
 require "./hcl"
 
-SRC_TEXT = <<-HEREDOC
+SRC_TEXT = <<-'HEREDOC'
 # An AMI
 variable "ami" {
   description = "the AMI to use"
@@ -23,6 +23,20 @@ resource "aws_instance" "web" {
 
 # One-line block
 data "a_single_datum" { foo = "bar" }
+
+# escaping strings
+variable "token" {
+  my_secure_password = "something \"with a quote"
+}
+
+
+# heredocs
+variable "prose" {
+  value = <<-PROSE
+    there once
+    was a story
+  PROSE
+}
 
 HEREDOC
 

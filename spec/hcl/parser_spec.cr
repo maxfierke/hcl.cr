@@ -35,6 +35,25 @@ describe HCL::Parser do
       })
     end
 
+    it "can parse strings w/ escapes" do
+      hcl_string = <<-'HEREDOC'
+        variable "ami" {
+          description = "the \"AMI to use"
+        }
+
+      HEREDOC
+
+      parser = HCL::Parser.new(hcl_string)
+      doc = parser.parse!
+      doc.value.should eq({
+        "variable" => {
+          "ami" => {
+            "description" => "the \\\"AMI to use"
+          }
+        }
+      })
+    end
+
     it "can parse heredocs" do
       hcl_string = <<-HEREDOC
         description = <<-DOC
