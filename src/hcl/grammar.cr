@@ -75,10 +75,10 @@ module HCL
     variable_expr = identifier
 
     _heredoc_template = (
-      (str("<<") | str("<<-")) >> identifier >> newline >>
-      (string_char.repeat >> newline).repeat >>
-      identifier >> newline
-    )
+      (str("<<-") | str("<<")) >> identifier.begin(:heredoc) >> s >> newline >>
+      (s >> ~delimiter(:heredoc) >> string_char.repeat >> newline).repeat.named(:string) >>
+      s >> identifier.end(:heredoc)
+    ).named(:heredoc)
     _quoted_template = string_lit
     template_expr = _quoted_template | _heredoc_template
 

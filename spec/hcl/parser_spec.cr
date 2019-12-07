@@ -16,7 +16,7 @@ end
 
 describe HCL::Parser do
   describe "#parse" do
-    it "can parse strings" do
+    it "can parse simple strings" do
       hcl_string = <<-HEREDOC
         variable "ami" {
           description = "the AMI to use"
@@ -32,6 +32,25 @@ describe HCL::Parser do
             "description" => "the AMI to use"
           }
         }
+      })
+    end
+
+    it "can parse heredocs" do
+      hcl_string = <<-HEREDOC
+        description = <<-DOC
+          once upon a time
+          there was a complicated
+          parsing rule
+        DOC
+        another_prop = "hello"
+
+      HEREDOC
+
+      parser = HCL::Parser.new(hcl_string)
+      doc = parser.parse!
+      doc.value.should eq({
+        "description" => "once upon a time\nthere was a complicated\nparsing rule\n",
+        "another_prop" => "hello"
       })
     end
 

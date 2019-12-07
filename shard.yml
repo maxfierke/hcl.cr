@@ -4,10 +4,11 @@ version: 0.1.0
 authors:
   - Max Fierke <max@maxfierke.com>
 
-crystal: 0.27.2
+crystal: 0.31.1
 
 dependencies:
   pegmatite:
-    github: jemc/crystal-pegmatite
+    github: maxfierke/crystal-pegmatite
+    branch: mf-taggable_delimiters
 
 license: MIT
