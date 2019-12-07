@@ -12,6 +12,7 @@ override CRFLAGS += --error-on-warnings $(if $(RELEASE),--release ,--debug --err
 all: parse-trace
 
 bin/hcl_parse_test: $(SOURCES)
+	mkdir -p bin
 	$(CRYSTAL_BIN) build $(CRFLAGS) -o bin/hcl_parse_test src/hcl_parse_test.cr
 
 .PHONY: parse-trace
@@ -24,6 +25,7 @@ deps:
 
 .PHONY: clean
 clean:
+	rm -rf ./bin/*
 	rm -rf ./dist
 
 .PHONY: test
