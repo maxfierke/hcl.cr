@@ -55,29 +55,6 @@ module HCL
       )
     end
 
-    private def build_heredoc(main, iter, source) : AST::StringValue
-      kind, start, finish = main
-
-      start_ident = iter.next_as_child_of(main)
-      assert_token_kind!(start_ident, :identifier)
-
-      content_token = iter.next_as_child_of(main)
-      assert_token_kind!(content_token, :string)
-
-      end_ident = iter.next_as_child_of(main)
-      assert_token_kind!(end_ident, :identifier)
-
-      _, content_start, content_finish = content_token
-      content = source[content_start..content_finish]
-
-      if m = content.match(/^\s+/)
-        indent_size = m[0].size
-        content = content.gsub(/^\s{1,#{indent_size}}/m, "")
-      end
-
-      AST::StringValue.new(main, content)
-    end
-
     private def build_node(main, iter, source) : AST::Node
       kind, start, finish = main
 
@@ -161,6 +138,26 @@ module HCL
         source[start...finish],
         identifier_node
       )
+    end
+
+    private def build_heredoc(main, iter, source) : AST::Heredoc
+      kind, start, finish = main
+
+      start_ident = extract_identifier(iter.next_as_child_of(main), iter, source)
+
+      content_token = iter.next_as_child_of(main)
+      assert_token_kind!(content_token, :string)
+
+      end_ident = extract_identifier(iter.next_as_child_of(main), iter, source)
+
+      if start_ident != end_ident
+        raise "BUG: Expected heredoc start and end identifiers to match"
+      end
+
+      _, content_start, content_finish = content_token
+      content = source[content_start...content_finish]
+
+      AST::Heredoc.new(main, source[start...finish], start_ident, content)
     end
 
     private def build_identifier(main, iter, source) : AST::Identifier
