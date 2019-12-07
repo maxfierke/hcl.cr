@@ -18,17 +18,15 @@ module HCL
       def string : String
         String.build do |str|
           attributes.each do |key, value|
-            str << "  #{key} = #{value.string}\n"
+            str << "#{key} = #{value.string}\n"
           end
 
           blocks.each do |block|
             block_lines = block.string.split("\n")
             block_lines.each do |line|
-              str << "  #{line}\n"
+              str << "#{line}\n"
             end
           end
-
-          str << "}\n"
         end
       end
 

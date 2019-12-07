@@ -25,14 +25,25 @@ module HCL
         String.build do |str|
           str << "#{id} #{labels.map(&.string).join(" ")} {\n"
 
+          indent = "  "
+
           attributes.each do |key, value|
-            str << "  #{key} = #{value.string}\n"
+            str << indent
+            str << "#{key} = #{value.string}\n"
           end
 
-          blocks.each do |block|
-            block_lines = block.string.split("\n")
-            block_lines.each do |line|
-              str << "  #{line}\n"
+          if blocks.any?
+            str << "\n" if attributes.any?
+
+            blocks.each do |block|
+              block_lines = block.string.split("\n")
+              block_lines.each do |line|
+                if line != ""
+                  str << indent
+                  str << line
+                  str << "\n"
+                end
+              end
             end
           end
 
