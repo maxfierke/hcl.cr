@@ -16,32 +16,28 @@ module HCL
         end
       end
 
-      def string : String
-        String.build do |heredoc|
-          heredoc << "<<-"
-          heredoc << delimiter
-          heredoc << "\n"
+      def to_s(io : IO)
+        io << "<<-"
+        io << delimiter
+        io << "\n"
 
-          if indent_size > 0
-            lines = content.split("\n")
-            indent = " " * indent_size
-            lines.each do |line|
-              if line != ""
-                heredoc << indent
-                heredoc << line
-                heredoc << "\n"
-              end
+        if indent_size > 0
+          lines = content.split("\n")
+          indent = " " * indent_size
+          lines.each do |line|
+            if line != ""
+              io << indent
+              io << line
+              io << "\n"
             end
-
-            delim_indent = " " * Math.max(1, indent_size - 2)
-            heredoc << delim_indent
-            heredoc << delimiter
-          else
-            heredoc << content
-            heredoc << delimiter
           end
 
-          heredoc << "\n"
+          delim_indent = " " * Math.max(1, indent_size - 2)
+          io << delim_indent
+          io << delimiter
+        else
+          io << content
+          io << delimiter
         end
       end
 

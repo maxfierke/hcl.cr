@@ -34,7 +34,7 @@ module HCL
 
         if kind == :attribute
           # Gather children as pairs of key/values into the array.
-          key = build_node(iter.next_as_child_of(token), iter, source).as_s
+          key = build_node(iter.next_as_child_of(token), iter, source).to_s
           val = build_node(iter.next_as_child_of(token), iter, source)
           iter.assert_next_not_child_of(token)
           attributes[key] = val
@@ -252,7 +252,7 @@ module HCL
         assert_token_kind!(kind, :attribute)
 
         # Gather children as pairs of key/values into the object.
-        key = build_node(iter.next_as_child_of(token), iter, source).as_s
+        key = build_node(iter.next_as_child_of(token), iter, source).to_s
         val = build_node(iter.next_as_child_of(token), iter, source)
         iter.assert_next_not_child_of(token)
         values[key] = val
@@ -281,7 +281,7 @@ module HCL
         if kind == :attribute
           has_seen_seen_inner_block = true
           # Gather children as pairs of key/values into the array.
-          key = build_node(iter.next_as_child_of(token), iter, source).as_s
+          key = build_node(iter.next_as_child_of(token), iter, source).to_s
           val = build_node(iter.next_as_child_of(token), iter, source)
           iter.assert_next_not_child_of(token)
           block_attributes[key] = val

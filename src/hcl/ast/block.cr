@@ -21,34 +21,44 @@ module HCL
         @blocks = blocks
       end
 
-      def string : String
-        String.build do |str|
-          str << "#{id} #{labels.map(&.string).join(" ")} {\n"
+      def to_s(io : IO)
+        io << id
+        io << " "
 
-          indent = "  "
-
-          attributes.each do |key, value|
-            str << indent
-            str << "#{key} = #{value.string}\n"
+        if labels.any?
+          labels.each do |label|
+            label.to_s(io)
+            io << " "
           end
+        end
 
-          if blocks.any?
-            str << "\n" if attributes.any?
+        io << "{\n"
 
-            blocks.each do |block|
-              block_lines = block.string.split("\n")
-              block_lines.each do |line|
-                if line != ""
-                  str << indent
-                  str << line
-                  str << "\n"
-                end
+        indent = "  "
+
+        attributes.each do |key, value|
+          io << indent
+          io << "#{key} = "
+          value.to_s(io)
+          io << "\n"
+        end
+
+        if blocks.any?
+          io << "\n" if attributes.any?
+
+          blocks.each do |block|
+            block_lines = block.to_s.split("\n")
+            block_lines.each do |line|
+              if line != ""
+                io << indent
+                io << line
+                io << "\n"
               end
             end
           end
-
-          str << "}\n"
         end
+
+        io << "}\n"
       end
 
       def value(ctx : ExpressionContext) : ValueType

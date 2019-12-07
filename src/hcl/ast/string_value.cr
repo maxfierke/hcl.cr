@@ -1,8 +1,10 @@
 module HCL
   module AST
     class StringValue < Node
-      def string : String
-        "\"#{source}\""
+      def to_s(io : IO)
+        io << "\""
+        io << source
+        io << "\""
       end
 
       def value(ctx : ExpressionContext) : ValueType

@@ -16,8 +16,12 @@ module HCL
         @false_expr = false_expr
       end
 
-      def string : String
-        "#{predicate.string} ? #{true_expr.string} : #{false_expr.string}"
+      def to_s(io : IO)
+        predicate.to_s(io)
+        io << " ? "
+        true_expr.to_s(io)
+        io << " : "
+        false_expr.to_s(io)
       end
 
       def value(ctx : ExpressionContext) : ValueType

@@ -18,21 +18,19 @@ module HCL
         @varadic = varadic
       end
 
-      def string : String
-        String.build do |str|
-          str << id
-          str << "("
+      def to_s(io : IO)
+        io << id
+        io << "("
 
-          args.each_with_index do |arg, index|
-            str << arg.string
+        args.each_with_index do |arg, index|
+          arg.to_s(io)
 
-            if varadic? && index == (args.size - 1) && arg.is_a?(Identifier)
-              str << "..."
-            end
+          if varadic? && index == (args.size - 1) && arg.is_a?(Identifier)
+            io << "..."
           end
-
-          str << ")"
         end
+
+        io << ")"
       end
 
       def value(ctx : ExpressionContext) : ValueType

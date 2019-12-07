@@ -13,15 +13,17 @@ module HCL
         @children = children
       end
 
-      def string : String
-        children.map do |exp|
+      def to_s(io : IO)
+        children.each do |exp|
           case exp
           when Expression
-            "(#{exp.string})"
+            io << "("
+            exp.to_s(io)
+            io << ")"
           else
-            exp.string
+            exp.to_s(io)
           end
-        end.join("")
+        end
       end
 
       def value(ctx : ExpressionContext) : ValueType

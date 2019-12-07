@@ -48,7 +48,7 @@ parser = HCL::Parser.new(SRC_TEXT) # Parser object. Is also an Iterator of token
 
 document = parser.parse! # Returns an HCL::AST::Document
 value = document.value   # Returns the HCL structure as Crystal data types
-string = document.string # Returns string reconstruction of HCL configuration
+string = document.to_s # Returns string reconstruction of HCL configuration
 ```
 
 TODO: Write usage instructions here

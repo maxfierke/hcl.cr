@@ -13,19 +13,17 @@ module HCL
         @attributes = attributes
       end
 
-      def string : String
-        String.build do |str|
-          str << "{ "
+      def to_s(io : IO)
+        io << "{ "
 
-          pairs = [] of String
+        pairs = [] of String
 
-          attributes.each do |key, value|
-            pairs << "#{key} = #{value.string}"
-          end
-
-          str << pairs.join(", ")
-          str << " }"
+        attributes.each do |key, value|
+          pairs << "#{key} = #{value.to_s}"
         end
+
+        io << pairs.join(", ")
+        io << " }"
       end
 
       def value(ctx : ExpressionContext) : ValueType

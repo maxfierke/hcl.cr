@@ -49,11 +49,16 @@ module HCL
         @right_operand = right_operand
       end
 
-      def string : String
+      def to_s(io : IO)
         if right_operand.nil?
-          "#{operator}#{left_operand.string}"
+          io << operator
+          left_operand.to_s(io)
         else
-          "#{left_operand.string} #{operator} #{right_operand.not_nil!.string}"
+          left_operand.to_s(io)
+          io << " "
+          io << operator
+          io << " "
+          right_operand.not_nil!.to_s(io)
         end
       end
 

@@ -13,8 +13,10 @@ module HCL
         @index_exp = index_exp
       end
 
-      def string : String
-        "[#{index_exp.string}]"
+      def to_s(io : IO)
+        io << "["
+        index_exp.to_s(io)
+        io << "]"
       end
 
       def value(ctx : ExpressionContext) : ValueType

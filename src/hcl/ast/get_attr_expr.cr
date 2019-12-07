@@ -12,11 +12,12 @@ module HCL
       )
         super(peg_tuple, source)
 
-        @attribute_name = attribute.string
+        @attribute_name = attribute.to_s
       end
 
-      def string : String
-        ".#{attribute_name}"
+      def to_s(io : IO)
+        io << "."
+        io << attribute_name
       end
 
       def value(ctx : ExpressionContext) : ValueType

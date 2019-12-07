@@ -12,8 +12,17 @@ module HCL
         @children << node
       end
 
-      def string : String
-        "[#{children.map(&.string).join(", ")}]"
+      def to_s(io : IO)
+        io << "["
+        children.each_with_index do |node, index|
+          node.to_s(io)
+
+          if index != (children.size - 1)
+            io << ", "
+          end
+        end
+
+        io << "]"
       end
 
       def value(ctx : ExpressionContext) : ValueType

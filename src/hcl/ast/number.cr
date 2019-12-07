@@ -16,8 +16,8 @@ module HCL
         end
       end
 
-      def string : String
-        @value.to_s
+      def to_s(io : IO)
+        @value.to_s(io)
       end
 
       def value(ctx : ExpressionContext) : ValueType

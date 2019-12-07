@@ -1,6 +1,8 @@
 require "./hcl"
 
 SRC_TEXT = <<-'HEREDOC'
+document_attr = "i am here at the top"
+
 # An AMI
 variable "ami" {
   description = "the AMI to use"
@@ -67,7 +69,7 @@ puts "#" * 80
 puts "END DOC VALUE DUMP"
 puts "#" * 80
 
-string = doc.string
+string = doc.to_s
 puts "#" * 80
 puts "START DOC STRING DUMP"
 puts "#" * 80

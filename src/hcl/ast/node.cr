@@ -11,11 +11,7 @@ module HCL
         @source = source
       end
 
-      def as_s
-        string
-      end
-
-      abstract def string : String
+      abstract def to_s(io : IO)
       abstract def value(ctx : ExpressionContext) : ValueType
     end
   end

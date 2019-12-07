@@ -7,8 +7,8 @@ module HCL
       TRUE_STR = "true"
       FALSE_STR = "false"
 
-      def string : String
-        source
+      def to_s(io : IO)
+        io << source
       end
 
       def value(ctx : ExpressionContext) : ValueType

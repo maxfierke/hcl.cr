@@ -15,18 +15,19 @@ module HCL
         @blocks = blocks
       end
 
-      def string : String
-        String.build do |str|
-          attributes.each do |key, value|
-            str << "#{key} = #{value.string}\n"
-          end
+      def to_s(io : IO)
+        attributes.each do |key, value|
+          io << key
+          io << " = "
+          value.to_s(io)
+          io << "\n"
+        end
 
-          blocks.each do |block|
-            block_lines = block.string.split("\n")
-            block_lines.each do |line|
-              str << "#{line}\n"
-            end
-          end
+        io << "\n" if attributes.any?
+
+        blocks.each do |block|
+          block.to_s(io)
+          io << "\n"
         end
       end
 
