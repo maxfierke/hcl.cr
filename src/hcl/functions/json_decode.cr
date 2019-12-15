@@ -18,11 +18,7 @@ module HCL
           )
         end
 
-        # json = JSON.parse(str)
-        # json.raw.as(ValueType)
-
-        # HCL::ValueType.from_json(str)
-        HCL::ValueType.new(nil)
+        HCL::ValueType.from_json(str)
       end
     end
   end

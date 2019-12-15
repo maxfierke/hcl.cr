@@ -12,7 +12,7 @@ describe HCL::Functions::JSONDecode do
   end
 
   describe "#call" do
-    pending "returns a deserialized representation of the value in Crystal types" do
+    it "returns a deserialized representation of the value in ValueType" do
       fn = HCL::Functions::JSONDecode.new
 
       json = <<-JSON
@@ -29,8 +29,14 @@ describe HCL::Functions::JSONDecode do
         HCL::ValueType.new(2_i64)
       ])
 
-      fn.call([HCL::ValueType.new("10")]).should eq(10_i64)
-      fn.call([HCL::ValueType.new(json)]).should eq(HCL::ValueType.new(hsh))
+      deserialized = fn.call([HCL::ValueType.new(json)])
+      deserialized.should eq(HCL::ValueType.new(hsh))
+      deserialized.unwrap.should eq({
+        "prop1" => 123_i64,
+        "prop2" => "hello",
+        "prop3" => {} of String => HCL::ValueType::Types,
+        "prop4" => [0_i64, 1_i64, 2_i64]
+      })
     end
   end
 end
