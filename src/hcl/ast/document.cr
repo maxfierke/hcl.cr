@@ -32,7 +32,7 @@ module HCL
       end
 
       def value
-        value(ExpressionContext.new)
+        value(ExpressionContext.default_context)
       end
 
       def value(ctx : ExpressionContext) : ValueType

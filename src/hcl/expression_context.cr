@@ -6,11 +6,41 @@ module HCL
     class FunctionUndefinedError < CallError; end
     class VariableUndefinedError < ExpressionError; end
 
+    DEFAULT_FUNCTIONS = [
+      Functions::Abs,
+      Functions::Coalesce,
+      Functions::Compact,
+      Functions::Concat,
+      Functions::Format,
+      Functions::HasIndex,
+      Functions::Int,
+      Functions::JSONDecode,
+      Functions::JSONEncode,
+      Functions::Length,
+      Functions::Lower,
+      Functions::Max,
+      Functions::Min,
+      Functions::Strlen,
+      Functions::Substr,
+      Functions::Upper,
+    ]
+
     @parent : ExpressionContext?
     @functions : Hash(String, Function)
     @variables : Hash(String, ValueType)
 
     getter :parent, :functions, :variables
+
+    def self.default_context
+      ctx = new(nil)
+
+      DEFAULT_FUNCTIONS.each do |function_class|
+        func = function_class.new
+        ctx.functions[func.name] = func
+      end
+
+      ctx
+    end
 
     def initialize(parent : ExpressionContext? = nil)
       @parent = parent

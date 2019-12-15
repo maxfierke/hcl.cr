@@ -14,20 +14,6 @@ class SomeFunction < HCL::Function
   end
 end
 
-class SomeVaradicFunction < HCL::Function
-  def initialize
-    super("some_varadic_function", arity: 4, varadic: true)
-  end
-
-  def call(args) : HCL::ValueType
-    arg1 = args[0]
-    arg2 = args[1]
-    arg3 = args[2]
-    arg4 = args[3]
-    "#{arg1} #{arg2} #{arg3} #{arg4}"
-  end
-end
-
 describe HCL::Parser do
   describe "#parse" do
     it "can parse simple strings" do
@@ -470,7 +456,7 @@ describe HCL::Parser do
     it "can parse varadic function calls" do
       hcl_string = <<-HCL
         config "hello" {
-          yoo = some_varadic_function("hello", numbers...)
+          yoo = format("hello %d %d %d", numbers...)
         }
 
       HCL
@@ -478,8 +464,7 @@ describe HCL::Parser do
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
 
-      ctx = HCL::ExpressionContext.new
-      ctx.functions["some_varadic_function"] = SomeVaradicFunction.new
+      ctx = HCL::ExpressionContext.default_context
       ctx.variables["numbers"] = [1_i64, 2_i64, 3_i64].map { |i| i.as(HCL::ValueType) }
 
       doc.value(ctx).should eq({

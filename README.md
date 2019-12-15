@@ -72,6 +72,7 @@ TODO: Write development instructions here
 - [X] Add support for identifier/variable evaluation
 - [X] Add support for function evaluation
 - [X] Add support for heredocs
+- [ ] Add standard functions
 - [ ] Add support for parsing interpolations/templates
 - [ ] Add support for evaluating interpolations/templates
 - [ ] More validations, better parse errors

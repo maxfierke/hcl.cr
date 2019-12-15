@@ -27,6 +27,9 @@ module HCL
       def value(ctx : ExpressionContext) : ValueType
         predicate_value = predicate.value(ctx)
 
+        # TODO: validate "correctness" of both expressions to catch errors in
+        # HCL construction, if even not for the active path
+
         if truthy?(predicate_value)
           true_expr.value(ctx)
         else

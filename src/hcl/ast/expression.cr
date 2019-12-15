@@ -32,6 +32,7 @@ module HCL
         children.reduce(result) do |result, child|
           if child.is_a?(GetAttrExpr)
             if result && result.is_a?(Hash(String, ValueType))
+              # TODO: Handle splat
               attr = result[child.attribute_name]
               result = attr
             else
@@ -41,6 +42,7 @@ module HCL
             child_val = child.index_exp.value(ctx)
 
             if child_val.is_a?(String) && result && result.is_a?(Hash(String, ValueType))
+              # TODO: Handle splat
               attr = result[child_val]
               result = attr
             elsif child_val.is_a?(Int64) && result && result.is_a?(Array(ValueType))
