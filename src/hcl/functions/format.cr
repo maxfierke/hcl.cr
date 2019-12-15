@@ -10,15 +10,15 @@ module HCL
       end
 
       def call(args : Array(ValueType)) : ValueType
-        if !args[0].is_a?(String)
+        if !args[0].value.is_a?(String)
           raise ArgumentTypeError.new(
-            "format(fmt, args...): Argument type mismatch. Expected a string, but got #{args[0].class}."
+            "format(fmt, args...): Argument type mismatch. Expected a string, but got #{args[0].value.class}."
           )
         end
 
-        fmt = args.shift.as(String)
+        fmt = args.shift.value.as(String)
 
-        sprintf(fmt, args)
+        ValueType.new(sprintf(fmt, args.map(&.value)))
       end
     end
   end

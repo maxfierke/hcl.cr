@@ -16,16 +16,24 @@ describe HCL::Functions::Concat do
       fn = HCL::Functions::Concat.new
 
       arr1 = [
-        "🧄".as(HCL::ValueType),
-        "🧇".as(HCL::ValueType)
+        HCL::ValueType.new("🧄"),
+        HCL::ValueType.new("🧇")
       ]
       arr2 = [
-        "hello".as(HCL::ValueType),
-        1_i64.as(HCL::ValueType)
+        HCL::ValueType.new("hello"),
+        HCL::ValueType.new(1_i64)
       ]
 
-      fn.call(Array(HCL::ValueType).new).should eq(Array(HCL::ValueType).new)
-      fn.call([arr1, arr2]).should eq(["🧄", "🧇", "hello", 1_i64])
+      fn.call(Array(HCL::ValueType).new).value.should eq(Array(HCL::ValueType).new)
+      fn.call([
+        HCL::ValueType.new(arr1),
+        HCL::ValueType.new(arr2)
+      ]).value.should eq([
+        HCL::ValueType.new("🧄"),
+        HCL::ValueType.new("🧇"),
+        HCL::ValueType.new("hello"),
+        HCL::ValueType.new(1_i64)
+      ])
     end
 
     it "raises an error if passed non-array arguments" do
@@ -35,12 +43,12 @@ describe HCL::Functions::Concat do
         HCL::Function::ArgumentTypeError,
         "concat(seqs...): Argument type mismatch. Expected an array, but got String"
       ) do
-        arr = [
-          "🧄".as(HCL::ValueType),
-          "🧇".as(HCL::ValueType)
-        ]
+        arr = HCL::ValueType.new([
+          HCL::ValueType.new("🧄"),
+          HCL::ValueType.new("🧇")
+        ])
 
-        fn.call([arr, "hello"])
+        fn.call([arr, HCL::ValueType.new("hello")])
       end
     end
   end

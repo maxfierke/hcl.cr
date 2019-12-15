@@ -16,14 +16,24 @@ describe HCL::Functions::JSONEncode do
       fn = HCL::Functions::JSONEncode.new
 
       hsh = Hash(String, HCL::ValueType).new
-      hsh["prop1"] = 123_i64
-      hsh["prop2"] = "hello"
-      hsh["prop3"] = Hash(String, HCL::ValueType).new
-      hsh["prop4"] = Array(HCL::ValueType).new.concat([0_i64, 1_i64, 2_i64])
+      hsh["prop1"] = HCL::ValueType.new(123_i64)
+      hsh["prop2"] = HCL::ValueType.new("hello")
+      hsh["prop3"] = HCL::ValueType.new(
+        Hash(String, HCL::ValueType).new
+      )
+      hsh["prop4"] = HCL::ValueType.new([
+        HCL::ValueType.new(0_i64),
+        HCL::ValueType.new(1_i64),
+        HCL::ValueType.new(2_i64)
+      ])
 
-      fn.call([10_i64]).should eq("10")
+      fn.call([
+        HCL::ValueType.new(10_i64)
+      ]).value.should eq("10")
 
-      fn.call([hsh]).should eq(<<-JSON)
+      fn.call([
+        HCL::ValueType.new(hsh)
+      ]).value.should eq(<<-JSON)
       {"prop1":123,"prop2":"hello","prop3":{},"prop4":[0,1,2]}
       JSON
     end

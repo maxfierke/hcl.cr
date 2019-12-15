@@ -11,7 +11,7 @@ module HCL
 
       def call(args : Array(ValueType)) : ValueType
         val = args[0]
-        val.to_json
+        ValueType.new(val.to_json)
       end
     end
   end

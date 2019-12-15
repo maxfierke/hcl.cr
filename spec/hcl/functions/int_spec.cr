@@ -15,10 +15,18 @@ describe HCL::Functions::Int do
     it "returns the integer component of a number, rounding towards zero" do
       fn = HCL::Functions::Int.new
 
-      fn.call([10_i64]).should eq(10_i64)
-      fn.call([-5_i64]).should eq(-5_i64)
-      fn.call([3.12_f64]).should eq(3_i64)
-      fn.call([-18.23_f64]).should eq(-18_i64)
+      fn.call([
+        HCL::ValueType.new(10_i64)
+      ]).value.should eq(10_i64)
+      fn.call([
+        HCL::ValueType.new(-5_i64)
+      ]).value.should eq(-5_i64)
+      fn.call([
+        HCL::ValueType.new(3.12_f64)
+      ]).value.should eq(3_i64)
+      fn.call([
+        HCL::ValueType.new(-18.23_f64)
+      ]).value.should eq(-18_i64)
     end
   end
 end

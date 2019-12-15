@@ -14,8 +14,9 @@ module HCL
           raise FunctionArgumentError.new(
             "min(numbers...): Received empty array. Expected at least one element."
           )
-        elsif args.all? { |arg| arg.is_a?(Int64) || arg.is_a?(Float64) }
-          args.map { |arg| arg.as(Int64 | Float64) }.min
+        elsif args.all? { |arg| arg.value.is_a?(Int64) || arg.value.is_a?(Float64) }
+          min_val = args.map { |arg| arg.value.as(Int64 | Float64) }.min
+          ValueType.new(min_val)
         else
           raise ArgumentTypeError.new(
             "min(numbers...): Argument type mismatch. Expected array of only numbers."

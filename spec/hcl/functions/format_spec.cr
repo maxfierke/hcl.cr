@@ -16,11 +16,11 @@ describe HCL::Functions::Format do
       fn = HCL::Functions::Format.new
 
       fn.call([
-        "hello %s + %s = %s".as(HCL::ValueType),
-        "🧄".as(HCL::ValueType),
-        "🧇".as(HCL::ValueType),
-        "gross".as(HCL::ValueType)
-      ]).should eq("hello 🧄 + 🧇 = gross")
+        HCL::ValueType.new("hello %s + %s = %s"),
+        HCL::ValueType.new("🧄"),
+        HCL::ValueType.new("🧇"),
+        HCL::ValueType.new("gross")
+      ]).value.should eq("hello 🧄 + 🧇 = gross")
     end
 
     it "raises an error when passed a non-string for fmt parameter" do
@@ -30,7 +30,11 @@ describe HCL::Functions::Format do
         HCL::Function::ArgumentTypeError,
         "format(fmt, args...): Argument type mismatch. Expected a string, but got Int64."
       ) do
-        fn.call([0_i64, "hello", "world"])
+        fn.call([
+          HCL::ValueType.new(0_i64),
+          HCL::ValueType.new("hello"),
+          HCL::ValueType.new("world")
+        ])
       end
     end
   end

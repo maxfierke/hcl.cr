@@ -31,6 +31,14 @@ module HCL
         end
       end
 
+      def unwrap
+        unwrap(ExpressionContext.default_context)
+      end
+
+      def unwrap(ctx : ExpressionContext)
+        value(ctx).unwrap
+      end
+
       def value
         value(ExpressionContext.default_context)
       end
@@ -39,15 +47,15 @@ module HCL
         dict = {} of String => ValueType
 
         attributes.each do |key, value|
-          dict[key] = value.value(ctx).as(ValueType)
+          dict[key] = value.value(ctx)
         end
 
         blocks.each do |block|
-          block_dict = block.value(ctx).as(Hash(String, ValueType))
+          block_dict = block.value(ctx).value.as(Hash(String, ValueType))
           dict.merge!(block_dict)
         end
 
-        dict
+        ValueType.new(dict)
       end
     end
   end

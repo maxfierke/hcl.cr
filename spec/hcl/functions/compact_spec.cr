@@ -18,26 +18,45 @@ describe HCL::Functions::Compact do
       hsh = Hash(String, HCL::ValueType).new
       arr = Array(HCL::ValueType).new
 
-      fn.call([hsh, nil, "hello"]).should eq([hsh, "hello"])
-      fn.call([arr, nil]).should eq([arr])
       fn.call([
-        nil.as(HCL::ValueType),
-        "🧄".as(HCL::ValueType),
-        "🧇".as(HCL::ValueType)
-      ]).should eq(["🧄", "🧇"])
+        HCL::ValueType.new(hsh),
+        HCL::ValueType.new(nil),
+        HCL::ValueType.new("hello")
+      ]).value.should eq([
+        HCL::ValueType.new(hsh),
+        HCL::ValueType.new("hello")
+      ])
+      fn.call([
+        HCL::ValueType.new(arr),
+        HCL::ValueType.new(nil)
+      ]).value.should eq([
+        HCL::ValueType.new(arr)
+      ])
+      fn.call([
+        HCL::ValueType.new(nil),
+        HCL::ValueType.new("🧄"),
+        HCL::ValueType.new("🧇")
+      ]).value.should eq([
+        HCL::ValueType.new("🧄"),
+        HCL::ValueType.new("🧇")
+      ])
 
       fn.call([
-        nil.as(HCL::ValueType),
-        nil.as(HCL::ValueType),
-        nil.as(HCL::ValueType)
-      ]).should eq(Array(HCL::ValueType).new)
+        HCL::ValueType.new(nil),
+        HCL::ValueType.new(nil)
+      ]).value.should eq(Array(HCL::ValueType).new)
 
       some_hash = Hash(String, HCL::ValueType).new.tap do |hsh|
-        hsh["one"] = 1_i64
-        hsh["two"] = 2_i64
-        hsh["three"] = 3_i64
+        hsh["one"] = HCL::ValueType.new(1_i64)
+        hsh["two"] = HCL::ValueType.new(2_i64)
+        hsh["three"] = HCL::ValueType.new(3_i64)
       end
-      fn.call([nil, some_hash]).should eq([some_hash])
+      fn.call([
+        HCL::ValueType.new(nil),
+        HCL::ValueType.new(some_hash)
+      ]).value.should eq([
+        HCL::ValueType.new(some_hash)
+      ])
     end
   end
 end

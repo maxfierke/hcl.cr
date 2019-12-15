@@ -42,7 +42,7 @@ module HCL
       end
 
       def value(ctx : ExpressionContext) : ValueType
-        content
+        ValueType.new(content)
       end
     end
   end

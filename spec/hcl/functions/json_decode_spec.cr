@@ -20,13 +20,17 @@ describe HCL::Functions::JSONDecode do
       JSON
 
       hsh = Hash(String, HCL::ValueType).new
-      hsh["prop1"] = 123_i64
-      hsh["prop2"] = "hello"
-      hsh["prop3"] = Hash(String, HCL::ValueType).new
-      hsh["prop4"] = Array(HCL::ValueType).new.concat([0_i64, 1_i64, 2_i64])
+      hsh["prop1"] = HCL::ValueType.new(123_i64)
+      hsh["prop2"] = HCL::ValueType.new("hello")
+      hsh["prop3"] = HCL::ValueType.new(Hash(String, HCL::ValueType).new)
+      hsh["prop4"] = HCL::ValueType.new([
+        HCL::ValueType.new(0_i64),
+        HCL::ValueType.new(1_i64),
+        HCL::ValueType.new(2_i64)
+      ])
 
-      fn.call(["10"]).should eq(10_i64)
-      fn.call([json]).should eq(hsh)
+      fn.call([HCL::ValueType.new("10")]).should eq(10_i64)
+      fn.call([HCL::ValueType.new(json)]).should eq(HCL::ValueType.new(hsh))
     end
   end
 end

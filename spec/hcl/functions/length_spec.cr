@@ -15,21 +15,27 @@ describe HCL::Functions::Length do
     it "returns the length of the collection" do
       fn = HCL::Functions::Length.new
 
-      fn.call([Hash(String, HCL::ValueType).new]).should eq(0)
-      fn.call([Array(HCL::ValueType).new]).should eq(0)
       fn.call([
-        [
-          "🧄".as(HCL::ValueType),
-          "🧇".as(HCL::ValueType)
-        ]
-      ]).should eq(2)
+        HCL::ValueType.new(Hash(String, HCL::ValueType).new)
+      ]).value.should eq(0)
+      fn.call([
+        HCL::ValueType.new(Array(HCL::ValueType).new)
+      ]).value.should eq(0)
+      fn.call([
+        HCL::ValueType.new([
+          HCL::ValueType.new("🧄"),
+          HCL::ValueType.new("🧇")
+        ])
+      ]).value.should eq(2)
 
       some_hash = Hash(String, HCL::ValueType).new.tap do |hsh|
-        hsh["one"] = 1_i64
-        hsh["two"] = 2_i64
-        hsh["three"] = 3_i64
+        hsh["one"] = HCL::ValueType.new(1_i64)
+        hsh["two"] = HCL::ValueType.new(2_i64)
+        hsh["three"] = HCL::ValueType.new(3_i64)
       end
-      fn.call([some_hash]).should eq(3)
+      fn.call([
+        HCL::ValueType.new(some_hash)
+      ]).value.should eq(3)
     end
 
     it "raises an error when passed something other than a collection" do
@@ -46,7 +52,9 @@ describe HCL::Functions::Length do
           HCL::Function::ArgumentTypeError,
           "length(coll): Argument type mismatch. Expected a collection, but got #{val.class}."
         ) do
-          fn.call([val.as(HCL::ValueType)])
+          fn.call([
+            HCL::ValueType.new(val)
+          ])
         end
       end
     end

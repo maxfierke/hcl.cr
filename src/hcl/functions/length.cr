@@ -10,7 +10,7 @@ module HCL
       end
 
       def call(args : Array(ValueType)) : ValueType
-        coll = args[0]
+        coll = args[0].value
 
         if !coll || coll.is_a?(Bool) || coll.is_a?(Int64) || coll.is_a?(Float64) || coll.is_a?(String)
           raise ArgumentTypeError.new(
@@ -20,7 +20,7 @@ module HCL
 
         coll = coll.as(Array(ValueType) | Hash(String, ValueType))
 
-        coll.size.to_i64
+        ValueType.new(coll.size.to_i64)
       end
     end
   end

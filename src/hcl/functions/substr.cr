@@ -10,9 +10,9 @@ module HCL
       end
 
       def call(args : Array(ValueType)) : ValueType
-        str = args[0]
-        offset = args[1]
-        length = args[2]
+        str = args[0].value
+        offset = args[1].value
+        length = args[2].value
 
         if !str.is_a?(String)
           raise ArgumentTypeError.new(
@@ -32,7 +32,7 @@ module HCL
           )
         end
 
-        str[offset..(offset+length)]
+        HCL::ValueType.new(str[offset..(offset+length)])
       end
     end
   end

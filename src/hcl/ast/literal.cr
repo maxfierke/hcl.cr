@@ -12,12 +12,12 @@ module HCL
       end
 
       def value(ctx : ExpressionContext) : ValueType
-        @value ||= if source == TRUE_STR
-          true
+        if source == TRUE_STR
+          ValueType.new(true)
         elsif source == FALSE_STR
-          false
+          ValueType.new(false)
         else
-          nil
+          ValueType.new(nil)
         end
       end
     end

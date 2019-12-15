@@ -26,9 +26,11 @@ module HCL
       end
 
       def value(ctx : ExpressionContext) : ValueType
-        children.map do |item|
-          item.value(ctx).as(ValueType)
+        result = children.map do |item|
+          item.value(ctx)
         end
+
+        ValueType.new(result)
       end
     end
   end

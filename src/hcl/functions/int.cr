@@ -10,7 +10,7 @@ module HCL
       end
 
       def call(args : Array(ValueType)) : ValueType
-        number = args[0]
+        number = args[0].value
 
         if !number.is_a?(Int64) && !number.is_a?(Float64)
           raise ArgumentTypeError.new(
@@ -21,9 +21,9 @@ module HCL
         number = number.as(Int64 | Float64)
 
         if number < 0_i64
-          number.ceil
+          ValueType.new(number.ceil)
         else
-          number.floor
+          ValueType.new(number.floor)
         end
       end
     end

@@ -10,7 +10,7 @@ module HCL
       end
 
       def call(args : Array(ValueType)) : ValueType
-        str = args[0]
+        str = args[0].value
 
         if !str.is_a?(String)
           raise ArgumentTypeError.new(
@@ -18,8 +18,11 @@ module HCL
           )
         end
 
-        json = JSON.parse(str)
-        json.raw.as(ValueType)
+        # json = JSON.parse(str)
+        # json.raw.as(ValueType)
+
+        # HCL::ValueType.from_json(str)
+        HCL::ValueType.new(nil)
       end
     end
   end

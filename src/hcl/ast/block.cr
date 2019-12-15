@@ -65,25 +65,30 @@ module HCL
         block_header = [id] + labels.map do |label|
           label.value(ctx)
         end
-        block_value = value_dict(ctx).as(ValueType)
+        block_value = value_dict(ctx)
         block_header.reverse.reduce(block_value) do |acc, val|
-          { val.to_s => acc.as(ValueType) }
-        end.as(Hash(String, ValueType)).as(ValueType)
+          if val.is_a?(ValueType)
+            # TODO: When is this not the case?
+            ValueType.new({ val.value.to_s => acc })
+          else
+            ValueType.new({ val.to_s => acc })
+          end
+        end
       end
 
       private def value_dict(ctx)
         dict = {} of String => ValueType
 
         attributes.each do |key, value|
-          dict[key] = value.value(ctx).as(ValueType)
+          dict[key] = value.value(ctx)
         end
 
         blocks.each do |block|
-          block_dict = block.value(ctx).as(Hash(String, ValueType))
+          block_dict = block.value(ctx).value.as(Hash(String, ValueType))
           dict.merge!(block_dict)
         end
 
-        dict
+        ValueType.new(dict)
       end
     end
   end

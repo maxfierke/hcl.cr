@@ -15,8 +15,8 @@ describe HCL::Functions::Lower do
     it "returns lower variant of string" do
       fn = HCL::Functions::Lower.new
 
-      fn.call(["WHISPER"]).should eq("whisper")
-      fn.call(["already_lower"]).should eq("already_lower")
+      fn.call([HCL::ValueType.new("WHISPER")]).value.should eq("whisper")
+      fn.call([HCL::ValueType.new("already_lower")]).value.should eq("already_lower")
     end
 
     it "raises an error when passed something other than a string" do
@@ -34,7 +34,7 @@ describe HCL::Functions::Lower do
           HCL::Function::ArgumentTypeError,
           "lower(str): Argument type mismatch. Expected a string, but got #{val.class}."
         ) do
-          fn.call([val.as(HCL::ValueType)])
+          fn.call([HCL::ValueType.new(val)])
         end
       end
     end

@@ -27,37 +27,35 @@ module HCL
       end
 
       def value(ctx : ExpressionContext) : ValueType
-        # TODO: This is wrong.
-        result : ValueType = nil
-        children.reduce(result) do |result, child|
+        children.reduce(HCL::ValueType.new(nil)) do |result, child|
+          current = result ? result.value : nil
+          next_val = nil
           if child.is_a?(GetAttrExpr)
-            if result && result.is_a?(Hash(String, ValueType))
+            if current && current.is_a?(Hash(String, ValueType))
               # TODO: Handle splat
-              attr = result[child.attribute_name]
-              result = attr
+              attr = current[child.attribute_name].value
+              next_val = attr
             else
-              raise "Cannot read attribute #{child.attribute_name} from #{typeof(result)}"
+              raise "Cannot read attribute #{child.attribute_name} from #{typeof(current)}"
             end
           elsif child.is_a?(IndexExpr)
-            child_val = child.index_exp.value(ctx)
+            child_val = child.index_exp.value(ctx).value
 
-            if child_val.is_a?(String) && result && result.is_a?(Hash(String, ValueType))
+            if child_val.is_a?(String) && current && current.is_a?(Hash(String, ValueType))
               # TODO: Handle splat
-              attr = result[child_val]
-              result = attr
-            elsif child_val.is_a?(Int64) && result && result.is_a?(Array(ValueType))
-              attr = result[child_val]
-              result = attr
+              attr = current[child_val].value
+              next_val = attr
+            elsif child_val.is_a?(Int64) && current && current.is_a?(Array(ValueType))
+              attr = current[child_val].value
+              next_val = attr
             else
-              raise "Cannot read member #{child_val} from #{typeof(result)}"
+              raise "Cannot read member #{child_val} from #{typeof(current)}"
             end
-          elsif child.is_a?(Node)
-            result = child.value(ctx)
           else
-            raise "BUG: Cannot evaluate token #{child.class}"
+            next_val = child.value(ctx).value
           end
 
-          result
+          HCL::ValueType.new(next_val)
         end
       end
     end

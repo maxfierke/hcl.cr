@@ -33,7 +33,7 @@ module HCL
           dict[key] = value.value(ctx)
         end
 
-        dict
+        ValueType.new(dict)
       end
     end
   end

@@ -15,7 +15,11 @@ describe HCL::Functions::Substr do
     it "returns the expected substring" do
       fn = HCL::Functions::Substr.new
 
-      fn.call(["hello world", 6_i64, 5_i64]).should eq("world")
+      fn.call([
+        HCL::ValueType.new("hello world"),
+        HCL::ValueType.new(6_i64),
+        HCL::ValueType.new(5_i64)
+      ]).value.should eq("world")
     end
 
     it "raises an error when passed something other than a string for first arg" do
@@ -28,12 +32,12 @@ describe HCL::Functions::Substr do
         true,
         Hash(String, HCL::ValueType).new,
         Array(HCL::ValueType).new
-      ].each do |val|
+      ].map { |val| HCL::ValueType.new(val) }.each do |val|
         expect_raises(
           HCL::Function::ArgumentTypeError,
-          "substr(str, offset, length): Argument type mismatch. Expected a string, but got #{val.class}."
+          "substr(str, offset, length): Argument type mismatch. Expected a string, but got #{val.value.class}."
         ) do
-          fn.call([val, 0_i64, val.as(HCL::ValueType)])
+          fn.call([val, HCL::ValueType.new(0_i64), HCL::ValueType.new(0_i64)])
         end
       end
     end
@@ -47,12 +51,12 @@ describe HCL::Functions::Substr do
         true,
         Hash(String, HCL::ValueType).new,
         Array(HCL::ValueType).new
-      ].each do |val|
+      ].map { |val| HCL::ValueType.new(val) }.each do |val|
         expect_raises(
           HCL::Function::ArgumentTypeError,
-          "substr(str, offset, length): Argument type mismatch. Expected an integer, but got #{val.class}."
+          "substr(str, offset, length): Argument type mismatch. Expected an integer, but got #{val.value.class}."
         ) do
-          fn.call(["hello", val.as(HCL::ValueType), 99_i64])
+          fn.call([HCL::ValueType.new("hello"), val, HCL::ValueType.new(99_i64)])
         end
       end
     end
@@ -66,12 +70,12 @@ describe HCL::Functions::Substr do
         true,
         Hash(String, HCL::ValueType).new,
         Array(HCL::ValueType).new
-      ].each do |val|
+      ].map { |val| HCL::ValueType.new(val) }.each do |val|
         expect_raises(
           HCL::Function::ArgumentTypeError,
-          "substr(str, offset, length): Argument type mismatch. Expected an integer, but got #{val.class}."
+          "substr(str, offset, length): Argument type mismatch. Expected an integer, but got #{val.value.class}."
         ) do
-          fn.call(["hello", 0_i64, val.as(HCL::ValueType)])
+          fn.call([HCL::ValueType.new("hello"), HCL::ValueType.new(0_i64), val])
         end
       end
     end

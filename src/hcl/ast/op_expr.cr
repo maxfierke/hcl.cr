@@ -68,9 +68,9 @@ module HCL
         right_op = right_operand
         if right_op.nil?
           left_op = left_operand
-          left_op_val = left_op.value(ctx)
+          left_op_val = left_op.value(ctx).value
           raise "Parser bug: Cannot perform unary operation on array" if left_op_val.responds_to?(:[])
-          case operator
+          result = case operator
           when NOT
             !left_op_val
           when SUBTRACTION
@@ -78,11 +78,13 @@ module HCL
             raise "Parser bug: Cannot perform numeric inversion on boolean" if left_op_val.is_a?(Bool)
             -left_op_val
           end
-        else
-          left_op_val = left_op.value(ctx)
-          right_op_val = right_op.value(ctx)
 
-          case operator
+          ValueType.new(result)
+        else
+          left_op_val = left_op.value(ctx).value
+          right_op_val = right_op.value(ctx).value
+
+          result = case operator
           when ADDITION
             left_op_val, right_op_val = assert_number!(left_op_val, right_op_val)
             left_op_val + right_op_val
@@ -127,6 +129,8 @@ module HCL
           when OR
             left_op_val || right_op_val
           end
+
+          ValueType.new(result)
         end
       end
 

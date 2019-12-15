@@ -16,13 +16,12 @@ describe HCL::Functions::Min do
       fn = HCL::Functions::Min.new
 
       arr = [
-        -1_i64.as(HCL::ValueType),
-        38_i64.as(HCL::ValueType),
-        0_i64.as(HCL::ValueType)
+        HCL::ValueType.new(-1_i64),
+        HCL::ValueType.new(38_i64),
+        HCL::ValueType.new(0_i64)
       ]
 
-
-      fn.call(arr).should eq(-1)
+      fn.call(arr).value.should eq(-1)
     end
 
     it "raises an error when passed an empty array" do
@@ -43,7 +42,10 @@ describe HCL::Functions::Min do
         HCL::Function::ArgumentTypeError,
         "min(numbers...): Argument type mismatch. Expected array of only numbers."
       ) do
-        fn.call([1_i64, "hello"])
+        fn.call([
+          HCL::ValueType.new(1_i64),
+          HCL::ValueType.new("hello")
+        ])
       end
     end
   end

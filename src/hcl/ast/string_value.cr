@@ -8,7 +8,7 @@ module HCL
       end
 
       def value(ctx : ExpressionContext) : ValueType
-        source
+        ValueType.new(source)
       end
     end
   end

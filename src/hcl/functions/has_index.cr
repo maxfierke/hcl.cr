@@ -10,8 +10,8 @@ module HCL
       end
 
       def call(args : Array(ValueType)) : ValueType
-        coll = args[0]
-        idx = args[1]
+        coll = args[0].value
+        idx = args[1].value
 
         if coll.is_a?(Array(ValueType))
           if !idx.is_a?(Int64)
@@ -22,7 +22,7 @@ module HCL
 
           idx = idx.as(Int64)
 
-          !!coll[idx]?
+          HCL::ValueType.new(!!coll[idx]?)
         elsif coll.is_a?(Hash(String, ValueType))
           if !idx.is_a?(String)
             raise ArgumentTypeError.new(
@@ -32,7 +32,7 @@ module HCL
 
           idx = idx.as(String)
 
-          !!coll[idx]?
+          HCL::ValueType.new(!!coll[idx]?)
         else
           raise ArgumentTypeError.new(
             "hasindex(coll, idx): Argument type mismatch. Expected a collection, but got #{coll.class}."

@@ -10,9 +10,9 @@ module HCL
       end
 
       def call(args : Array(ValueType)) : ValueType
-        val = args.find { |arg| !arg.nil? }
+        val = args.find { |arg| !arg.value.nil? }
 
-        val
+        val ? val : ValueType.new(nil)
       end
     end
   end

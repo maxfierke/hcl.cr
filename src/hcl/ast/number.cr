@@ -21,7 +21,7 @@ module HCL
       end
 
       def value(ctx : ExpressionContext) : ValueType
-        @value
+        ValueType.new(@value)
       end
     end
   end
