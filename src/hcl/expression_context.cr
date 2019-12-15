@@ -8,14 +8,14 @@ module HCL
 
     @parent : ExpressionContext?
     @functions : Hash(String, Function)
-    @variables : Hash(String, AST::ValueType)
+    @variables : Hash(String, ValueType)
 
     getter :parent, :functions, :variables
 
     def initialize(parent : ExpressionContext? = nil)
       @parent = parent
       @functions = Hash(String, Function).new
-      @variables = Hash(String, AST::ValueType).new
+      @variables = Hash(String, ValueType).new
     end
 
     def call_func(name, args)

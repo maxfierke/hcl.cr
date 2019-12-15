@@ -5,7 +5,7 @@ class SomeFunction < HCL::Function
     super("some_function", arity: 3)
   end
 
-  def call(args) : HCL::AST::ValueType
+  def call(args) : HCL::ValueType
     arg1 = args[0]
     arg2 = args[1]
     arg3 = args[2]
@@ -19,7 +19,7 @@ class SomeVaradicFunction < HCL::Function
     super("some_varadic_function", arity: 4, varadic: true)
   end
 
-  def call(args) : HCL::AST::ValueType
+  def call(args) : HCL::ValueType
     arg1 = args[0]
     arg2 = args[1]
     arg3 = args[2]
@@ -287,7 +287,7 @@ describe HCL::Parser do
               {
                 "foo" => [
                   {
-                    "bar" => {} of String => HCL::AST::ValueType
+                    "bar" => {} of String => HCL::ValueType
                   }
                 ]
               }
@@ -387,8 +387,8 @@ describe HCL::Parser do
       doc = parser.parse!
 
       ctx = HCL::ExpressionContext.new
-      ctx.variables["var"] = Hash(String, HCL::AST::ValueType).new.tap do |hsh|
-        hsh["something"] = Hash(String, HCL::AST::ValueType).new.tap do |nested|
+      ctx.variables["var"] = Hash(String, HCL::ValueType).new.tap do |hsh|
+        hsh["something"] = Hash(String, HCL::ValueType).new.tap do |nested|
           nested["ami_id"] = "ami-1234"
         end
       end
@@ -416,12 +416,12 @@ describe HCL::Parser do
       doc = parser.parse!
 
       ctx = HCL::ExpressionContext.new
-      ctx.variables["var"] = Hash(String, HCL::AST::ValueType).new.tap do |var|
-        something = [] of HCL::AST::ValueType
-        something << Hash(String, HCL::AST::ValueType).new.tap do |something_0|
-          other_thing = Hash(String, HCL::AST::ValueType).new.tap do |other_thing|
-            some_list = [] of HCL::AST::ValueType
-            some_list << Hash(String, HCL::AST::ValueType).new.tap do |nested|
+      ctx.variables["var"] = Hash(String, HCL::ValueType).new.tap do |var|
+        something = [] of HCL::ValueType
+        something << Hash(String, HCL::ValueType).new.tap do |something_0|
+          other_thing = Hash(String, HCL::ValueType).new.tap do |other_thing|
+            some_list = [] of HCL::ValueType
+            some_list << Hash(String, HCL::ValueType).new.tap do |nested|
               nested["ami_id"] = "ami-1234"
             end
             other_thing["some_list"] = some_list
@@ -480,7 +480,7 @@ describe HCL::Parser do
 
       ctx = HCL::ExpressionContext.new
       ctx.functions["some_varadic_function"] = SomeVaradicFunction.new
-      ctx.variables["numbers"] = [1_i64, 2_i64, 3_i64].map { |i| i.as(HCL::AST::ValueType) }
+      ctx.variables["numbers"] = [1_i64, 2_i64, 3_i64].map { |i| i.as(HCL::ValueType) }
 
       doc.value(ctx).should eq({
         "config" => {
