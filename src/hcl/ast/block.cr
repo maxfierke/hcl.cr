@@ -79,7 +79,7 @@ module HCL
         end
 
         blocks.each do |block|
-          block_dict = block.value(ctx).raw.as(Hash(String, Any))
+          block_dict = block.value(ctx).as_h
           dict.merge!(block_dict)
         end
 

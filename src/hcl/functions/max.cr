@@ -14,13 +14,13 @@ module HCL
           raise FunctionArgumentError.new(
             "max(numbers...): Received empty array. Expected at least one element."
           )
-        elsif args.all? { |arg| arg.raw.is_a?(Int64) || arg.raw.is_a?(Float64) }
-          max_val = args.map { |arg| arg.raw.as(Int64 | Float64) }.max
-          Any.new(max_val)
         else
-          raise ArgumentTypeError.new(
-            "max(numbers...): Argument type mismatch. Expected array of only numbers."
-          )
+          max_val = args.map { |arg|
+            arg.as_i? || arg.as_f? || raise ArgumentTypeError.new(
+              "max(numbers...): Argument type mismatch. Expected array of only numbers."
+            )
+          }.max
+          Any.new(max_val)
         end
       end
     end

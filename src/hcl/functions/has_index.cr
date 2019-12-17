@@ -10,32 +10,28 @@ module HCL
       end
 
       def call(args : Array(Any)) : Any
-        coll = args[0].raw
-        idx = args[1].raw
+        coll = args[0]
+        idx_or_key = args[1]
 
-        if coll.is_a?(Array(Any))
-          if !idx.is_a?(Int64)
+        if arr = coll.as_a?
+          if idx = idx_or_key.as_i?
+            HCL::Any.new(!!arr[idx]?)
+          else
             raise ArgumentTypeError.new(
-              "hasindex(coll, idx): Argument type mismatch. Expected a number, but got #{coll.class}."
+              "hasindex(coll, idx): Argument type mismatch. Expected a number, but got #{coll.raw.class}."
             )
           end
-
-          idx = idx.as(Int64)
-
-          HCL::Any.new(!!coll[idx]?)
-        elsif coll.is_a?(Hash(String, Any))
-          if !idx.is_a?(String)
+        elsif hsh = coll.as_h?
+          if key = idx_or_key.as_s?
+            HCL::Any.new(!!hsh[key]?)
+          else
             raise ArgumentTypeError.new(
-              "hasindex(coll, idx): Argument type mismatch. Expected a string, but got #{coll.class}."
+              "hasindex(coll, idx): Argument type mismatch. Expected a string, but got #{coll.raw.class}."
             )
           end
-
-          idx = idx.as(String)
-
-          HCL::Any.new(!!coll[idx]?)
         else
           raise ArgumentTypeError.new(
-            "hasindex(coll, idx): Argument type mismatch. Expected a collection, but got #{coll.class}."
+            "hasindex(coll, idx): Argument type mismatch. Expected a collection, but got #{coll.raw.class}."
           )
         end
       end

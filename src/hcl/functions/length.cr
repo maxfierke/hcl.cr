@@ -10,15 +10,14 @@ module HCL
       end
 
       def call(args : Array(Any)) : Any
-        coll = args[0].raw
+        coll_arg = args[0]
+        coll = coll_arg.as_a? || coll_arg.as_h?
 
-        if !coll || coll.is_a?(Bool) || coll.is_a?(Int64) || coll.is_a?(Float64) || coll.is_a?(String)
+        if !coll
           raise ArgumentTypeError.new(
-            "length(coll): Argument type mismatch. Expected a collection, but got #{coll.class}."
+            "length(coll): Argument type mismatch. Expected a collection, but got #{coll_arg.raw.class}."
           )
         end
-
-        coll = coll.as(Array(Any) | Hash(String, Any))
 
         Any.new(coll.size.to_i64)
       end

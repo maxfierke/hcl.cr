@@ -10,15 +10,14 @@ module HCL
       end
 
       def call(args : Array(Any)) : Any
-        number = args[0].raw
+        number_arg = args[0]
+        number = number_arg.as_i? || number_arg.as_f?
 
-        if !number.is_a?(Int64) && !number.is_a?(Float64)
+        if !number
           raise ArgumentTypeError.new(
-            "int(number): Argument type mismatch. Expected a number, but got #{number.class}."
+            "int(number): Argument type mismatch. Expected a number, but got #{number_arg.raw.class}."
           )
         end
-
-        number = number.as(Int64 | Float64)
 
         if number < 0_i64
           Any.new(number.ceil)

@@ -88,13 +88,13 @@ module HCL
       _, start, finish = main
 
       predicate = iter.next_as_child_of(main)
-      predicate_node = build_node(predicate, iter, source).as(AST::Expression)
+      predicate_node = build_expression(predicate, iter, source)
 
       true_expr = iter.next_as_child_of(main)
-      true_expr_node = build_node(true_expr, iter, source).as(AST::Expression)
+      true_expr_node = build_expression(true_expr, iter, source)
 
       false_expr = iter.next_as_child_of(main)
-      false_expr_node = build_node(false_expr, iter, source).as(AST::Expression)
+      false_expr_node = build_expression(false_expr, iter, source)
 
       AST::CondExpr.new(
         main,
@@ -131,7 +131,7 @@ module HCL
       next_token = iter.next_as_child_of(main)
       assert_token_kind!(next_token, :identifier)
 
-      identifier_node = build_node(next_token, iter, source).as(AST::Identifier)
+      identifier_node = build_identifier(next_token, iter, source)
 
       AST::GetAttrExpr.new(
         main,
@@ -171,7 +171,7 @@ module HCL
       next_token = iter.next_as_child_of(main)
       assert_token_kind!(next_token, :expression)
 
-      expr_node = build_node(next_token, iter, source).as(AST::Expression)
+      expr_node = build_expression(next_token, iter, source)
 
       AST::IndexExpr.new(
         main,
