@@ -6,11 +6,7 @@ class SomeFunction < HCL::Function
   end
 
   def call(args) : HCL::Any
-    arg1 = args[0].unwrap
-    arg2 = args[1].unwrap
-    arg3 = args[2].unwrap
-
-    HCL::Any.new("#{arg3} #{arg1} #{arg2}")
+    HCL::Any.new("#{args[2]} #{args[0]} #{args[1]}")
   end
 end
 
@@ -374,12 +370,10 @@ describe HCL::Parser do
 
       ctx = HCL::ExpressionContext.new
       ctx.variables["var"] = HCL::Any.new(
-        Hash(String, HCL::Any).new.tap { |hsh|
-          hsh["something"] = HCL::Any.new(
-            Hash(String, HCL::Any).new.tap { |nested|
-              nested["ami_id"] = HCL::Any.new("ami-1234")
-            }
-          )
+        {
+          "something" => {
+            "ami_id" => "ami-1234"
+          }
         }
       )
 
@@ -407,24 +401,18 @@ describe HCL::Parser do
 
       ctx = HCL::ExpressionContext.new
       ctx.variables["var"] = HCL::Any.new(
-        Hash(String, HCL::Any).new.tap { |var|
-          something = [] of HCL::Any
-          something << HCL::Any.new(
-            Hash(String, HCL::Any).new.tap { |something_0|
-              other_thing = Hash(String, HCL::Any).new.tap do |other_thing|
-                some_list = [] of HCL::Any
-                some_list << HCL::Any.new(
-                  Hash(String, HCL::Any).new.tap { |nested|
-                    nested["ami_id"] = HCL::Any.new("ami-1234")
+        {
+          "something" => [
+            {
+              "other_thing" => {
+                "some_list" => [
+                  {
+                    "ami_id" => "ami-1234"
                   }
-                )
-                other_thing["some_list"] = HCL::Any.new(some_list)
-              end
-
-              something_0["other_thing"] = HCL::Any.new(other_thing)
+                ]
+              }
             }
-          )
-          var["something"] = HCL::Any.new(something)
+          ]
         }
       )
 
@@ -475,11 +463,7 @@ describe HCL::Parser do
       doc = parser.parse!
 
       ctx = HCL::ExpressionContext.default_context
-      ctx.variables["numbers"] = HCL::Any.new([
-        HCL::Any.new(1_i64),
-        HCL::Any.new(2_i64),
-        HCL::Any.new(3_i64)
-      ])
+      ctx.variables["numbers"] = HCL::Any.new([1_i64, 2_i64, 3_i64])
 
       doc.unwrap(ctx).should eq({
         "config" => {

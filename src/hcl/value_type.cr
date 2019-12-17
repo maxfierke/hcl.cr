@@ -31,6 +31,14 @@ module HCL
 
     getter :raw
 
+    def initialize(hsh : Hash(String, RawType))
+      @raw = hsh.transform_values { |val| HCL::Any.new(val) }
+    end
+
+    def initialize(array : Array(RawType))
+      @raw = array.map { |item| HCL::Any.new(item) }
+    end
+
     def initialize(@raw)
     end
 
