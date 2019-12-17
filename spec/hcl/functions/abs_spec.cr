@@ -17,16 +17,16 @@ describe HCL::Functions::Abs do
 
       fn.call([
         HCL::ValueType.new(10_i64)
-      ]).value.should eq(10_i64)
+      ]).raw.should eq(10_i64)
       fn.call([
         HCL::ValueType.new(-5_i64)
-      ]).value.should eq(5_i64)
+      ]).raw.should eq(5_i64)
       fn.call([
         HCL::ValueType.new(3.12_f64)
-      ]).value.should eq(3.12_f64)
+      ]).raw.should eq(3.12_f64)
       fn.call([
         HCL::ValueType.new(-18.23_f64)
-      ]).value.should eq(18.23_f64)
+      ]).raw.should eq(18.23_f64)
     end
   end
 end

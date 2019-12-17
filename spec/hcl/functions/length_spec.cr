@@ -17,16 +17,16 @@ describe HCL::Functions::Length do
 
       fn.call([
         HCL::ValueType.new(Hash(String, HCL::ValueType).new)
-      ]).value.should eq(0)
+      ]).raw.should eq(0)
       fn.call([
         HCL::ValueType.new(Array(HCL::ValueType).new)
-      ]).value.should eq(0)
+      ]).raw.should eq(0)
       fn.call([
         HCL::ValueType.new([
           HCL::ValueType.new("🧄"),
           HCL::ValueType.new("🧇")
         ])
-      ]).value.should eq(2)
+      ]).raw.should eq(2)
 
       some_hash = Hash(String, HCL::ValueType).new.tap do |hsh|
         hsh["one"] = HCL::ValueType.new(1_i64)
@@ -35,7 +35,7 @@ describe HCL::Functions::Length do
       end
       fn.call([
         HCL::ValueType.new(some_hash)
-      ]).value.should eq(3)
+      ]).raw.should eq(3)
     end
 
     it "raises an error when passed something other than a collection" do

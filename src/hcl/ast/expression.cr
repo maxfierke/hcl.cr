@@ -28,31 +28,31 @@ module HCL
 
       def value(ctx : ExpressionContext) : ValueType
         children.reduce(HCL::ValueType.new(nil)) do |result, child|
-          current = result ? result.value : nil
+          current = result ? result.raw : nil
           next_val = nil
           if child.is_a?(GetAttrExpr)
             if current && current.is_a?(Hash(String, ValueType))
               # TODO: Handle splat
-              attr = current[child.attribute_name].value
+              attr = current[child.attribute_name].raw
               next_val = attr
             else
               raise "Cannot read attribute #{child.attribute_name} from #{typeof(current)}"
             end
           elsif child.is_a?(IndexExpr)
-            child_val = child.index_exp.value(ctx).value
+            child_val = child.index_exp.value(ctx).raw
 
             if child_val.is_a?(String) && current && current.is_a?(Hash(String, ValueType))
               # TODO: Handle splat
-              attr = current[child_val].value
+              attr = current[child_val].raw
               next_val = attr
             elsif child_val.is_a?(Int64) && current && current.is_a?(Array(ValueType))
-              attr = current[child_val].value
+              attr = current[child_val].raw
               next_val = attr
             else
               raise "Cannot read member #{child_val} from #{typeof(current)}"
             end
           else
-            next_val = child.value(ctx).value
+            next_val = child.value(ctx).raw
           end
 
           HCL::ValueType.new(next_val)

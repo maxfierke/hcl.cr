@@ -68,7 +68,7 @@ module HCL
         right_op = right_operand
         if right_op.nil?
           left_op = left_operand
-          left_op_val = left_op.value(ctx).value
+          left_op_val = left_op.value(ctx).raw
           raise "Parser bug: Cannot perform unary operation on array" if left_op_val.responds_to?(:[])
           result = case operator
           when NOT
@@ -81,8 +81,8 @@ module HCL
 
           ValueType.new(result)
         else
-          left_op_val = left_op.value(ctx).value
-          right_op_val = right_op.value(ctx).value
+          left_op_val = left_op.value(ctx).raw
+          right_op_val = right_op.value(ctx).raw
 
           result = case operator
           when ADDITION

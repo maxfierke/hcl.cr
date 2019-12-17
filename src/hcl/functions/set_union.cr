@@ -10,12 +10,12 @@ module HCL
       end
 
       def call(args : Array(ValueType)) : ValueType
-        initial_arg = args.first.value
+        initial_arg = args.first.raw
         initial_arg = assert_array!(initial_arg)
         initial = initial_arg.to_set
 
         result = args.reduce(initial) do |acc, el|
-          val = el.value
+          val = el.raw
           val = assert_array!(val)
 
           acc | val.to_set

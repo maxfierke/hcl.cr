@@ -12,7 +12,7 @@ module HCL
       def call(args : Array(ValueType)) : ValueType
         arr = Array(ValueType).new
 
-        result = args.map(&.value).reduce(arr) do |acc, val|
+        result = args.map(&.raw).reduce(arr) do |acc, val|
           if val.is_a?(Array(ValueType))
             acc.concat(val)
           else

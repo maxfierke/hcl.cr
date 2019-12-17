@@ -22,21 +22,21 @@ describe HCL::Functions::Compact do
         HCL::ValueType.new(hsh),
         HCL::ValueType.new(nil),
         HCL::ValueType.new("hello")
-      ]).value.should eq([
+      ]).raw.should eq([
         HCL::ValueType.new(hsh),
         HCL::ValueType.new("hello")
       ])
       fn.call([
         HCL::ValueType.new(arr),
         HCL::ValueType.new(nil)
-      ]).value.should eq([
+      ]).raw.should eq([
         HCL::ValueType.new(arr)
       ])
       fn.call([
         HCL::ValueType.new(nil),
         HCL::ValueType.new("🧄"),
         HCL::ValueType.new("🧇")
-      ]).value.should eq([
+      ]).raw.should eq([
         HCL::ValueType.new("🧄"),
         HCL::ValueType.new("🧇")
       ])
@@ -44,7 +44,7 @@ describe HCL::Functions::Compact do
       fn.call([
         HCL::ValueType.new(nil),
         HCL::ValueType.new(nil)
-      ]).value.should eq(Array(HCL::ValueType).new)
+      ]).raw.should eq(Array(HCL::ValueType).new)
 
       some_hash = Hash(String, HCL::ValueType).new.tap do |hsh|
         hsh["one"] = HCL::ValueType.new(1_i64)
@@ -54,7 +54,7 @@ describe HCL::Functions::Compact do
       fn.call([
         HCL::ValueType.new(nil),
         HCL::ValueType.new(some_hash)
-      ]).value.should eq([
+      ]).raw.should eq([
         HCL::ValueType.new(some_hash)
       ])
     end

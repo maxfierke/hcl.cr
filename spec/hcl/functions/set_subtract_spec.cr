@@ -28,7 +28,7 @@ describe HCL::Functions::SetSubtract do
       fn.call([
         HCL::ValueType.new(arr1),
         HCL::ValueType.new(arr2),
-      ]).value.should eq([
+      ]).raw.should eq([
         HCL::ValueType.new("🧄")
       ])
     end

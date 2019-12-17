@@ -10,7 +10,7 @@ module HCL
       end
 
       def call(args : Array(ValueType)) : ValueType
-        number = args[0].value
+        number = args[0].raw
 
         if !number.is_a?(Int64) && !number.is_a?(Float64)
           raise ArgumentTypeError.new(

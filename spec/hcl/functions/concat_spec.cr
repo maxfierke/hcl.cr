@@ -24,11 +24,11 @@ describe HCL::Functions::Concat do
         HCL::ValueType.new(1_i64)
       ]
 
-      fn.call(Array(HCL::ValueType).new).value.should eq(Array(HCL::ValueType).new)
+      fn.call(Array(HCL::ValueType).new).raw.should eq(Array(HCL::ValueType).new)
       fn.call([
         HCL::ValueType.new(arr1),
         HCL::ValueType.new(arr2)
-      ]).value.should eq([
+      ]).raw.should eq([
         HCL::ValueType.new("🧄"),
         HCL::ValueType.new("🧇"),
         HCL::ValueType.new("hello"),

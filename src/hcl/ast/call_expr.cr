@@ -42,13 +42,13 @@ module HCL
         call_args = args.map { |arg| arg.value(ctx) }
 
         if varadic?
-          varadic_args = call_args.pop.value
+          varadic_args = call_args.pop.raw
 
           if !varadic_args.is_a?(Array(ValueType))
             raise "Expected varadic argument to evaluate to a list"
           end
 
-          varadic_args.map(&.value).each { |arg| call_args << HCL::ValueType.new(arg) }
+          varadic_args.map(&.raw).each { |arg| call_args << HCL::ValueType.new(arg) }
         end
 
         call_args

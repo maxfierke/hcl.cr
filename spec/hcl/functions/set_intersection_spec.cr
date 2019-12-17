@@ -34,7 +34,7 @@ describe HCL::Functions::SetIntersection do
         HCL::ValueType.new(arr1),
         HCL::ValueType.new(arr2),
         HCL::ValueType.new(arr3)
-      ]).value.should eq([
+      ]).raw.should eq([
         HCL::ValueType.new("🧇")
       ])
     end

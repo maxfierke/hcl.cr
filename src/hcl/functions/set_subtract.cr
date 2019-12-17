@@ -10,10 +10,10 @@ module HCL
       end
 
       def call(args : Array(ValueType)) : ValueType
-        arg1 = args.shift.value
+        arg1 = args.shift.raw
         arg1 = assert_array!(arg1)
 
-        arg2 = args.shift.value
+        arg2 = args.shift.raw
         arg2 = assert_array!(arg2)
 
         result = arg1.to_set - arg2.to_set

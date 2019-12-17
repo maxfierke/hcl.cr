@@ -29,11 +29,11 @@ describe HCL::Functions::JSONEncode do
 
       fn.call([
         HCL::ValueType.new(10_i64)
-      ]).value.should eq("10")
+      ]).raw.should eq("10")
 
       fn.call([
         HCL::ValueType.new(hsh)
-      ]).value.should eq(<<-JSON)
+      ]).raw.should eq(<<-JSON)
       {"prop1":123,"prop2":"hello","prop3":{},"prop4":[0,1,2]}
       JSON
     end

@@ -18,18 +18,18 @@ describe HCL::Functions::HasIndex do
       fn.call([
         HCL::ValueType.new(Hash(String, HCL::ValueType).new),
         HCL::ValueType.new("hello")
-      ]).value.should eq(false)
+      ]).raw.should eq(false)
       fn.call([
         HCL::ValueType.new(Array(HCL::ValueType).new),
         HCL::ValueType.new(99_i64)
-      ]).value.should eq(false)
+      ]).raw.should eq(false)
       fn.call([
         HCL::ValueType.new([
           HCL::ValueType.new("🧄"),
           HCL::ValueType.new("🧇")
         ]),
         HCL::ValueType.new(0_i64)
-      ]).value.should eq(true)
+      ]).raw.should eq(true)
 
       some_hash = Hash(String, HCL::ValueType).new.tap do |hsh|
         hsh["one"] = HCL::ValueType.new(1_i64)
@@ -39,7 +39,7 @@ describe HCL::Functions::HasIndex do
       fn.call([
         HCL::ValueType.new(some_hash),
         HCL::ValueType.new("two")
-      ]).value.should eq(true)
+      ]).raw.should eq(true)
     end
 
     it "raises an error when passed something other than a collection" do

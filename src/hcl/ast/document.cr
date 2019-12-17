@@ -51,7 +51,7 @@ module HCL
         end
 
         blocks.each do |block|
-          block_dict = block.value(ctx).value.as(Hash(String, ValueType))
+          block_dict = block.value(ctx).raw.as(Hash(String, ValueType))
           dict.merge!(block_dict)
         end
 

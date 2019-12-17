@@ -15,9 +15,9 @@ describe HCL::Functions::Strlen do
     it "returns the character length in Unicode graphemes" do
       fn = HCL::Functions::Strlen.new
 
-      fn.call([HCL::ValueType.new("")]).value.should eq(0)
-      fn.call([HCL::ValueType.new("string")]).value.should eq(6)
-      fn.call([HCL::ValueType.new("🧄🧇")]).value.should eq(2)
+      fn.call([HCL::ValueType.new("")]).raw.should eq(0)
+      fn.call([HCL::ValueType.new("string")]).raw.should eq(6)
+      fn.call([HCL::ValueType.new("🧄🧇")]).raw.should eq(2)
     end
 
     it "raises an error when passed something other than a string" do

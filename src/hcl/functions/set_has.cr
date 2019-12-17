@@ -10,7 +10,7 @@ module HCL
       end
 
       def call(args : Array(ValueType)) : ValueType
-        set_arr = args[0].value
+        set_arr = args[0].raw
         val = args[1]
 
         if set_arr.is_a?(Array(ValueType))

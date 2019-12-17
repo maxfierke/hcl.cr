@@ -10,7 +10,7 @@ module HCL
       end
 
       def call(args : Array(ValueType)) : ValueType
-        str = args[0].value
+        str = args[0].raw
 
         if !str.is_a?(String)
           raise ArgumentTypeError.new(

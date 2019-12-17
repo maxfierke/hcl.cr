@@ -10,8 +10,8 @@ module HCL
       end
 
       def call(args : Array(ValueType)) : ValueType
-        coll = args[0].value
-        idx = args[1].value
+        coll = args[0].raw
+        idx = args[1].raw
 
         if coll.is_a?(Array(ValueType))
           if !idx.is_a?(Int64)

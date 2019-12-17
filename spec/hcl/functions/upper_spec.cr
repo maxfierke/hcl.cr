@@ -15,8 +15,8 @@ describe HCL::Functions::Upper do
     it "returns uppercase variant of string" do
       fn = HCL::Functions::Upper.new
 
-      fn.call([HCL::ValueType.new("scream")]).value.should eq("SCREAM")
-      fn.call([HCL::ValueType.new("ALREADY_UPPER")]).value.should eq("ALREADY_UPPER")
+      fn.call([HCL::ValueType.new("scream")]).raw.should eq("SCREAM")
+      fn.call([HCL::ValueType.new("ALREADY_UPPER")]).raw.should eq("ALREADY_UPPER")
     end
 
     it "raises an error when passed something other than a string" do

@@ -69,7 +69,7 @@ module HCL
         block_header.reverse.reduce(block_value) do |acc, val|
           if val.is_a?(ValueType)
             # TODO: When is this not the case?
-            ValueType.new({ val.value.to_s => acc })
+            ValueType.new({ val.raw.to_s => acc })
           else
             ValueType.new({ val.to_s => acc })
           end
@@ -84,7 +84,7 @@ module HCL
         end
 
         blocks.each do |block|
-          block_dict = block.value(ctx).value.as(Hash(String, ValueType))
+          block_dict = block.value(ctx).raw.as(Hash(String, ValueType))
           dict.merge!(block_dict)
         end
 

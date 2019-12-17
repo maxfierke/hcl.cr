@@ -21,7 +21,7 @@ describe HCL::Functions::Min do
         HCL::ValueType.new(0_i64)
       ]
 
-      fn.call(arr).value.should eq(-1)
+      fn.call(arr).raw.should eq(-1)
     end
 
     it "raises an error when passed an empty array" do

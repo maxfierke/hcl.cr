@@ -33,7 +33,7 @@ describe HCL::Functions::SetSymDiff do
         HCL::ValueType.new(arr1),
         HCL::ValueType.new(arr2),
         HCL::ValueType.new(arr3)
-      ]).value.should eq([
+      ]).raw.should eq([
         HCL::ValueType.new("🧄"),
         HCL::ValueType.new("hello"),
         HCL::ValueType.new(1_i64),

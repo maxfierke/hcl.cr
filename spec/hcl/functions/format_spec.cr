@@ -20,7 +20,7 @@ describe HCL::Functions::Format do
         HCL::ValueType.new("🧄"),
         HCL::ValueType.new("🧇"),
         HCL::ValueType.new("gross")
-      ]).value.should eq("hello 🧄 + 🧇 = gross")
+      ]).raw.should eq("hello 🧄 + 🧇 = gross")
     end
 
     it "raises an error when passed a non-string for fmt parameter" do

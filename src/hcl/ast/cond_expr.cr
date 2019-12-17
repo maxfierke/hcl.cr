@@ -25,7 +25,7 @@ module HCL
       end
 
       def value(ctx : ExpressionContext) : ValueType
-        predicate_value = predicate.value(ctx).value
+        predicate_value = predicate.value(ctx).raw
 
         # TODO: validate "correctness" of both expressions to catch errors in
         # HCL construction, if even not for the active path

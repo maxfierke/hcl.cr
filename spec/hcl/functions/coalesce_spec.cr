@@ -21,22 +21,22 @@ describe HCL::Functions::Coalesce do
       fn.call([
         HCL::ValueType.new(hsh),
         HCL::ValueType.new("hello")
-      ]).value.should eq(hsh)
+      ]).raw.should eq(hsh)
       fn.call([
         HCL::ValueType.new(arr),
         HCL::ValueType.new(nil)
-      ]).value.should eq(arr)
+      ]).raw.should eq(arr)
       fn.call([
         HCL::ValueType.new(nil),
         HCL::ValueType.new("🧄"),
         HCL::ValueType.new("🧇")
-      ]).value.should eq("🧄")
+      ]).raw.should eq("🧄")
 
       fn.call([
         HCL::ValueType.new(nil),
         HCL::ValueType.new(nil),
         HCL::ValueType.new(nil)
-      ]).value.should be_nil
+      ]).raw.should be_nil
 
       some_hash = Hash(String, HCL::ValueType).new.tap do |hsh|
         hsh["one"] = HCL::ValueType.new(1_i64)
@@ -46,7 +46,7 @@ describe HCL::Functions::Coalesce do
       fn.call([
         HCL::ValueType.new(nil),
         HCL::ValueType.new(some_hash)
-      ]).value.should eq(some_hash)
+      ]).raw.should eq(some_hash)
     end
   end
 end

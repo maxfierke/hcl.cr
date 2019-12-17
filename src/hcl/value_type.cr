@@ -19,21 +19,29 @@ module HCL
       Array(ValueType)
     }
 
-    @value : Nil |
-             Bool |
-             String |
-             Int64 |
-             Float64 |
-             Hash(String, ValueType) |
-             Array(ValueType)
+    @raw : Nil |
+           Bool |
+           String |
+           Int64 |
+           Float64 |
+           Hash(String, ValueType) |
+           Array(ValueType)
 
-    getter :value
+    getter :raw
 
-    def initialize(@value)
+    def initialize(@raw)
+    end
+
+    def dup
+      new(raw.dup)
+    end
+
+    def clone
+      new(raw.clone)
     end
 
     def unwrap : Types
-      val = value
+      val = raw
 
       if val.is_a?(Array(ValueType))
         val.map(&.unwrap).as(Types)
@@ -97,7 +105,7 @@ module HCL
     end
 
     def to_json(builder : JSON::Builder)
-      value.to_json(builder)
+      raw.to_json(builder)
     end
   end
 end

@@ -15,8 +15,8 @@ describe HCL::Functions::Lower do
     it "returns lower variant of string" do
       fn = HCL::Functions::Lower.new
 
-      fn.call([HCL::ValueType.new("WHISPER")]).value.should eq("whisper")
-      fn.call([HCL::ValueType.new("already_lower")]).value.should eq("already_lower")
+      fn.call([HCL::ValueType.new("WHISPER")]).raw.should eq("whisper")
+      fn.call([HCL::ValueType.new("already_lower")]).raw.should eq("already_lower")
     end
 
     it "raises an error when passed something other than a string" do
