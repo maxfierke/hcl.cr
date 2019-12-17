@@ -26,12 +26,12 @@ module HCL
         end
       end
 
-      def value(ctx : ExpressionContext) : ValueType
-        children.reduce(HCL::ValueType.new(nil)) do |result, child|
+      def value(ctx : ExpressionContext) : Any
+        children.reduce(HCL::Any.new(nil)) do |result, child|
           current = result ? result.raw : nil
           next_val = nil
           if child.is_a?(GetAttrExpr)
-            if current && current.is_a?(Hash(String, ValueType))
+            if current && current.is_a?(Hash(String, Any))
               # TODO: Handle splat
               attr = current[child.attribute_name].raw
               next_val = attr
@@ -41,11 +41,11 @@ module HCL
           elsif child.is_a?(IndexExpr)
             child_val = child.index_exp.value(ctx).raw
 
-            if child_val.is_a?(String) && current && current.is_a?(Hash(String, ValueType))
+            if child_val.is_a?(String) && current && current.is_a?(Hash(String, Any))
               # TODO: Handle splat
               attr = current[child_val].raw
               next_val = attr
-            elsif child_val.is_a?(Int64) && current && current.is_a?(Array(ValueType))
+            elsif child_val.is_a?(Int64) && current && current.is_a?(Array(Any))
               attr = current[child_val].raw
               next_val = attr
             else
@@ -55,7 +55,7 @@ module HCL
             next_val = child.value(ctx).raw
           end
 
-          HCL::ValueType.new(next_val)
+          HCL::Any.new(next_val)
         end
       end
     end

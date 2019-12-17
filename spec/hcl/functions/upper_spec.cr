@@ -15,8 +15,8 @@ describe HCL::Functions::Upper do
     it "returns uppercase variant of string" do
       fn = HCL::Functions::Upper.new
 
-      fn.call([HCL::ValueType.new("scream")]).raw.should eq("SCREAM")
-      fn.call([HCL::ValueType.new("ALREADY_UPPER")]).raw.should eq("ALREADY_UPPER")
+      fn.call([HCL::Any.new("scream")]).should eq("SCREAM")
+      fn.call([HCL::Any.new("ALREADY_UPPER")]).should eq("ALREADY_UPPER")
     end
 
     it "raises an error when passed something other than a string" do
@@ -27,14 +27,14 @@ describe HCL::Functions::Upper do
         123_i64,
         123.456_f64,
         true,
-        Hash(String, HCL::ValueType).new,
-        Array(HCL::ValueType).new
+        Hash(String, HCL::Any).new,
+        Array(HCL::Any).new
       ].each do |val|
         expect_raises(
           HCL::Function::ArgumentTypeError,
           "upper(str): Argument type mismatch. Expected a string, but got #{val.class}."
         ) do
-          fn.call([HCL::ValueType.new(val)])
+          fn.call([HCL::Any.new(val)])
         end
       end
     end

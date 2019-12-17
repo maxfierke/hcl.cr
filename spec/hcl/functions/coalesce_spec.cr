@@ -15,38 +15,38 @@ describe HCL::Functions::Coalesce do
     it "returns the first non-null argument" do
       fn = HCL::Functions::Coalesce.new
 
-      hsh = Hash(String, HCL::ValueType).new
-      arr = Array(HCL::ValueType).new
+      hsh = Hash(String, HCL::Any).new
+      arr = Array(HCL::Any).new
 
       fn.call([
-        HCL::ValueType.new(hsh),
-        HCL::ValueType.new("hello")
-      ]).raw.should eq(hsh)
+        HCL::Any.new(hsh),
+        HCL::Any.new("hello")
+      ]).should eq(hsh)
       fn.call([
-        HCL::ValueType.new(arr),
-        HCL::ValueType.new(nil)
-      ]).raw.should eq(arr)
+        HCL::Any.new(arr),
+        HCL::Any.new(nil)
+      ]).should eq(arr)
       fn.call([
-        HCL::ValueType.new(nil),
-        HCL::ValueType.new("🧄"),
-        HCL::ValueType.new("🧇")
-      ]).raw.should eq("🧄")
+        HCL::Any.new(nil),
+        HCL::Any.new("🧄"),
+        HCL::Any.new("🧇")
+      ]).should eq("🧄")
 
       fn.call([
-        HCL::ValueType.new(nil),
-        HCL::ValueType.new(nil),
-        HCL::ValueType.new(nil)
-      ]).raw.should be_nil
+        HCL::Any.new(nil),
+        HCL::Any.new(nil),
+        HCL::Any.new(nil)
+      ]).should eq(nil)
 
-      some_hash = Hash(String, HCL::ValueType).new.tap do |hsh|
-        hsh["one"] = HCL::ValueType.new(1_i64)
-        hsh["two"] = HCL::ValueType.new(2_i64)
-        hsh["three"] = HCL::ValueType.new(3_i64)
+      some_hash = Hash(String, HCL::Any).new.tap do |hsh|
+        hsh["one"] = HCL::Any.new(1_i64)
+        hsh["two"] = HCL::Any.new(2_i64)
+        hsh["three"] = HCL::Any.new(3_i64)
       end
       fn.call([
-        HCL::ValueType.new(nil),
-        HCL::ValueType.new(some_hash)
-      ]).raw.should eq(some_hash)
+        HCL::Any.new(nil),
+        HCL::Any.new(some_hash)
+      ]).should eq(some_hash)
     end
   end
 end

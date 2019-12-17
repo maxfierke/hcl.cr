@@ -9,7 +9,7 @@ module HCL
         )
       end
 
-      def call(args : Array(ValueType)) : ValueType
+      def call(args : Array(Any)) : Any
         str = args[0].raw
         offset = args[1].raw
         length = args[2].raw
@@ -32,7 +32,7 @@ module HCL
           )
         end
 
-        HCL::ValueType.new(str[offset..(offset+length)])
+        HCL::Any.new(str[offset..(offset+length)])
       end
     end
   end

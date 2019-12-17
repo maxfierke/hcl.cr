@@ -24,7 +24,7 @@ module HCL
         false_expr.to_s(io)
       end
 
-      def value(ctx : ExpressionContext) : ValueType
+      def value(ctx : ExpressionContext) : Any
         predicate_value = predicate.value(ctx).raw
 
         # TODO: validate "correctness" of both expressions to catch errors in

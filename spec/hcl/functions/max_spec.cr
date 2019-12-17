@@ -16,12 +16,12 @@ describe HCL::Functions::Max do
       fn = HCL::Functions::Max.new
 
       arr = [
-        HCL::ValueType.new(-1_i64),
-        HCL::ValueType.new(38_i64),
-        HCL::ValueType.new(0_i64)
+        HCL::Any.new(-1_i64),
+        HCL::Any.new(38_i64),
+        HCL::Any.new(0_i64)
       ]
 
-      fn.call(arr).raw.should eq(38)
+      fn.call(arr).should eq(38)
     end
 
     it "raises an error when passed an empty array" do
@@ -31,7 +31,7 @@ describe HCL::Functions::Max do
         HCL::Function::FunctionArgumentError,
         "max(numbers...): Received empty array. Expected at least one element."
       ) do
-        fn.call(Array(HCL::ValueType).new)
+        fn.call(Array(HCL::Any).new)
       end
     end
 
@@ -43,8 +43,8 @@ describe HCL::Functions::Max do
         "max(numbers...): Argument type mismatch. Expected array of only numbers."
       ) do
         fn.call([
-          HCL::ValueType.new(1_i64),
-          HCL::ValueType.new("hello")
+          HCL::Any.new(1_i64),
+          HCL::Any.new("hello")
         ])
       end
     end

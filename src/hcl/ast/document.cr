@@ -43,19 +43,19 @@ module HCL
         value(ExpressionContext.default_context)
       end
 
-      def value(ctx : ExpressionContext) : ValueType
-        dict = {} of String => ValueType
+      def value(ctx : ExpressionContext) : Any
+        dict = {} of String => Any
 
         attributes.each do |key, value|
           dict[key] = value.value(ctx)
         end
 
         blocks.each do |block|
-          block_dict = block.value(ctx).raw.as(Hash(String, ValueType))
+          block_dict = block.value(ctx).raw.as(Hash(String, Any))
           dict.merge!(block_dict)
         end
 
-        ValueType.new(dict)
+        Any.new(dict)
       end
     end
   end

@@ -26,14 +26,14 @@ module HCL
         io << " }"
       end
 
-      def value(ctx : ExpressionContext) : ValueType
-        dict = {} of String => ValueType
+      def value(ctx : ExpressionContext) : Any
+        dict = {} of String => Any
 
         attributes.each do |key, value|
           dict[key] = value.value(ctx)
         end
 
-        ValueType.new(dict)
+        Any.new(dict)
       end
     end
   end

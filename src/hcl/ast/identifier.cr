@@ -5,7 +5,7 @@ module HCL
         io << source
       end
 
-      def value(ctx : ExpressionContext) : ValueType
+      def value(ctx : ExpressionContext) : Any
         ctx.lookup_var(to_s)
       end
     end

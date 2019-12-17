@@ -9,7 +9,7 @@ module HCL
         )
       end
 
-      def call(args : Array(ValueType)) : ValueType
+      def call(args : Array(Any)) : Any
         arg1 = args.shift.raw
         arg1 = assert_array!(arg1)
 
@@ -18,11 +18,11 @@ module HCL
 
         result = arg1.to_set - arg2.to_set
 
-        ValueType.new(result.to_a)
+        Any.new(result.to_a)
       end
 
       private def assert_array!(value)
-        if value.is_a?(Array(ValueType))
+        if value.is_a?(Array(Any))
           value
         else
           raise ArgumentTypeError.new(

@@ -62,7 +62,7 @@ module HCL
         end
       end
 
-      def value(ctx : ExpressionContext) : ValueType
+      def value(ctx : ExpressionContext) : Any
         # This is wrong. Need to figure out order of operations stuff, probably.
         left_op = left_operand
         right_op = right_operand
@@ -79,7 +79,7 @@ module HCL
             -left_op_val
           end
 
-          ValueType.new(result)
+          Any.new(result)
         else
           left_op_val = left_op.value(ctx).raw
           right_op_val = right_op.value(ctx).raw
@@ -130,7 +130,7 @@ module HCL
             left_op_val || right_op_val
           end
 
-          ValueType.new(result)
+          Any.new(result)
         end
       end
 

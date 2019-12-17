@@ -16,26 +16,26 @@ describe HCL::Functions::Length do
       fn = HCL::Functions::Length.new
 
       fn.call([
-        HCL::ValueType.new(Hash(String, HCL::ValueType).new)
-      ]).raw.should eq(0)
+        HCL::Any.new(Hash(String, HCL::Any).new)
+      ]).should eq(0)
       fn.call([
-        HCL::ValueType.new(Array(HCL::ValueType).new)
-      ]).raw.should eq(0)
+        HCL::Any.new(Array(HCL::Any).new)
+      ]).should eq(0)
       fn.call([
-        HCL::ValueType.new([
-          HCL::ValueType.new("🧄"),
-          HCL::ValueType.new("🧇")
+        HCL::Any.new([
+          HCL::Any.new("🧄"),
+          HCL::Any.new("🧇")
         ])
-      ]).raw.should eq(2)
+      ]).should eq(2)
 
-      some_hash = Hash(String, HCL::ValueType).new.tap do |hsh|
-        hsh["one"] = HCL::ValueType.new(1_i64)
-        hsh["two"] = HCL::ValueType.new(2_i64)
-        hsh["three"] = HCL::ValueType.new(3_i64)
+      some_hash = Hash(String, HCL::Any).new.tap do |hsh|
+        hsh["one"] = HCL::Any.new(1_i64)
+        hsh["two"] = HCL::Any.new(2_i64)
+        hsh["three"] = HCL::Any.new(3_i64)
       end
       fn.call([
-        HCL::ValueType.new(some_hash)
-      ]).raw.should eq(3)
+        HCL::Any.new(some_hash)
+      ]).should eq(3)
     end
 
     it "raises an error when passed something other than a collection" do
@@ -53,7 +53,7 @@ describe HCL::Functions::Length do
           "length(coll): Argument type mismatch. Expected a collection, but got #{val.class}."
         ) do
           fn.call([
-            HCL::ValueType.new(val)
+            HCL::Any.new(val)
           ])
         end
       end

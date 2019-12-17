@@ -16,27 +16,25 @@ describe HCL::Functions::SetIntersection do
       fn = HCL::Functions::SetIntersection.new
 
       arr1 = [
-        HCL::ValueType.new("🧄"),
-        HCL::ValueType.new("🧇")
+        HCL::Any.new("🧄"),
+        HCL::Any.new("🧇")
       ]
       arr2 = [
-        HCL::ValueType.new("hello"),
-        HCL::ValueType.new(1_i64),
-        HCL::ValueType.new("🧇")
+        HCL::Any.new("hello"),
+        HCL::Any.new(1_i64),
+        HCL::Any.new("🧇")
       ]
       arr3 = [
-        HCL::ValueType.new("world"),
-        HCL::ValueType.new(true),
-        HCL::ValueType.new("🧇")
+        HCL::Any.new("world"),
+        HCL::Any.new(true),
+        HCL::Any.new("🧇")
       ]
 
       fn.call([
-        HCL::ValueType.new(arr1),
-        HCL::ValueType.new(arr2),
-        HCL::ValueType.new(arr3)
-      ]).raw.should eq([
-        HCL::ValueType.new("🧇")
-      ])
+        HCL::Any.new(arr1),
+        HCL::Any.new(arr2),
+        HCL::Any.new(arr3)
+      ]).should eq(["🧇"])
     end
 
     it "raises an error if passed non-array arguments" do
@@ -46,12 +44,12 @@ describe HCL::Functions::SetIntersection do
         HCL::Function::ArgumentTypeError,
         "setintersection(sets...): Argument type mismatch. Expected an array, but got String"
       ) do
-        arr = HCL::ValueType.new([
-          HCL::ValueType.new("🧄"),
-          HCL::ValueType.new("🧇")
+        arr = HCL::Any.new([
+          HCL::Any.new("🧄"),
+          HCL::Any.new("🧇")
         ])
 
-        fn.call([arr, HCL::ValueType.new("hello")])
+        fn.call([arr, HCL::Any.new("hello")])
       end
     end
   end

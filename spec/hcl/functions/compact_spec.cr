@@ -15,47 +15,47 @@ describe HCL::Functions::Compact do
     it "returns the non-null arguments" do
       fn = HCL::Functions::Compact.new
 
-      hsh = Hash(String, HCL::ValueType).new
-      arr = Array(HCL::ValueType).new
+      hsh = Hash(String, HCL::Any).new
+      arr = Array(HCL::Any).new
 
       fn.call([
-        HCL::ValueType.new(hsh),
-        HCL::ValueType.new(nil),
-        HCL::ValueType.new("hello")
-      ]).raw.should eq([
-        HCL::ValueType.new(hsh),
-        HCL::ValueType.new("hello")
+        HCL::Any.new(hsh),
+        HCL::Any.new(nil),
+        HCL::Any.new("hello")
+      ]).should eq([
+        HCL::Any.new(hsh),
+        HCL::Any.new("hello")
       ])
       fn.call([
-        HCL::ValueType.new(arr),
-        HCL::ValueType.new(nil)
-      ]).raw.should eq([
-        HCL::ValueType.new(arr)
+        HCL::Any.new(arr),
+        HCL::Any.new(nil)
+      ]).should eq([
+        HCL::Any.new(arr)
       ])
       fn.call([
-        HCL::ValueType.new(nil),
-        HCL::ValueType.new("🧄"),
-        HCL::ValueType.new("🧇")
-      ]).raw.should eq([
-        HCL::ValueType.new("🧄"),
-        HCL::ValueType.new("🧇")
+        HCL::Any.new(nil),
+        HCL::Any.new("🧄"),
+        HCL::Any.new("🧇")
+      ]).should eq([
+        HCL::Any.new("🧄"),
+        HCL::Any.new("🧇")
       ])
 
       fn.call([
-        HCL::ValueType.new(nil),
-        HCL::ValueType.new(nil)
-      ]).raw.should eq(Array(HCL::ValueType).new)
+        HCL::Any.new(nil),
+        HCL::Any.new(nil)
+      ]).should eq(Array(HCL::Any).new)
 
-      some_hash = Hash(String, HCL::ValueType).new.tap do |hsh|
-        hsh["one"] = HCL::ValueType.new(1_i64)
-        hsh["two"] = HCL::ValueType.new(2_i64)
-        hsh["three"] = HCL::ValueType.new(3_i64)
+      some_hash = Hash(String, HCL::Any).new.tap do |hsh|
+        hsh["one"] = HCL::Any.new(1_i64)
+        hsh["two"] = HCL::Any.new(2_i64)
+        hsh["three"] = HCL::Any.new(3_i64)
       end
       fn.call([
-        HCL::ValueType.new(nil),
-        HCL::ValueType.new(some_hash)
-      ]).raw.should eq([
-        HCL::ValueType.new(some_hash)
+        HCL::Any.new(nil),
+        HCL::Any.new(some_hash)
+      ]).should eq([
+        HCL::Any.new(some_hash)
       ])
     end
   end

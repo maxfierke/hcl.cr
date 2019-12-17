@@ -25,12 +25,12 @@ module HCL
         io << "]"
       end
 
-      def value(ctx : ExpressionContext) : ValueType
+      def value(ctx : ExpressionContext) : Any
         result = children.map do |item|
           item.value(ctx)
         end
 
-        ValueType.new(result)
+        Any.new(result)
       end
     end
   end

@@ -33,7 +33,7 @@ module HCL
         io << ")"
       end
 
-      def value(ctx : ExpressionContext) : ValueType
+      def value(ctx : ExpressionContext) : Any
         call_args = evaluate_args(ctx)
         ctx.call_func(id, call_args)
       end
@@ -44,11 +44,11 @@ module HCL
         if varadic?
           varadic_args = call_args.pop.raw
 
-          if !varadic_args.is_a?(Array(ValueType))
+          if !varadic_args.is_a?(Array(Any))
             raise "Expected varadic argument to evaluate to a list"
           end
 
-          varadic_args.map(&.raw).each { |arg| call_args << HCL::ValueType.new(arg) }
+          varadic_args.map(&.raw).each { |arg| call_args << HCL::Any.new(arg) }
         end
 
         call_args

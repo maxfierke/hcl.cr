@@ -9,7 +9,7 @@ module HCL
         )
       end
 
-      def call(args : Array(ValueType)) : ValueType
+      def call(args : Array(Any)) : Any
         number = args[0].raw
 
         if !number.is_a?(Int64) && !number.is_a?(Float64)
@@ -21,9 +21,9 @@ module HCL
         number = number.as(Int64 | Float64)
 
         if number < 0_i64
-          ValueType.new(number.ceil)
+          Any.new(number.ceil)
         else
-          ValueType.new(number.floor)
+          Any.new(number.floor)
         end
       end
     end

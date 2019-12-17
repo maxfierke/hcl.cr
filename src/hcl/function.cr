@@ -32,6 +32,6 @@ module HCL
       end
     end
 
-    abstract def call(args : Array(ValueType)) : ValueType
+    abstract def call(args : Array(Any)) : Any
   end
 end

@@ -61,34 +61,29 @@ module HCL
         io << "}\n"
       end
 
-      def value(ctx : ExpressionContext) : ValueType
+      def value(ctx : ExpressionContext) : Any
         block_header = [id] + labels.map do |label|
           label.value(ctx)
         end
         block_value = value_dict(ctx)
         block_header.reverse.reduce(block_value) do |acc, val|
-          if val.is_a?(ValueType)
-            # TODO: When is this not the case?
-            ValueType.new({ val.raw.to_s => acc })
-          else
-            ValueType.new({ val.to_s => acc })
-          end
+          Any.new({ val.to_s => acc })
         end
       end
 
       private def value_dict(ctx)
-        dict = {} of String => ValueType
+        dict = {} of String => Any
 
         attributes.each do |key, value|
           dict[key] = value.value(ctx)
         end
 
         blocks.each do |block|
-          block_dict = block.value(ctx).raw.as(Hash(String, ValueType))
+          block_dict = block.value(ctx).raw.as(Hash(String, Any))
           dict.merge!(block_dict)
         end
 
-        ValueType.new(dict)
+        Any.new(dict)
       end
     end
   end

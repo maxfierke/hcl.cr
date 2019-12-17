@@ -15,9 +15,9 @@ describe HCL::Functions::Strlen do
     it "returns the character length in Unicode graphemes" do
       fn = HCL::Functions::Strlen.new
 
-      fn.call([HCL::ValueType.new("")]).raw.should eq(0)
-      fn.call([HCL::ValueType.new("string")]).raw.should eq(6)
-      fn.call([HCL::ValueType.new("🧄🧇")]).raw.should eq(2)
+      fn.call([HCL::Any.new("")]).should eq(0)
+      fn.call([HCL::Any.new("string")]).should eq(6)
+      fn.call([HCL::Any.new("🧄🧇")]).should eq(2)
     end
 
     it "raises an error when passed something other than a string" do
@@ -28,14 +28,14 @@ describe HCL::Functions::Strlen do
         123_i64,
         123.456_f64,
         true,
-        Hash(String, HCL::ValueType).new,
-        Array(HCL::ValueType).new
+        Hash(String, HCL::Any).new,
+        Array(HCL::Any).new
       ].each do |val|
         expect_raises(
           HCL::Function::ArgumentTypeError,
           "strlen(str): Argument type mismatch. Expected a string, but got #{val.class}."
         ) do
-          fn.call([HCL::ValueType.new(val)])
+          fn.call([HCL::Any.new(val)])
         end
       end
     end

@@ -9,11 +9,11 @@ module HCL
         )
       end
 
-      def call(args : Array(ValueType)) : ValueType
-        arr = Array(ValueType).new
+      def call(args : Array(Any)) : Any
+        arr = Array(Any).new
 
         result = args.map(&.raw).reduce(arr) do |acc, val|
-          if val.is_a?(Array(ValueType))
+          if val.is_a?(Array(Any))
             acc.concat(val)
           else
             raise ArgumentTypeError.new(
@@ -22,7 +22,7 @@ module HCL
           end
         end
 
-        ValueType.new(result)
+        Any.new(result)
       end
     end
   end

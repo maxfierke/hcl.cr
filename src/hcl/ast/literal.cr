@@ -11,13 +11,13 @@ module HCL
         io << source
       end
 
-      def value(ctx : ExpressionContext) : ValueType
+      def value(ctx : ExpressionContext) : Any
         if source == TRUE_STR
-          ValueType.new(true)
+          Any.new(true)
         elsif source == FALSE_STR
-          ValueType.new(false)
+          Any.new(false)
         else
-          ValueType.new(nil)
+          Any.new(nil)
         end
       end
     end

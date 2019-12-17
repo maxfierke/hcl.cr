@@ -16,16 +16,16 @@ describe HCL::Functions::SetHas do
       fn = HCL::Functions::SetHas.new
 
       fn.call([
-        HCL::ValueType.new(Array(HCL::ValueType).new),
-        HCL::ValueType.new(99_i64)
-      ]).raw.should eq(false)
+        HCL::Any.new(Array(HCL::Any).new),
+        HCL::Any.new(99_i64)
+      ]).should eq(false)
       fn.call([
-        HCL::ValueType.new([
-          HCL::ValueType.new("🧄"),
-          HCL::ValueType.new("🧇")
+        HCL::Any.new([
+          HCL::Any.new("🧄"),
+          HCL::Any.new("🧇")
         ]),
-        HCL::ValueType.new("🧇")
-      ]).raw.should eq(true)
+        HCL::Any.new("🧇")
+      ]).should eq(true)
     end
 
     it "raises an error when passed something other than a collection" do
@@ -37,15 +37,15 @@ describe HCL::Functions::SetHas do
         123.456_f64,
         true,
         "hello",
-        Hash(String, HCL::ValueType).new
+        Hash(String, HCL::Any).new
       ].each do |val|
         expect_raises(
           HCL::Function::ArgumentTypeError,
           "sethas(set, val): Argument type mismatch. Expected a set, but got #{val.class}."
         ) do
           fn.call([
-            HCL::ValueType.new(val),
-            HCL::ValueType.new("doesn't matter")
+            HCL::Any.new(val),
+            HCL::Any.new("doesn't matter")
           ])
         end
       end

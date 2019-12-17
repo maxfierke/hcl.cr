@@ -9,9 +9,9 @@ module HCL
         )
       end
 
-      def call(args : Array(ValueType)) : ValueType
+      def call(args : Array(Any)) : Any
         val = args[0]
-        ValueType.new(val.to_json)
+        Any.new(val.to_json)
       end
     end
   end

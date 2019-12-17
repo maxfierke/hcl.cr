@@ -32,7 +32,7 @@ module HCL
 
     @parent : ExpressionContext?
     @functions : Hash(String, Function)
-    @variables : Hash(String, ValueType)
+    @variables : Hash(String, Any)
 
     getter :parent, :functions, :variables
 
@@ -50,7 +50,7 @@ module HCL
     def initialize(parent : ExpressionContext? = nil)
       @parent = parent
       @functions = Hash(String, Function).new
-      @variables = Hash(String, ValueType).new
+      @variables = Hash(String, Any).new
     end
 
     def call_func(name, args)

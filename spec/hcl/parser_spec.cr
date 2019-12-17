@@ -5,12 +5,12 @@ class SomeFunction < HCL::Function
     super("some_function", arity: 3)
   end
 
-  def call(args) : HCL::ValueType
+  def call(args) : HCL::Any
     arg1 = args[0].unwrap
     arg2 = args[1].unwrap
     arg3 = args[2].unwrap
 
-    HCL::ValueType.new("#{arg3} #{arg1} #{arg2}")
+    HCL::Any.new("#{arg3} #{arg1} #{arg2}")
   end
 end
 
@@ -273,7 +273,7 @@ describe HCL::Parser do
               {
                 "foo" => [
                   {
-                    "bar" => {} of String => HCL::ValueType
+                    "bar" => {} of String => HCL::Any
                   }
                 ]
               }
@@ -373,11 +373,11 @@ describe HCL::Parser do
       doc = parser.parse!
 
       ctx = HCL::ExpressionContext.new
-      ctx.variables["var"] = HCL::ValueType.new(
-        Hash(String, HCL::ValueType).new.tap { |hsh|
-          hsh["something"] = HCL::ValueType.new(
-            Hash(String, HCL::ValueType).new.tap { |nested|
-              nested["ami_id"] = HCL::ValueType.new("ami-1234")
+      ctx.variables["var"] = HCL::Any.new(
+        Hash(String, HCL::Any).new.tap { |hsh|
+          hsh["something"] = HCL::Any.new(
+            Hash(String, HCL::Any).new.tap { |nested|
+              nested["ami_id"] = HCL::Any.new("ami-1234")
             }
           )
         }
@@ -406,25 +406,25 @@ describe HCL::Parser do
       doc = parser.parse!
 
       ctx = HCL::ExpressionContext.new
-      ctx.variables["var"] = HCL::ValueType.new(
-        Hash(String, HCL::ValueType).new.tap { |var|
-          something = [] of HCL::ValueType
-          something << HCL::ValueType.new(
-            Hash(String, HCL::ValueType).new.tap { |something_0|
-              other_thing = Hash(String, HCL::ValueType).new.tap do |other_thing|
-                some_list = [] of HCL::ValueType
-                some_list << HCL::ValueType.new(
-                  Hash(String, HCL::ValueType).new.tap { |nested|
-                    nested["ami_id"] = HCL::ValueType.new("ami-1234")
+      ctx.variables["var"] = HCL::Any.new(
+        Hash(String, HCL::Any).new.tap { |var|
+          something = [] of HCL::Any
+          something << HCL::Any.new(
+            Hash(String, HCL::Any).new.tap { |something_0|
+              other_thing = Hash(String, HCL::Any).new.tap do |other_thing|
+                some_list = [] of HCL::Any
+                some_list << HCL::Any.new(
+                  Hash(String, HCL::Any).new.tap { |nested|
+                    nested["ami_id"] = HCL::Any.new("ami-1234")
                   }
                 )
-                other_thing["some_list"] = HCL::ValueType.new(some_list)
+                other_thing["some_list"] = HCL::Any.new(some_list)
               end
 
-              something_0["other_thing"] = HCL::ValueType.new(other_thing)
+              something_0["other_thing"] = HCL::Any.new(other_thing)
             }
           )
-          var["something"] = HCL::ValueType.new(something)
+          var["something"] = HCL::Any.new(something)
         }
       )
 
@@ -452,7 +452,7 @@ describe HCL::Parser do
 
       ctx = HCL::ExpressionContext.new
       ctx.functions["some_function"] = SomeFunction.new
-      ctx.variables["item1"] = HCL::ValueType.new("world")
+      ctx.variables["item1"] = HCL::Any.new("world")
 
       doc.unwrap(ctx).should eq({
         "config" => {
@@ -475,10 +475,10 @@ describe HCL::Parser do
       doc = parser.parse!
 
       ctx = HCL::ExpressionContext.default_context
-      ctx.variables["numbers"] = HCL::ValueType.new([
-        HCL::ValueType.new(1_i64),
-        HCL::ValueType.new(2_i64),
-        HCL::ValueType.new(3_i64)
+      ctx.variables["numbers"] = HCL::Any.new([
+        HCL::Any.new(1_i64),
+        HCL::Any.new(2_i64),
+        HCL::Any.new(3_i64)
       ])
 
       doc.unwrap(ctx).should eq({

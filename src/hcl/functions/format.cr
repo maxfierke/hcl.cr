@@ -9,16 +9,16 @@ module HCL
         )
       end
 
-      def call(args : Array(ValueType)) : ValueType
-        if !args[0].raw.is_a?(String)
+      def call(args : Array(Any)) : Any
+        if !args[0].as_s?
           raise ArgumentTypeError.new(
             "format(fmt, args...): Argument type mismatch. Expected a string, but got #{args[0].raw.class}."
           )
         end
 
-        fmt = args.shift.raw.as(String)
+        fmt = args.shift.as_s
 
-        ValueType.new(sprintf(fmt, args.map(&.unwrap)))
+        Any.new(sprintf(fmt, args.map(&.unwrap)))
       end
     end
   end

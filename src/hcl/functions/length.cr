@@ -9,7 +9,7 @@ module HCL
         )
       end
 
-      def call(args : Array(ValueType)) : ValueType
+      def call(args : Array(Any)) : Any
         coll = args[0].raw
 
         if !coll || coll.is_a?(Bool) || coll.is_a?(Int64) || coll.is_a?(Float64) || coll.is_a?(String)
@@ -18,9 +18,9 @@ module HCL
           )
         end
 
-        coll = coll.as(Array(ValueType) | Hash(String, ValueType))
+        coll = coll.as(Array(Any) | Hash(String, Any))
 
-        ValueType.new(coll.size.to_i64)
+        Any.new(coll.size.to_i64)
       end
     end
   end

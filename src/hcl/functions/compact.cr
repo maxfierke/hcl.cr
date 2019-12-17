@@ -9,9 +9,9 @@ module HCL
         )
       end
 
-      def call(args : Array(ValueType)) : ValueType
+      def call(args : Array(Any)) : Any
         result = args.select { |arg| !arg.raw.nil? }
-        HCL::ValueType.new(result)
+        HCL::Any.new(result)
       end
     end
   end

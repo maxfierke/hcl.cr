@@ -9,7 +9,7 @@ module HCL
         )
       end
 
-      def call(args : Array(ValueType)) : ValueType
+      def call(args : Array(Any)) : Any
         str = args[0].raw
 
         if !str.is_a?(String)
@@ -18,7 +18,7 @@ module HCL
           )
         end
 
-        HCL::ValueType.new(str.upcase)
+        HCL::Any.new(str.upcase)
       end
     end
   end
