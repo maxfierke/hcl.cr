@@ -41,8 +41,8 @@ module HCL
         end
       end
 
-      def value(ctx : ExpressionContext) : ValueType
-        content
+      def value(ctx : ExpressionContext) : Any
+        Any.new(content)
       end
     end
   end

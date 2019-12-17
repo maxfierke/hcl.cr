@@ -69,6 +69,15 @@ puts "#" * 80
 puts "END DOC VALUE DUMP"
 puts "#" * 80
 
+doc_unwrap = doc.unwrap
+puts "#" * 80
+puts "START DOC UNWRAP DUMP"
+puts "#" * 80
+pp! doc_unwrap
+puts "#" * 80
+puts "END DOC UNWRAP DUMP"
+puts "#" * 80
+
 string = doc.to_s
 puts "#" * 80
 puts "START DOC STRING DUMP"

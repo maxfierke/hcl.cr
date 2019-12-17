@@ -5,26 +5,8 @@ class SomeFunction < HCL::Function
     super("some_function", arity: 3)
   end
 
-  def call(args) : HCL::ValueType
-    arg1 = args[0]
-    arg2 = args[1]
-    arg3 = args[2]
-
-    "#{arg3} #{arg1} #{arg2}"
-  end
-end
-
-class SomeVaradicFunction < HCL::Function
-  def initialize
-    super("some_varadic_function", arity: 4, varadic: true)
-  end
-
-  def call(args) : HCL::ValueType
-    arg1 = args[0]
-    arg2 = args[1]
-    arg3 = args[2]
-    arg4 = args[3]
-    "#{arg1} #{arg2} #{arg3} #{arg4}"
+  def call(args) : HCL::Any
+    HCL::Any.new("#{args[2]} #{args[0]} #{args[1]}")
   end
 end
 
@@ -40,7 +22,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.unwrap.should eq({
         "variable" => {
           "ami" => {
             "description" => "the AMI to use"
@@ -59,7 +41,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.unwrap.should eq({
         "variable" => {
           "ami" => {
             "description" => "the \\\"AMI to use"
@@ -81,7 +63,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.unwrap.should eq({
         "description" => "once upon a time\nthere was a complicated\nparsing rule\n",
         "another_prop" => "hello"
       })
@@ -101,7 +83,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.unwrap.should eq({
         "provider" => {
           "foo" => {
             "foo" => 0.1_f64,
@@ -139,7 +121,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.unwrap.should eq({
         "provider" => {
           "foo" => {
             "foo" => 0.1_f64 * 0.5_f64,
@@ -175,7 +157,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.unwrap.should eq({
         "resource" => {
           "aws_instance" => {
             "web" => {
@@ -197,7 +179,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.unwrap.should eq({
         "hello" => "it's me",
         "works" => true
       })
@@ -218,7 +200,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.unwrap.should eq({
         "resource" => {
           "aws_instance" => {
             "web" => {
@@ -249,7 +231,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.unwrap.should eq({
         "config" => {
           "hello" => {
             "yoo" => "yes",
@@ -280,14 +262,14 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.unwrap.should eq({
         "test" => {
           "hello" => {
             "resource" => [
               {
                 "foo" => [
                   {
-                    "bar" => {} of String => HCL::ValueType
+                    "bar" => {} of String => HCL::Any
                   }
                 ]
               }
@@ -326,7 +308,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.unwrap.should eq({
         "variable" => {
           "ami" => {"description" => "the AMI to use"}
         },
@@ -363,7 +345,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.unwrap.should eq({
         "resource" => {
           "aws_instance" => {
             "web" => {
@@ -387,13 +369,15 @@ describe HCL::Parser do
       doc = parser.parse!
 
       ctx = HCL::ExpressionContext.new
-      ctx.variables["var"] = Hash(String, HCL::ValueType).new.tap do |hsh|
-        hsh["something"] = Hash(String, HCL::ValueType).new.tap do |nested|
-          nested["ami_id"] = "ami-1234"
-        end
-      end
+      ctx.variables["var"] = HCL::Any.new(
+        {
+          "something" => {
+            "ami_id" => "ami-1234"
+          }
+        }
+      )
 
-      doc.value(ctx).should eq({
+      doc.unwrap(ctx).should eq({
         "resource" => {
           "aws_instance" => {
             "web" => {
@@ -416,23 +400,23 @@ describe HCL::Parser do
       doc = parser.parse!
 
       ctx = HCL::ExpressionContext.new
-      ctx.variables["var"] = Hash(String, HCL::ValueType).new.tap do |var|
-        something = [] of HCL::ValueType
-        something << Hash(String, HCL::ValueType).new.tap do |something_0|
-          other_thing = Hash(String, HCL::ValueType).new.tap do |other_thing|
-            some_list = [] of HCL::ValueType
-            some_list << Hash(String, HCL::ValueType).new.tap do |nested|
-              nested["ami_id"] = "ami-1234"
-            end
-            other_thing["some_list"] = some_list
-          end
+      ctx.variables["var"] = HCL::Any.new(
+        {
+          "something" => [
+            {
+              "other_thing" => {
+                "some_list" => [
+                  {
+                    "ami_id" => "ami-1234"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      )
 
-          something_0["other_thing"] = other_thing
-        end
-        var["something"] = something
-      end
-
-      doc.value(ctx).should eq({
+      doc.unwrap(ctx).should eq({
         "resource" => {
           "aws_instance" => {
             "web" => {
@@ -456,9 +440,9 @@ describe HCL::Parser do
 
       ctx = HCL::ExpressionContext.new
       ctx.functions["some_function"] = SomeFunction.new
-      ctx.variables["item1"] = "world"
+      ctx.variables["item1"] = HCL::Any.new("world")
 
-      doc.value(ctx).should eq({
+      doc.unwrap(ctx).should eq({
         "config" => {
           "hello" => {
             "yoo" => "hello world [1, 2, 3]"
@@ -470,7 +454,7 @@ describe HCL::Parser do
     it "can parse varadic function calls" do
       hcl_string = <<-HCL
         config "hello" {
-          yoo = some_varadic_function("hello", numbers...)
+          yoo = format("hello %d %d %d", numbers...)
         }
 
       HCL
@@ -478,11 +462,10 @@ describe HCL::Parser do
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
 
-      ctx = HCL::ExpressionContext.new
-      ctx.functions["some_varadic_function"] = SomeVaradicFunction.new
-      ctx.variables["numbers"] = [1_i64, 2_i64, 3_i64].map { |i| i.as(HCL::ValueType) }
+      ctx = HCL::ExpressionContext.default_context
+      ctx.variables["numbers"] = HCL::Any.new([1_i64, 2_i64, 3_i64])
 
-      doc.value(ctx).should eq({
+      doc.unwrap(ctx).should eq({
         "config" => {
           "hello" => {
             "yoo" => "hello 1 2 3"

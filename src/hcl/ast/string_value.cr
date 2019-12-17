@@ -7,8 +7,8 @@ module HCL
         io << "\""
       end
 
-      def value(ctx : ExpressionContext) : ValueType
-        source
+      def value(ctx : ExpressionContext) : Any
+        Any.new(source)
       end
     end
   end

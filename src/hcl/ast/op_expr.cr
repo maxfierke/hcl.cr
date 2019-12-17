@@ -62,15 +62,15 @@ module HCL
         end
       end
 
-      def value(ctx : ExpressionContext) : ValueType
+      def value(ctx : ExpressionContext) : Any
         # This is wrong. Need to figure out order of operations stuff, probably.
         left_op = left_operand
         right_op = right_operand
         if right_op.nil?
           left_op = left_operand
-          left_op_val = left_op.value(ctx)
+          left_op_val = left_op.value(ctx).raw
           raise "Parser bug: Cannot perform unary operation on array" if left_op_val.responds_to?(:[])
-          case operator
+          result = case operator
           when NOT
             !left_op_val
           when SUBTRACTION
@@ -78,11 +78,13 @@ module HCL
             raise "Parser bug: Cannot perform numeric inversion on boolean" if left_op_val.is_a?(Bool)
             -left_op_val
           end
-        else
-          left_op_val = left_op.value(ctx)
-          right_op_val = right_op.value(ctx)
 
-          case operator
+          Any.new(result)
+        else
+          left_op_val = left_op.value(ctx).raw
+          right_op_val = right_op.value(ctx).raw
+
+          result = case operator
           when ADDITION
             left_op_val, right_op_val = assert_number!(left_op_val, right_op_val)
             left_op_val + right_op_val
@@ -127,6 +129,8 @@ module HCL
           when OR
             left_op_val || right_op_val
           end
+
+          Any.new(result)
         end
       end
 

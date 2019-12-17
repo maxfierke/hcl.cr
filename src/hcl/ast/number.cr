@@ -20,8 +20,8 @@ module HCL
         @value.to_s(io)
       end
 
-      def value(ctx : ExpressionContext) : ValueType
-        @value
+      def value(ctx : ExpressionContext) : Any
+        Any.new(@value)
       end
     end
   end

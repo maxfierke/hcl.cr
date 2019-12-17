@@ -19,7 +19,7 @@ module HCL
         io << "]"
       end
 
-      def value(ctx : ExpressionContext) : ValueType
+      def value(ctx : ExpressionContext) : Any
         raise "BUG: This should not be called, as there is no value to represent."
       end
     end

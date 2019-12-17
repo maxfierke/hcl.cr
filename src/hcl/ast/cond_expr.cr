@@ -24,8 +24,11 @@ module HCL
         false_expr.to_s(io)
       end
 
-      def value(ctx : ExpressionContext) : ValueType
-        predicate_value = predicate.value(ctx)
+      def value(ctx : ExpressionContext) : Any
+        predicate_value = predicate.value(ctx).raw
+
+        # TODO: validate "correctness" of both expressions to catch errors in
+        # HCL construction, if even not for the active path
 
         if truthy?(predicate_value)
           true_expr.value(ctx)

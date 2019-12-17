@@ -31,23 +31,31 @@ module HCL
         end
       end
 
-      def value
-        value(ExpressionContext.new)
+      def unwrap
+        unwrap(ExpressionContext.default_context)
       end
 
-      def value(ctx : ExpressionContext) : ValueType
-        dict = {} of String => ValueType
+      def unwrap(ctx : ExpressionContext)
+        value(ctx).unwrap
+      end
+
+      def value
+        value(ExpressionContext.default_context)
+      end
+
+      def value(ctx : ExpressionContext) : Any
+        dict = {} of String => Any
 
         attributes.each do |key, value|
-          dict[key] = value.value(ctx).as(ValueType)
+          dict[key] = value.value(ctx)
         end
 
         blocks.each do |block|
-          block_dict = block.value(ctx).as(Hash(String, ValueType))
+          block_dict = block.value(ctx).raw.as(Hash(String, Any))
           dict.merge!(block_dict)
         end
 
-        dict
+        Any.new(dict)
       end
     end
   end

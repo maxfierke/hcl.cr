@@ -12,7 +12,7 @@ module HCL
       end
 
       abstract def to_s(io : IO)
-      abstract def value(ctx : ExpressionContext) : ValueType
+      abstract def value(ctx : ExpressionContext) : Any
     end
   end
 end
