@@ -30,8 +30,7 @@ describe HCL::Functions::JSONDecode do
       ])
 
       deserialized = fn.call([HCL::Any.new(json)])
-      deserialized.should eq(HCL::Any.new(hsh))
-      deserialized.unwrap.should eq({
+      deserialized.should eq({
         "prop1" => 123_i64,
         "prop2" => "hello",
         "prop3" => {} of String => HCL::Any::RawType,
