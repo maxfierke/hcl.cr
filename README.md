@@ -3,8 +3,11 @@
 A general-purpose HCL2 parser written in Crystal. Does not make any domain assumptions.
 Aims to supports the standard HCL2 types and map to the HCL2 informational model.
 
-This is considered a work-in-progress, though may work already for simple HCL2
-documents that don't depend on any dynamic evaluation (function calls, variables, interpolation)
+This is considered a work-in-progress, though may work already for many HCL2
+documents. Much of the HCL2 spec is supported, except interpolation/template
+expressions and `for` expressions. However, it does not yet run against or pass
+the spec test suite, so there may be situations in which some documents do not
+work as they should. Please report any issues [here](https://github.com/maxfierke/hcl.cr/issues/new).
 
 ## Installation
 
