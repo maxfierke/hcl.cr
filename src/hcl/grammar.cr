@@ -165,7 +165,7 @@ module HCL
       identifier >> s >>
       ((string_lit | identifier) >> s).repeat >>
       char('{') >> s >>
-      (identifier >> s >> char('=') >> s >> expression >> s).maybe.named(:attribute) >>
+      (identifier >> s >> char('=') >> s >> expression >> s).named(:attribute).maybe >>
       char('}') >> s >> newline
     ).named(:block)
     block = (
@@ -177,7 +177,7 @@ module HCL
       identifier >> s >> char('=') >> s >> expression >> s >> newline
     ).named(:attribute)
     body.define \
-      (snl >> (attribute | block | one_line_block) >> snl).repeat
+      (snl >> (attribute | block | one_line_block).maybe >> snl).repeat
 
     config_file = body.then_eof
   end
