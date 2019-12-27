@@ -1,8 +1,11 @@
 module HCL
+  annotation Attribute
+  end
+
   annotation Block
   end
 
-  annotation Attribute
+  annotation Label
   end
 
   # The `HCL::Serializable` module automatically generates methods for HCL serialization when included.
@@ -55,11 +58,11 @@ module HCL
   # ### Usage
   #
   # Including `HCL::Serializable` will create `#to_hcl` and `self.from_hcl` methods on the current class,
-  # and a constructor which takes an `HCL::Block | HCL::Document` and an `HCL::ExpressionContext`.
+  # and a constructor which takes an `HCL::Block` and an `HCL::ExpressionContext`.
   # By default, these methods serialize into an HCL document containing the value of every tagged instance
   # variable, the keys being the instance variable name. Most primitives and collections supported as
   # instance variable values (string, integer, array, hash, etc.), along with objects which define `to_hcl`
-  # and a constructor taking an `HCL::Block | HCL::Document` and an `HCL::ExpressionContext`.
+  # and a constructor taking an `HCL::Block` and an `HCL::ExpressionContext`.
   # Union types are supported for attributes, including unions with nil. If multiple types in a union parse correctly,
   # it is undefined which one will be chosen. Union types are not supported for blocks.
   #
@@ -141,11 +144,11 @@ module HCL
       # Define a `new` directly in the included type,
       # so it overloads well with other possible initializes
 
-      def self.new(node : ::HCL::AST::Block | ::HCL::AST::Document, ctx : ::HCL::ExpressionContext)
+      def self.new(node : ::HCL::AST::Block, ctx : ::HCL::ExpressionContext)
         new_from_hcl_ast_node(node, ctx)
       end
 
-      private def self.new_from_hcl_ast_node(node : ::HCL::AST::Block | ::HCL::AST::Document, ctx : ::HCL::ExpressionContext)
+      private def self.new_from_hcl_ast_node(node : ::HCL::AST::Block, ctx : ::HCL::ExpressionContext)
         instance = allocate
         instance.initialize(__node_from_hcl: node, __ctx_from_hcl: ctx)
         GC.add_finalizer(instance) if instance.responds_to?(:finalize)
@@ -156,22 +159,35 @@ module HCL
       # so it can compete with other possible intializes
 
       macro inherited
-        def self.new(node : ::HCL::AST::Block | ::HCL::AST::Document, ctx : ::HCL::ExpressionContext)
+        def self.new(node : ::HCL::AST::Block, ctx : ::HCL::ExpressionContext)
           new_from_hcl_ast_node(node, ctx)
         end
       end
     end
 
-    def initialize(*, __node_from_hcl : ::HCL::AST::Block | ::HCL::AST::Document, __ctx_from_hcl : ::HCL::ExpressionContext)
+    def initialize(*, __node_from_hcl : ::HCL::AST::Block, __ctx_from_hcl : ::HCL::ExpressionContext)
       {% begin %}
-        # Process Attributes
+        # Collect instance variable configuration
 
         {% attributes = {} of Nil => Nil %}
+        {% blocks = {} of Nil => Nil %}
+        {% labels = {} of Nil => Nil %}
+        {% current_label_idx = 0 %}
         {% for ivar in @type.instance_vars %}
           {% ann = ivar.annotation(::HCL::Attribute) %}
-          {% if ann %}
+          {% if ann = ivar.annotation(::HCL::Attribute) %}
             {%
               attributes[ivar.id] = {
+                type:        ivar.type,
+                key:         ((ann && ann[:key]) || ivar).id.stringify,
+                has_default: ivar.has_default_value?,
+                default:     ivar.default_value,
+                nilable:     ivar.type.nilable?
+              }
+            %}
+          {% elsif ann = ivar.annotation(::HCL::Block) %}
+            {%
+              blocks[ivar.id] = {
                 type:        ivar.type,
                 key:         ((ann && ann[:key]) || ivar).id.stringify,
                 has_default: ivar.has_default_value?,
@@ -179,10 +195,21 @@ module HCL
                 nilable:     ivar.type.nilable?,
               }
             %}
+          {% elsif ann = ivar.annotation(::HCL::Label) %}
+            {%
+              labels[ivar.id] = {
+                type:        ivar.type,
+                index:       ann[:index] || current_label_idx,
+                has_default: ivar.has_default_value?,
+                default:     ivar.default_value,
+                nilable:     ivar.type.nilable?
+              }
+            %}
+            {% current_label_idx = ann[:index] ? (ann[:index] + 1) : (current_label_idx + 1) %}
           {% end %}
         {% end %}
 
-        {% for name, value in attributes %}
+        {% for name in (attributes.keys + blocks.keys + labels.keys) %}
           %var{name} = nil
           %found{name} = false
         {% end %}
@@ -192,7 +219,7 @@ module HCL
           {% for name, value in attributes %}
             when {{value[:key]}}
               %found{name} = true
-              %var{name} = attr_node.value(__ctx_from_hcl)
+              %var{name} = attr_node.value(__ctx_from_hcl).raw
           {% end %}
           else
             on_unknown_hcl_attribute(__node_from_hcl, key, __ctx_from_hcl)
@@ -209,42 +236,20 @@ module HCL
 
           {% if value[:nilable] %}
             {% if value[:has_default] != nil %}
-              @{{name}} = %found{name} ? %var{name} : {{value[:default]}}
+              @{{name}} = %found{name} ? %var{name}.as({{value[:type]}}) : {{value[:default]}}
             {% else %}
-              @{{name}} = %var{name}
+              @{{name}} = %var{name}.as({{value[:type]}})
             {% end %}
           {% elsif value[:has_default] %}
-            @{{name}} = %var{name}.nil? ? {{value[:default]}} : %var{name}
+            @{{name}} = %var{name}.nil? ? {{value[:default]}} : %var{name}.as({{value[:type]}})
           {% else %}
-            @{{name}} = (%var{name}).not_nil!.raw.as({{value[:type]}})
+            @{{name}} = (%var{name}).as({{value[:type]}})
           {% end %}
         {% end %}
 
         # Process Blocks
 
-        {% blocks = {} of Nil => Nil %}
-        {% for ivar in @type.instance_vars %}
-          {% ann = ivar.annotation(::HCL::Block) %}
-          {% if ann %}
-            {%
-              blocks[ivar.id] = {
-                type:        ivar.type,
-                key:         ((ann && ann[:key]) || ivar).id.stringify,
-                has_default: ivar.has_default_value?,
-                default:     ivar.default_value,
-                nilable:     ivar.type.nilable?,
-              }
-            %}
-          {% end %}
-        {% end %}
-
-        {% for name, value in blocks %}
-          %var{name} = nil
-          %found{name} = false
-        {% end %}
-
         __node_from_hcl.blocks.each do |block_node|
-          # TODO: Does this make sense?
           case block_node.id
           {% for name, value in blocks %}
             when {{value[:key]}}
@@ -280,12 +285,45 @@ module HCL
 
           {% if value[:nilable] %}
             {% if value[:has_default] != nil %}
-              @{{name}} = %found{name} ? %var{name} : {{value[:default]}}
+              @{{name}} = %found{name} ? %var{name}.as({{value[:type]}}) : {{value[:default]}}
             {% else %}
-              @{{name}} = %var{name}
+              @{{name}} = %var{name}.as({{value[:type]}})
             {% end %}
           {% elsif value[:has_default] %}
-            @{{name}} = %var{name}.nil? ? {{value[:default]}} : %var{name}
+            @{{name}} = %var{name}.nil? ? {{value[:default]}} : %var{name}.as({{value[:type]}})
+          {% else %}
+            @{{name}} = (%var{name}).as({{value[:type]}})
+          {% end %}
+        {% end %}
+
+        # Process labels
+
+        __node_from_hcl.labels.each_with_index do |label, idx|
+          case idx
+        {% for name, value in labels %}
+          when {{value[:index]}}
+            %found{name} = true
+            %var{name} = label.value(__ctx_from_hcl).raw
+        {% end %}
+          end
+        end
+
+        {% for name, value in labels %}
+          {% unless value[:nilable] || value[:has_default] %}
+            if %var{name}.nil? && !%found{name} && !::Union({{value[:type]}}).nilable?
+              # TODO: Make this a real exception
+              raise "Missing HCL block label for block '#{__node_from_hcl.id}' (label index {{value[:index]}})"
+            end
+          {% end %}
+
+          {% if value[:nilable] %}
+            {% if value[:has_default] != nil %}
+              @{{name}} = %found{name} ? %var{name}.as({{value[:type]}}) : {{value[:default]}}
+            {% else %}
+              @{{name}} = %var{name}.as({{value[:type]}})
+            {% end %}
+          {% elsif value[:has_default] %}
+            @{{name}} = %var{name}.nil? ? {{value[:default]}} : %var{name}.as({{value[:type]}})
           {% else %}
             @{{name}} = (%var{name}).as({{value[:type]}})
           {% end %}

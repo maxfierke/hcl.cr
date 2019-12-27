@@ -1,7 +1,8 @@
 module HCL
   module AST
-    class Document < Node
-      getter :attributes, :blocks
+    class Document < Block
+      # :nodoc:
+      ID = "__hcl__doc"
 
       def initialize(
         peg_tuple : Pegmatite::Token,
@@ -9,10 +10,7 @@ module HCL
         attributes : Hash(String, Node),
         blocks : Array(Block)
       )
-        super(peg_tuple, string)
-
-        @attributes = attributes
-        @blocks = blocks
+        super(peg_tuple, string, ID, Array(BlockLabel).new, attributes, blocks)
       end
 
       def to_s(io : IO)

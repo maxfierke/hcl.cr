@@ -33,6 +33,11 @@ class TestBlockNoLabels
 end
 
 class TestBlockLabels < TestBlockNoLabels
+  @[HCL::Label]
+  property which : String
+
+  @[HCL::Label]
+  property part : String?
 end
 
 class TestEmptyBlock
@@ -57,7 +62,7 @@ describe "Serializable attributes" do
         title = "The First B Block"
       }
 
-      b_block "two" {
+      b_block "two" "point-one" {
         title = "The Second B Block"
       }
 
@@ -77,7 +82,11 @@ describe "Serializable attributes" do
     parsed.list.should eq(["these", "are", "items", 1, 2, 3])
     parsed.a_block.title.should eq("The A Block")
     parsed.b_blocks[0].title.should eq("The First B Block")
+    parsed.b_blocks[0].which.should eq("one")
+    parsed.b_blocks[0].part.should be_nil
     parsed.b_blocks[1].title.should eq("The Second B Block")
+    parsed.b_blocks[1].which.should eq("two")
+    parsed.b_blocks[1].part.should eq("point-one")
     parsed.empty_block.should be_a(TestEmptyBlock)
   end
 end
