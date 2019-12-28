@@ -229,9 +229,9 @@ module HCL
       )
     end
 
-    private def build_string(main, iter, source) : AST::StringValue
+    private def build_string(main, iter, source) : AST::Literal
       kind, start, finish = main
-      AST::StringValue.new(main, source[start...finish])
+      AST::Literal.new(main, source[start...finish])
     end
 
     private def build_list(main, iter, source) : AST::List
