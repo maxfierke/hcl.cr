@@ -7,6 +7,7 @@ end
 
 require "./hcl/ast"
 require "./hcl/ast/node"
+require "./hcl/ast/body"
 require "./hcl/ast/*"
 require "./hcl/function"
 require "./hcl/functions/*"

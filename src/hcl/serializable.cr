@@ -145,11 +145,11 @@ module HCL
       # Define a `new` directly in the included type,
       # so it overloads well with other possible initializes
 
-      def self.new(node : ::HCL::AST::Block, ctx : ::HCL::ExpressionContext)
+      def self.new(node : ::HCL::AST::Body, ctx : ::HCL::ExpressionContext)
         new_from_hcl_ast_node(node, ctx)
       end
 
-      private def self.new_from_hcl_ast_node(node : ::HCL::AST::Block, ctx : ::HCL::ExpressionContext)
+      private def self.new_from_hcl_ast_node(node : ::HCL::AST::Body, ctx : ::HCL::ExpressionContext)
         instance = allocate
         instance.initialize(__node_from_hcl: node, __ctx_from_hcl: ctx)
         GC.add_finalizer(instance) if instance.responds_to?(:finalize)
@@ -160,13 +160,13 @@ module HCL
       # so it can compete with other possible intializes
 
       macro inherited
-        def self.new(node : ::HCL::AST::Block, ctx : ::HCL::ExpressionContext)
+        def self.new(node : ::HCL::AST::Body, ctx : ::HCL::ExpressionContext)
           new_from_hcl_ast_node(node, ctx)
         end
       end
     end
 
-    def initialize(*, __node_from_hcl : ::HCL::AST::Block, __ctx_from_hcl : ::HCL::ExpressionContext)
+    def initialize(*, __node_from_hcl : ::HCL::AST::Body, __ctx_from_hcl : ::HCL::ExpressionContext)
       {% begin %}
         # Collect instance variable configuration
 
@@ -231,7 +231,7 @@ module HCL
         {% for name, value in attributes %}
           {% unless value[:nilable] || value[:has_default] %}
             if %var{name}.nil? && !%found{name} && !::Union({{value[:type]}}).nilable?
-              if __node_from_hcl.is_a?(HCL::AST::Document)
+              if __node_from_hcl.is_a?(::HCL::AST::Document)
                 raise ::HCL::ParseException.new(
                   "Missing HCL attribute '{{value[:key].id}}' for document"
                 )
@@ -288,7 +288,7 @@ module HCL
         {% for name, value in blocks %}
           {% unless value[:nilable] || value[:has_default] %}
             if %var{name}.nil? && !%found{name} && !::Union({{value[:type]}}).nilable?
-              if __node_from_hcl.is_a?(HCL::AST::Document)
+              if __node_from_hcl.is_a?(::HCL::AST::Document)
                 raise ::HCL::ParseException.new(
                   "Missing HCL block '{{value[:key].id}}' for document"
                 )
@@ -315,39 +315,47 @@ module HCL
 
         # Process labels
 
-        __node_from_hcl.labels.each_with_index do |label, idx|
-          case idx
-        {% for name, value in labels %}
-          when {{value[:index]}}
-            %found{name} = true
-            %var{name} = label.value(__ctx_from_hcl).raw
-        {% end %}
-          else
-            on_unknown_hcl_label(__node_from_hcl, idx, __ctx_from_hcl)
-          end
-        end
-
-        {% for name, value in labels %}
-          {% unless value[:nilable] || value[:has_default] %}
-            if %var{name}.nil? && !%found{name} && !::Union({{value[:type]}}).nilable?
-              raise ::HCL::ParseException.new(
-                "Missing HCL label at index {{value[:index]}} for block '#{__node_from_hcl.id}'"
-              )
+        if __node_from_hcl.is_a?(::HCL::AST::Block)
+          __node_from_hcl.labels.each_with_index do |label, idx|
+            case idx
+          {% for name, value in labels %}
+            when {{value[:index]}}
+              %found{name} = true
+              %var{name} = label.value(__ctx_from_hcl).raw
+          {% end %}
+            else
+              on_unknown_hcl_label(__node_from_hcl, idx, __ctx_from_hcl)
             end
-          {% end %}
+          end
 
-          {% if value[:nilable] %}
-            {% if value[:has_default] != nil %}
-              @{{name}} = %found{name} ? %var{name}.as({{value[:type]}}) : {{value[:default]}}
-            {% else %}
-              @{{name}} = %var{name}.as({{value[:type]}})
+          {% for name, value in labels %}
+            {% unless value[:nilable] || value[:has_default] %}
+              if %var{name}.nil? && !%found{name} && !::Union({{value[:type]}}).nilable?
+                raise ::HCL::ParseException.new(
+                  "Missing HCL label at index {{value[:index]}} for block '#{__node_from_hcl.id}'"
+                )
+              end
             {% end %}
-          {% elsif value[:has_default] %}
-            @{{name}} = %var{name}.nil? ? {{value[:default]}} : %var{name}.as({{value[:type]}})
-          {% else %}
-            @{{name}} = (%var{name}).as({{value[:type]}})
+
+            {% if value[:nilable] %}
+              {% if value[:has_default] != nil %}
+                @{{name}} = %found{name} ? %var{name}.as({{value[:type]}}) : {{value[:default]}}
+              {% else %}
+                @{{name}} = %var{name}.as({{value[:type]}})
+              {% end %}
+            {% elsif value[:has_default] %}
+              @{{name}} = %var{name}.nil? ? {{value[:default]}} : %var{name}.as({{value[:type]}})
+            {% else %}
+              @{{name}} = (%var{name}).as({{value[:type]}})
+            {% end %}
           {% end %}
-        {% end %}
+        else
+          {% unless labels.keys.empty? %}
+            raise ::HCL::ParseException.new(
+              "Cannot extract labels for an HCL document. Labels are only supported on HCL blocks."
+            )
+          {% end %}
+        end
       {% end %}
       after_initialize
     end
@@ -364,9 +372,12 @@ module HCL
     protected def on_unknown_hcl_label(node, idx, ctx)
     end
 
+    protected def on_to_hcl(hcl)
+    end
+
     module Strict
       protected def on_unknown_hcl_attribute(node, key, ctx)
-        if node.is_a?(HCL::AST::Document)
+        if node.is_a?(::HCL::AST::Document)
           raise ::HCL::ParseException.new(
             "Unknown HCL attribute '#{key}' for document"
           )
@@ -378,7 +389,7 @@ module HCL
       end
 
       protected def on_unknown_hcl_block(node, key, ctx)
-        if node.is_a?(HCL::AST::Document)
+        if node.is_a?(::HCL::AST::Document)
           raise ::HCL::ParseException.new(
             "Unknown HCL block '#{key}' for document"
           )
@@ -398,13 +409,13 @@ module HCL
 
     module Unmapped
       # Unmapped attributes
-      property hcl_unmapped_attributes = Hash(String, HCL::Any).new
+      property hcl_unmapped_attributes = Hash(String, ::HCL::Any).new
 
       # Unmapped blocks
-      property hcl_unmapped_blocks = Hash(String, HCL::Any).new
+      property hcl_unmapped_blocks = Hash(String, ::HCL::Any).new
 
       # Unmapped labels
-      property hcl_unmapped_labels = Hash(Int32, HCL::Any).new
+      property hcl_unmapped_labels = Hash(Int32, ::HCL::Any).new
 
       protected def on_unknown_hcl_attribute(node, key, ctx)
         hcl_unmapped_attributes[key] = node.attributes[key].value(ctx)

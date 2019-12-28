@@ -1,9 +1,9 @@
 module HCL
   module AST
-    class Block < Node
+    class Block < Body
       @labels : Array(BlockLabel)
 
-      getter :id, :labels, :attributes, :blocks
+      getter :id, :labels
 
       def initialize(
         peg_tuple : Pegmatite::Token,
@@ -13,12 +13,10 @@ module HCL
         attributes : Hash(String, Node),
         blocks : Array(Block)
       )
-        super(peg_tuple, string)
+        super(peg_tuple, string, attributes, blocks)
 
         @id = id
         @labels = labels
-        @attributes = attributes
-        @blocks = blocks
       end
 
       def to_s(io : IO)
@@ -65,25 +63,10 @@ module HCL
         block_header = [id] + labels.map do |label|
           label.value(ctx)
         end
-        block_value = value_dict(ctx)
+        block_value = super(ctx)
         block_header.reverse.reduce(block_value) do |acc, val|
           Any.new({ val.to_s => acc })
         end
-      end
-
-      private def value_dict(ctx)
-        dict = {} of String => Any
-
-        attributes.each do |key, value|
-          dict[key] = value.value(ctx)
-        end
-
-        blocks.each do |block|
-          block_dict = block.value(ctx).as_h
-          dict.merge!(block_dict)
-        end
-
-        Any.new(dict)
       end
     end
   end
