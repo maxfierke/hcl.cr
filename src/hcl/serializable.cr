@@ -104,7 +104,8 @@ module HCL
   # document will raise a parse exception. By default the unknown properties
   # are silently ignored.
   # If the `HCL::Serializable::Unmapped` module is included, unknown properties in the HCL
-  # document will be stored in a `Hash(String, HCL::Any)`. On serialization, any keys inside hcl_unmapped
+  # document will be stored in a `Hash(String, HCL::Any)`. On serialization, any keys
+  # inside hcl_unmapped_attributes, hcl_unmapped_blocks, and hcl_unmapped_labels
   # will be serialized and appended to the current HCL block or document.
   # ```
   # require "hcl"
@@ -212,6 +213,8 @@ module HCL
           %var{name} = nil
           %found{name} = false
         {% end %}
+
+        # Process Attributes
 
         __node_from_hcl.attributes.each do |key, attr_node|
           case key
@@ -394,8 +397,13 @@ module HCL
     end
 
     module Unmapped
+      # Unmapped attributes
       property hcl_unmapped_attributes = Hash(String, HCL::Any).new
+
+      # Unmapped blocks
       property hcl_unmapped_blocks = Hash(String, HCL::Any).new
+
+      # Unmapped labels
       property hcl_unmapped_labels = Hash(Int32, HCL::Any).new
 
       protected def on_unknown_hcl_attribute(node, key, ctx)
