@@ -19,7 +19,9 @@ module HCL
     end
 
     private def assert_token_kind!(kind : Symbol, expected_kind)
-      raise "Expected #{expected_kind}, but got #{kind}." unless kind == expected_kind
+      raise ParseException.new(
+        "Expected #{expected_kind}, but got #{kind}."
+      ) unless kind == expected_kind
     end
 
     private def build_document(iter, source) : AST::Document
@@ -43,7 +45,11 @@ module HCL
           iter.assert_next_not_child_of(token)
           blocks << new_block
         else
-          raise "Found '#{kind}' but expected an attribute assignment or block."
+          raise ParseException.new(
+            "Found '#{kind}' but expected an attribute assignment or block.",
+            source: source,
+            token: token
+          )
         end
       end
 
@@ -292,7 +298,11 @@ module HCL
           blocks << new_block
         elsif kind == :identifier || kind == :string
           if has_seen_seen_inner_block
-            raise "Found '#{kind}' but expected an attribute assignment or block."
+            raise ParseException.new(
+              "Found '#{kind}' but expected an attribute assignment or block.",
+              source: source,
+              token: token
+            )
           else
             if kind == :identifier
               label_node = build_identifier(token, iter, source)
@@ -303,7 +313,11 @@ module HCL
             end
           end
         else
-          raise "'#{kind}' is not supported within blocks."
+          raise ParseException.new(
+            "'#{kind}' is not supported within blocks.",
+            source: source,
+            token: token
+          )
         end
       end
 
@@ -334,7 +348,11 @@ module HCL
         if kind == :varadic
           varadic = true
         else
-          raise "Cannot specify additional arguments after a varadic argument (...)" if varadic
+          raise ParseException.new(
+            "Cannot specify additional arguments after a varadic argument (...)",
+            source: source,
+            token: child
+           ) if varadic
           args << build_node(child, iter, source)
         end
       end

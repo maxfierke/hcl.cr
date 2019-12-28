@@ -228,8 +228,15 @@ module HCL
         {% for name, value in attributes %}
           {% unless value[:nilable] || value[:has_default] %}
             if %var{name}.nil? && !%found{name} && !::Union({{value[:type]}}).nilable?
-              # TODO: Make this a real exception
-              raise "Missing HCL block attribute: {{value[:key].id}}"
+              if __node_from_hcl.is_a?(HCL::AST::Document)
+                raise ::HCL::ParseException.new(
+                  "Missing HCL attribute '{{value[:key].id}}' for document"
+                )
+              else
+                raise ::HCL::ParseException.new(
+                  "Missing HCL attribute '{{value[:key].id}}' for block '#{__node_from_hcl.id}'"
+                )
+              end
             end
           {% end %}
 
@@ -254,8 +261,9 @@ module HCL
             when {{value[:key]}}
             {% unless value[:type] < Array %}
               if %found{name}
-                # TODO: Make this a real exception
-                raise "Only one '{{value[:key].id}}' block is allowed. Another was defined earlier."
+                raise ::HCL::ParseException.new(
+                  "Only one '{{value[:key].id}}' block is allowed. Another was defined earlier."
+                )
               end
             {% end %}
 
@@ -277,8 +285,15 @@ module HCL
         {% for name, value in blocks %}
           {% unless value[:nilable] || value[:has_default] %}
             if %var{name}.nil? && !%found{name} && !::Union({{value[:type]}}).nilable?
-              # TODO: Make this a real exception
-              raise "Missing HCL block: {{value[:key].id}}"
+              if __node_from_hcl.is_a?(HCL::AST::Document)
+                raise ::HCL::ParseException.new(
+                  "Missing HCL block '{{value[:key].id}}' for document"
+                )
+              else
+                raise ::HCL::ParseException.new(
+                  "Missing HCL block '{{value[:key].id}}' for block '#{__node_from_hcl.id}'"
+                )
+              end
             end
           {% end %}
 
@@ -312,8 +327,9 @@ module HCL
         {% for name, value in labels %}
           {% unless value[:nilable] || value[:has_default] %}
             if %var{name}.nil? && !%found{name} && !::Union({{value[:type]}}).nilable?
-              # TODO: Make this a real exception
-              raise "Missing HCL block label for block '#{__node_from_hcl.id}' (label index {{value[:index]}})"
+              raise ::HCL::ParseException.new(
+                "Missing HCL label at index {{value[:index]}} for block '#{__node_from_hcl.id}'"
+              )
             end
           {% end %}
 
@@ -347,36 +363,59 @@ module HCL
 
     module Strict
       protected def on_unknown_hcl_attribute(node, key, ctx)
-        # TODO: Make this a real exception
-        raise "Unknown HCL block attribute: #{key}"
+        if node.is_a?(HCL::AST::Document)
+          raise ::HCL::ParseException.new(
+            "Unknown HCL attribute '#{key}' for document"
+          )
+        else
+          raise ::HCL::ParseException.new(
+            "Unknown HCL attribute '#{key}' for block '#{node.id}'"
+          )
+        end
       end
 
       protected def on_unknown_hcl_block(node, key, ctx)
-        # TODO: Make this a real exception
-        raise "Unknown HCL block: #{key}"
+        if node.is_a?(HCL::AST::Document)
+          raise ::HCL::ParseException.new(
+            "Unknown HCL block '#{key}' for document"
+          )
+        else
+          raise ::HCL::ParseException.new(
+            "Unknown HCL block '#{key}' for block '#{node.id}'"
+          )
+        end
       end
 
       protected def on_unknown_hcl_label(node, idx, ctx)
-        # TODO: Make this a real exception
-        raise "Unknown or unexpected HCL label at label index #{idx}"
+        raise ::HCL::ParseException.new(
+          "Unknown HCL label at index #{idx} for block '#{node.id}': #{node.labels[idx]}"
+        )
       end
     end
 
     module Unmapped
       property hcl_unmapped_attributes = Hash(String, HCL::Any).new
       property hcl_unmapped_blocks = Hash(String, HCL::Any).new
-      property hcl_unmapped_labels = Hash(Int64, String).new
+      property hcl_unmapped_labels = Hash(Int32, HCL::Any).new
 
       protected def on_unknown_hcl_attribute(node, key, ctx)
-        hcl_unmapped_attributes[key] = node.value(ctx)
+        hcl_unmapped_attributes[key] = node.attributes[key].value(ctx)
       end
 
       protected def on_unknown_hcl_block(node, key, ctx)
-        hcl_unmapped_blocks[key] = node.value(ctx)
+        blocks = node.blocks.
+          select { |block| block.id == key }.
+          map { |block| block.value(ctx).dig(key) }
+
+        if blocks.size == 1
+          hcl_unmapped_blocks[key] = blocks.first
+        else
+          hcl_unmapped_blocks[key] = ::HCL::Any.new(blocks)
+        end
       end
 
       protected def on_unknown_hcl_label(node, idx, ctx)
-        hcl_unmapped_labels[idx] = node.labels[idx]
+        hcl_unmapped_labels[idx] = node.labels[idx].value(ctx)
       end
 
       protected def on_to_hcl(hcl)

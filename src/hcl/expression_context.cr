@@ -1,11 +1,5 @@
 module HCL
   class ExpressionContext
-    class ExpressionError < Exception; end
-    class CallError < ExpressionError; end
-    class ArityMismatchError < CallError; end
-    class FunctionUndefinedError < CallError; end
-    class VariableUndefinedError < ExpressionError; end
-
     DEFAULT_FUNCTIONS = [
       Functions::Abs,
       Functions::Coalesce,
