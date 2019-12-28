@@ -3,12 +3,8 @@ module HCL
     class Map < Node
       getter :attributes
 
-      def initialize(
-        peg_tuple : Pegmatite::Token,
-        source : String,
-        attributes : Hash(String, Node)
-      )
-        super(peg_tuple, source)
+      def initialize(attributes : Hash(String, Node), **kwargs)
+        super(**kwargs)
 
         @attributes = attributes
       end

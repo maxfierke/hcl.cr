@@ -3,13 +3,8 @@ module HCL
     class IndexExpr < Node
       getter :index_exp
 
-      def initialize(
-        peg_tuple : Pegmatite::Token,
-        source : String,
-        index_exp : Expression
-      )
-        super(peg_tuple, source)
-
+      def initialize(index_exp : Expression, **kwargs)
+        super(**kwargs)
         @index_exp = index_exp
       end
 

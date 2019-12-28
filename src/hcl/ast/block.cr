@@ -6,14 +6,13 @@ module HCL
       getter :id, :labels
 
       def initialize(
-        peg_tuple : Pegmatite::Token,
-        string : String,
         id : String,
         labels : Array(BlockLabel),
         attributes : Hash(String, Node),
-        blocks : Array(Block)
+        blocks : Array(Block),
+        **kwargs
       )
-        super(peg_tuple, string, attributes, blocks)
+        super(attributes, blocks, **kwargs)
 
         @id = id
         @labels = labels
@@ -59,12 +58,20 @@ module HCL
         io << "}\n"
       end
 
-      def value(ctx : ExpressionContext) : Any
-        block_header = [id] + labels.map do |label|
-          label.value(ctx)
+      def block_header(ctx : ExpressionContext)
+        Array(Any).new(labels.size + 1).tap do |arr|
+          arr << Any.new(id)
+          labels.each do |label|
+            arr << label.value(ctx)
+          end
+
+          arr
         end
+      end
+
+      def value(ctx : ExpressionContext) : Any
         block_value = super(ctx)
-        block_header.reverse.reduce(block_value) do |acc, val|
+        block_header(ctx).reverse.reduce(block_value) do |acc, val|
           Any.new({ val.to_s => acc })
         end
       end

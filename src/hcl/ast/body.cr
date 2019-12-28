@@ -4,12 +4,11 @@ module HCL
       getter :attributes, :blocks
 
       def initialize(
-        peg_tuple : Pegmatite::Token,
-        string : String,
         attributes : Hash(String, Node),
-        blocks : Array(Block)
+        blocks : Array(Block),
+        **kwargs
       )
-        super(peg_tuple, string)
+        super(**kwargs)
 
         @attributes = attributes
         @blocks = blocks

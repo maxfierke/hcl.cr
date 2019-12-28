@@ -5,13 +5,12 @@ module HCL
       getter? :varadic
 
       def initialize(
-        peg_tuple : Pegmatite::Token,
-        string : String,
         id : String,
         args : Array(Node),
-        varadic : Bool
+        varadic : Bool,
+        **kwargs
       )
-        super(peg_tuple, string)
+        super(**kwargs)
 
         @id = id
         @args = args

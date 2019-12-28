@@ -4,13 +4,12 @@ module HCL
       getter :predicate, :true_expr, :false_expr
 
       def initialize(
-        peg_tuple : Pegmatite::Token,
-        string : String,
         predicate : Expression,
         true_expr : Expression,
-        false_expr : Expression
+        false_expr : Expression,
+        **kwargs
       )
-        super(peg_tuple, string)
+        super(**kwargs)
         @predicate = predicate
         @true_expr = true_expr
         @false_expr = false_expr

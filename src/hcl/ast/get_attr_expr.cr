@@ -5,13 +5,8 @@ module HCL
 
       getter :attribute_name
 
-      def initialize(
-        peg_tuple : Pegmatite::Token,
-        source : String,
-        attribute : Identifier
-      )
-        super(peg_tuple, source)
-
+      def initialize(attribute : Identifier, **kwargs)
+        super(**kwargs)
         @attribute_name = attribute.to_s
       end
 

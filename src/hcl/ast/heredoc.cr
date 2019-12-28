@@ -3,8 +3,8 @@ module HCL
     class Heredoc < Node
       getter :content, :delimiter, :indent_size
 
-      def initialize(peg_tuple : Pegmatite::Token, source : String, delimiter : String, content : String)
-        super(peg_tuple, source)
+      def initialize(delimiter : String, content : String, **kwargs)
+        super(**kwargs)
         @delimiter = delimiter
 
         if m = content.match(/^\s+/)

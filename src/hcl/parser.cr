@@ -60,10 +60,10 @@ module HCL
       end
 
       AST::Document.new(
-        Pegmatite::Token.new(:document, 0, source.size),
-        source,
         attributes,
-        blocks
+        blocks,
+        token: Pegmatite::Token.new(:document, 0, source.size),
+        source: source,
       )
     end
 
@@ -81,8 +81,8 @@ module HCL
         when :heredoc then build_heredoc(main, iter, source)
         when :identifier then build_identifier(main, iter, source)
         when :index then build_index(main, iter, source)
-        when :literal then AST::Literal.new(main, source[start...finish])
-        when :number then AST::Number.new(main, source[start...finish])
+        when :literal then AST::Literal.new(token: main, source: source[start...finish])
+        when :number then AST::Number.new(token: main, source: source[start...finish])
         when :object then build_map(main, iter, source)
         when :operation then build_operation(main, iter, source)
         when :string then build_string(main, iter, source)
@@ -109,11 +109,11 @@ module HCL
       false_expr_node = build_expression(false_expr, iter, source)
 
       AST::CondExpr.new(
-        main,
-        source[start...finish],
         predicate_node,
         true_expr_node,
-        false_expr_node
+        false_expr_node,
+        token: main,
+        source: source[start...finish],
       )
     end
 
@@ -131,9 +131,9 @@ module HCL
       end
 
       AST::Expression.new(
-        main,
-        source[start...finish],
-        exp_terms
+        exp_terms,
+        token: main,
+        source: source[start...finish],
       )
     end
 
@@ -146,9 +146,9 @@ module HCL
       identifier_node = build_identifier(next_token, iter, source)
 
       AST::GetAttrExpr.new(
-        main,
-        source[start...finish],
-        identifier_node
+        identifier_node,
+        token: main,
+        source: source[start...finish],
       )
     end
 
@@ -169,12 +169,17 @@ module HCL
       _, content_start, content_finish = content_token
       content = source[content_start...content_finish]
 
-      AST::Heredoc.new(main, source[start...finish], start_ident, content)
+      AST::Heredoc.new(
+        start_ident,
+        content,
+        token: main,
+        source: source[start...finish],
+      )
     end
 
     private def build_identifier(main, iter, source) : AST::Identifier
       kind, start, finish = main
-      AST::Identifier.new(main, source[start...finish])
+      AST::Identifier.new(token: main, source: source[start...finish])
     end
 
     private def build_index(main, iter, source) : AST::IndexExpr
@@ -186,9 +191,9 @@ module HCL
       expr_node = build_expression(next_token, iter, source)
 
       AST::IndexExpr.new(
-        main,
-        source[start...finish],
-        expr_node
+        expr_node,
+        token: main,
+        source: source[start...finish],
       )
     end
 
@@ -221,22 +226,22 @@ module HCL
       _, op_start, op_finish = operator
 
       AST::OpExpr.new(
-        main,
-        source[start...finish],
         source[op_start...op_finish],
         left_operand_node,
-        right_operand_node
+        right_operand_node,
+        token: main,
+        source: source[start...finish],
       )
     end
 
     private def build_string(main, iter, source) : AST::Literal
       kind, start, finish = main
-      AST::Literal.new(main, source[start...finish])
+      AST::Literal.new(token: main, source: source[start...finish])
     end
 
     private def build_list(main, iter, source) : AST::List
       _, start, finish = main
-      list = AST::List.new(main, source[start...finish])
+      list = AST::List.new(token: main, source: source[start...finish])
 
       # Gather children as values into the list.
       iter.while_next_is_child_of(main) do |child|
@@ -271,9 +276,9 @@ module HCL
       end
 
       AST::Map.new(
-        main,
-        source[start...finish],
-        values
+        values,
+        token: main,
+        source: source[start...finish],
       )
     end
 
@@ -328,12 +333,12 @@ module HCL
       end
 
       AST::Block.new(
-        main,
-        source[start...finish],
         block_id,
         block_labels,
         block_attributes,
-        blocks
+        blocks,
+        token: main,
+        source: source[start...finish],
       )
     end
 
@@ -364,11 +369,11 @@ module HCL
       end
 
       AST::CallExpr.new(
-        main,
-        source[start...finish],
         function_id,
         args,
-        varadic
+        varadic,
+        token: main,
+        source: source[start...finish],
       )
     end
   end
