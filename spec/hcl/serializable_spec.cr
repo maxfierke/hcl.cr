@@ -97,11 +97,7 @@ describe "HCL::Serializable" do
   HCL
 
   it "allows parsing an HCL file to according to a schema" do
-    parser = HCL::Parser.new(valid_src_hcl)
-    doc = parser.parse!
-
-    ctx = HCL::ExpressionContext.default_context
-    parsed = LaxTestDocument.new(doc, ctx)
+    parsed = LaxTestDocument.from_hcl(valid_src_hcl)
 
     parsed.an_attribute.should eq("hello")
     parsed.numbered_attr.should eq(123_i64)
@@ -123,15 +119,11 @@ describe "HCL::Serializable" do
 
     HCL
 
-    parser = HCL::Parser.new(src_hcl)
-    doc = parser.parse!
-    ctx = HCL::ExpressionContext.default_context
-
     expect_raises(
       HCL::ParseException,
       "Missing HCL attribute 'numbered_attr' for document"
     ) do
-      LaxTestDocument.new(doc, ctx)
+      LaxTestDocument.from_hcl(src_hcl)
     end
   end
 
@@ -144,15 +136,11 @@ describe "HCL::Serializable" do
 
     HCL
 
-    parser = HCL::Parser.new(src_hcl)
-    doc = parser.parse!
-    ctx = HCL::ExpressionContext.default_context
-
     expect_raises(
       HCL::ParseException,
       "Missing HCL block 'a_block' for document"
     ) do
-      LaxTestDocument.new(doc, ctx)
+      LaxTestDocument.from_hcl(src_hcl)
     end
   end
 
@@ -164,10 +152,8 @@ describe "HCL::Serializable" do
 
     HCL
 
-    parser = HCL::Parser.new(src_hcl)
-    doc = parser.parse!
+    doc = HCL::Parser.parse!(src_hcl)
     ctx = HCL::ExpressionContext.default_context
-
     block_node = doc.blocks.find { |b| b.id == "some_block" }.not_nil!
 
     expect_raises(
@@ -186,11 +172,7 @@ describe "HCL::Serializable" do
 
     HCL
 
-    parser = HCL::Parser.new(src_hcl)
-    doc = parser.parse!
-    ctx = HCL::ExpressionContext.default_context
-
-    parsed = LaxTestDocument.new(doc, ctx)
+    parsed = LaxTestDocument.from_hcl(src_hcl)
     parsed.an_attribute.should eq("hello")
     parsed.responds_to?(:some_attribute_not_mapped).should eq(false)
   end
@@ -205,11 +187,7 @@ describe "HCL::Serializable" do
 
     HCL
 
-    parser = HCL::Parser.new(src_hcl)
-    doc = parser.parse!
-    ctx = HCL::ExpressionContext.default_context
-
-    parsed = LaxTestDocument.new(doc, ctx)
+    parsed = LaxTestDocument.from_hcl(src_hcl)
     parsed.empty_block.should be_a(TestEmptyBlock)
     parsed.responds_to?(:novel_block).should eq(false)
   end
@@ -222,8 +200,7 @@ describe "HCL::Serializable" do
 
     HCL
 
-    parser = HCL::Parser.new(src_hcl)
-    doc = parser.parse!
+    doc = HCL::Parser.parse!(src_hcl)
     ctx = HCL::ExpressionContext.default_context
 
     block_node = doc.blocks.find { |b| b.id == "some_block" }.not_nil!
@@ -242,15 +219,11 @@ describe "HCL::Serializable" do
 
       HCL
 
-      parser = HCL::Parser.new(src_hcl)
-      doc = parser.parse!
-      ctx = HCL::ExpressionContext.default_context
-
       expect_raises(
         HCL::ParseException,
         "Unknown HCL attribute 'some_attribute_not_mapped' for document"
       ) do
-        StrictTestDocument.new(doc, ctx)
+        StrictTestDocument.from_hcl(src_hcl)
       end
     end
 
@@ -262,15 +235,11 @@ describe "HCL::Serializable" do
 
       HCL
 
-      parser = HCL::Parser.new(src_hcl)
-      doc = parser.parse!
-      ctx = HCL::ExpressionContext.default_context
-
       expect_raises(
         HCL::ParseException,
         "Unknown HCL block 'novel_block' for document"
       ) do
-        StrictTestDocument.new(doc, ctx)
+        StrictTestDocument.from_hcl(src_hcl)
       end
     end
 
@@ -282,8 +251,7 @@ describe "HCL::Serializable" do
 
       HCL
 
-      parser = HCL::Parser.new(src_hcl)
-      doc = parser.parse!
+      doc = HCL::Parser.parse!(src_hcl)
       ctx = HCL::ExpressionContext.default_context
 
       block_node = doc.blocks.find { |b| b.id == "some_block" }.not_nil!
@@ -310,7 +278,7 @@ describe "HCL::Serializable" do
       doc = parser.parse!
       ctx = HCL::ExpressionContext.default_context
 
-      parsed = UnmappedTestDocument.new(doc, ctx)
+      parsed = UnmappedTestDocument.from_hcl(src_hcl)
       parsed.hcl_unmapped_attributes["some_attribute_not_mapped"].should eq(true)
     end
 
@@ -336,7 +304,7 @@ describe "HCL::Serializable" do
       doc = parser.parse!
       ctx = HCL::ExpressionContext.default_context
 
-      parsed = UnmappedTestDocument.new(doc, ctx)
+      parsed = UnmappedTestDocument.from_hcl(src_hcl)
       parsed.hcl_unmapped_blocks["novel_block"].should eq({ "an_attr" => "yo" })
       parsed.hcl_unmapped_blocks["array_block"].should eq([
         { "one" => { "index" => 0 } },
@@ -352,8 +320,7 @@ describe "HCL::Serializable" do
 
       HCL
 
-      parser = HCL::Parser.new(src_hcl)
-      doc = parser.parse!
+      doc = HCL::Parser.parse!(src_hcl)
       ctx = HCL::ExpressionContext.default_context
 
       block_node = doc.blocks.find { |b| b.id == "some_block" }.not_nil!

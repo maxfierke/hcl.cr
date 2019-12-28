@@ -1,11 +1,17 @@
 module HCL
   class Parser
+    @source : String
     @document : AST::Document?
 
     getter :document, :source
 
-    def initialize(@source : String, offset = 0, io : IO? = nil)
-      @peg_tokens = Pegmatite.tokenize(HCL::Grammar, source, offset, io)
+    def self.parse!(*args, **kwargs)
+      new(*args, **kwargs).parse!
+    end
+
+    def initialize(source : String | IO, offset = 0, io : IO? = nil)
+      @source = source.is_a?(IO) ? source.gets_to_end : source
+      @peg_tokens = Pegmatite.tokenize(HCL::Grammar, @source, offset, io)
       @peg_iter = Pegmatite::TokenIterator.new(@peg_tokens)
     end
 
