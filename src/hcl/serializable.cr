@@ -408,33 +408,26 @@ module HCL
     end
 
     module Unmapped
-      # Unmapped attributes
-      property hcl_unmapped_attributes = Hash(String, ::HCL::Any).new
+      # Unmapped attribute nodes
+      property hcl_unmapped_attributes = Hash(String, ::HCL::AST::Node).new
 
-      # Unmapped blocks
-      property hcl_unmapped_blocks = Hash(String, ::HCL::Any).new
+      # Unmapped block node groups
+      property hcl_unmapped_blocks = Hash(String, Array(::HCL::AST::Block)).new
 
-      # Unmapped labels
-      property hcl_unmapped_labels = Hash(Int32, ::HCL::Any).new
+      # Unmapped label nodes
+      property hcl_unmapped_labels = Hash(Int32, ::HCL::AST::Node).new
 
       protected def on_unknown_hcl_attribute(node, key, ctx)
-        hcl_unmapped_attributes[key] = node.attributes[key].value(ctx)
+        hcl_unmapped_attributes[key] = node.attributes[key]
       end
 
       protected def on_unknown_hcl_block(node, key, ctx)
-        blocks = node.blocks.
-          select { |block| block.id == key }.
-          map { |block| block.value(ctx).dig(key) }
+        hcl_unmapped_blocks[key] = node.blocks.select { |block| block.id == key }
 
-        if blocks.size == 1
-          hcl_unmapped_blocks[key] = blocks.first
-        else
-          hcl_unmapped_blocks[key] = ::HCL::Any.new(blocks)
-        end
       end
 
       protected def on_unknown_hcl_label(node, idx, ctx)
-        hcl_unmapped_labels[idx] = node.labels[idx].value(ctx)
+        hcl_unmapped_labels[idx] = node.labels[idx]
       end
 
       protected def on_to_hcl(hcl)

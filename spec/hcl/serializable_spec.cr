@@ -274,12 +274,13 @@ describe "HCL::Serializable" do
 
       HCL
 
-      parser = HCL::Parser.new(src_hcl)
-      doc = parser.parse!
+      doc = HCL::Parser.parse!(src_hcl)
       ctx = HCL::ExpressionContext.default_context
 
-      parsed = UnmappedTestDocument.from_hcl(src_hcl)
-      parsed.hcl_unmapped_attributes["some_attribute_not_mapped"].should eq(true)
+      parsed = UnmappedTestDocument.new(doc, ctx)
+      parsed.hcl_unmapped_attributes["some_attribute_not_mapped"].should eq(
+        doc.attributes["some_attribute_not_mapped"]
+      )
     end
 
     it "saves unmapped blocks" do
@@ -300,16 +301,16 @@ describe "HCL::Serializable" do
 
       HCL
 
-      parser = HCL::Parser.new(src_hcl)
-      doc = parser.parse!
+      doc = HCL::Parser.parse!(src_hcl)
       ctx = HCL::ExpressionContext.default_context
 
-      parsed = UnmappedTestDocument.from_hcl(src_hcl)
-      parsed.hcl_unmapped_blocks["novel_block"].should eq({ "an_attr" => "yo" })
-      parsed.hcl_unmapped_blocks["array_block"].should eq([
-        { "one" => { "index" => 0 } },
-        { "two" => { "index" => 1 } }
-      ])
+      parsed = UnmappedTestDocument.new(doc, ctx)
+      parsed.hcl_unmapped_blocks["novel_block"].should eq(
+        doc.blocks.select { |block| block.id == "novel_block" }
+      )
+      parsed.hcl_unmapped_blocks["array_block"].should eq(
+        doc.blocks.select { |block| block.id == "array_block" }
+      )
     end
 
     it "saves unmapped labels" do
@@ -328,7 +329,7 @@ describe "HCL::Serializable" do
       parsed = UnmappedTestBlockLabels.new(block_node, ctx)
       parsed.which.should eq("one")
       parsed.part.should eq("point-one")
-      parsed.hcl_unmapped_labels[2].should eq("undefined")
+      parsed.hcl_unmapped_labels[2].should eq(block_node.labels[2])
     end
   end
 end
