@@ -1,6 +1,6 @@
 module HCL
   module AST
-    class Body < Node
+    abstract class Body < Node
       getter :attributes, :blocks
 
       def initialize(
