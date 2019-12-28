@@ -178,6 +178,61 @@ describe "HCL::Serializable" do
     end
   end
 
+  it "ignores unmapped attributes" do
+    src_hcl = <<-HCL
+    #{valid_src_hcl}
+
+    some_attribute_not_mapped = true
+
+    HCL
+
+    parser = HCL::Parser.new(src_hcl)
+    doc = parser.parse!
+    ctx = HCL::ExpressionContext.default_context
+
+    parsed = LaxTestDocument.new(doc, ctx)
+    parsed.an_attribute.should eq("hello")
+    parsed.responds_to?(:some_attribute_not_mapped).should eq(false)
+  end
+
+  it "ignores unmapped blocks" do
+    src_hcl = <<-HCL
+    #{valid_src_hcl}
+
+    novel_block {
+      an_attr = "yo"
+    }
+
+    HCL
+
+    parser = HCL::Parser.new(src_hcl)
+    doc = parser.parse!
+    ctx = HCL::ExpressionContext.default_context
+
+    parsed = LaxTestDocument.new(doc, ctx)
+    parsed.empty_block.should be_a(TestEmptyBlock)
+    parsed.responds_to?(:novel_block).should eq(false)
+  end
+
+  it "ignores unmapped labels" do
+    src_hcl = <<-HCL
+    some_block "one" "point-one" "undefined" {
+      title = "I am a Block"
+    }
+
+    HCL
+
+    parser = HCL::Parser.new(src_hcl)
+    doc = parser.parse!
+    ctx = HCL::ExpressionContext.default_context
+
+    block_node = doc.blocks.find { |b| b.id == "some_block" }.not_nil!
+
+    parsed = TestBlockLabels.new(block_node, ctx)
+    parsed.which.should eq("one")
+    parsed.part.should eq("point-one")
+  end
+
   describe "HCL::Serializable::Strict" do
     it "raises on unmapped attributes" do
       src_hcl = <<-HCL
