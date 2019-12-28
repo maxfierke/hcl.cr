@@ -2,6 +2,7 @@ require "../spec_helper"
 
 class TestDocument
   include HCL::Serializable
+  include HCL::Serializable::Strict
 
   @[HCL::Attribute(key: "an_attr")]
   property an_attribute : String
@@ -27,6 +28,7 @@ end
 
 class TestBlockNoLabels
   include HCL::Serializable
+  include HCL::Serializable::Strict
 
   @[HCL::Attribute]
   property title : String
@@ -42,6 +44,7 @@ end
 
 class TestEmptyBlock
   include HCL::Serializable
+  include HCL::Serializable::Strict
 end
 
 describe "Serializable attributes" do

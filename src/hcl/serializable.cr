@@ -174,7 +174,6 @@ module HCL
         {% labels = {} of Nil => Nil %}
         {% current_label_idx = 0 %}
         {% for ivar in @type.instance_vars %}
-          {% ann = ivar.annotation(::HCL::Attribute) %}
           {% if ann = ivar.annotation(::HCL::Attribute) %}
             {%
               attributes[ivar.id] = {
@@ -287,7 +286,7 @@ module HCL
             {% if value[:has_default] != nil %}
               @{{name}} = %found{name} ? %var{name}.as({{value[:type]}}) : {{value[:default]}}
             {% else %}
-              @{{name}} = %var{name}.as({{value[:type]}})
+              @{{name}} = %var{name}
             {% end %}
           {% elsif value[:has_default] %}
             @{{name}} = %var{name}.nil? ? {{value[:default]}} : %var{name}.as({{value[:type]}})
@@ -305,6 +304,8 @@ module HCL
             %found{name} = true
             %var{name} = label.value(__ctx_from_hcl).raw
         {% end %}
+          else
+            on_unknown_hcl_label(__node_from_hcl, idx, __ctx_from_hcl)
           end
         end
 
@@ -341,6 +342,9 @@ module HCL
     protected def on_unknown_hcl_block(node, key, ctx)
     end
 
+    protected def on_unknown_hcl_label(node, idx, ctx)
+    end
+
     module Strict
       protected def on_unknown_hcl_attribute(node, key, ctx)
         # TODO: Make this a real exception
@@ -351,11 +355,17 @@ module HCL
         # TODO: Make this a real exception
         raise "Unknown HCL block: #{key}"
       end
+
+      protected def on_unknown_hcl_label(node, idx, ctx)
+        # TODO: Make this a real exception
+        raise "Unknown or unexpected HCL label at label index #{idx}"
+      end
     end
 
     module Unmapped
       property hcl_unmapped_attributes = Hash(String, HCL::Any).new
       property hcl_unmapped_blocks = Hash(String, HCL::Any).new
+      property hcl_unmapped_labels = Hash(Int64, String).new
 
       protected def on_unknown_hcl_attribute(node, key, ctx)
         hcl_unmapped_attributes[key] = node.value(ctx)
@@ -363,6 +373,10 @@ module HCL
 
       protected def on_unknown_hcl_block(node, key, ctx)
         hcl_unmapped_blocks[key] = node.value(ctx)
+      end
+
+      protected def on_unknown_hcl_label(node, idx, ctx)
+        hcl_unmapped_labels[idx] = node.labels[idx]
       end
 
       protected def on_to_hcl(hcl)
