@@ -23,7 +23,7 @@ module HCL
 
         if indent_size > 0
           lines = content.split("\n")
-          indent = " " * indent_size
+          indent = " " * Math.max(2, indent_size - 2)
           lines.each do |line|
             if line != ""
               io << indent
@@ -32,7 +32,7 @@ module HCL
             end
           end
 
-          delim_indent = " " * Math.max(1, indent_size - 2)
+          delim_indent = " " * Math.max(0, indent_size - 4)
           io << delim_indent
           io << delimiter
         else
