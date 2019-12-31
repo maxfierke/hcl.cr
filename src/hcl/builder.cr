@@ -11,7 +11,7 @@ module HCL
     def initialize(@node : AST::Node)
     end
 
-    def to_node
+    def to_hcl(_builder : HCL::Builder)
       node
     end
 
@@ -26,7 +26,7 @@ module HCL
     def <<(value : AST::Node)
       n = node
       if n.is_a?(AST::List)
-        n << value
+        n << value_to_node(value)
       else
         raise "Cannot use << inside non-list node."
       end
@@ -119,8 +119,9 @@ module HCL
         possible_value_node.is_a?(AST::Number) ||
         possible_value_node.is_a?(AST::Map) ||
         possible_value_node.is_a?(AST::List)
-        raise "#{possible_value_node.class} cannot be used as a value in the specified context."
+        raise "#{possible_value_node.class} cannot be used as a value inside #{node.class}"
       end
+      possible_value_node
     end
 
     private def block_node_for_name_and_labels(name, *args : String | Symbol)
@@ -132,39 +133,17 @@ module HCL
       AST::Block.new(name)
     end
 
-    private def value_to_node(value)
+    private def value_to_node(value) : AST::Node
       case value
-      when .nil?
-        AST::Literal.new("null")
-      when Array
-        n = AST::List.new
-        value.each do |val|
-          n << value_to_node(val)
-        end
-        n
-      when Bool
-        AST::Literal.new(value.to_s)
-      when Float32, Float64, Int32, Int64
-        number(value)
-      when Hash
-        n = AST::Map.new
-        value.each do |key, value|
-          n.attributes[key] = value_to_node(value)
-        end
-        n
-      when String
-        literal(value)
-      when Symbol
-        identifier(value)
-      when HCL::Any
-        raw = value.raw
-        value_to_node(raw)
-      when HCL::Builder
-        n = value.node
+      when AST::Node
+        value
+      when .responds_to?(:to_hcl)
+        n = value.to_hcl(self)
+        n = n.node if n.is_a?(HCL::Builder)
         assert_value_node!(n)
         n
       else
-        raise "#{value.class} '#{value}' could not be mapped to an HCL::AST::Node. Please use one of the builder helper methods instead."
+        raise "#{value.class} could not be mapped to an HCL::AST::Node. Please use one of the builder helper methods instead or implement #to_hcl(builder : HCL::Builder)."
       end
     end
   end

@@ -6,6 +6,7 @@ describe HCL::Builder do
       hcl.attribute("hello") { "world" }
       hcl.attribute("life") { 42 }
       hcl.attribute("contrived") { true }
+      hcl.attribute("nothing") { nil }
 
       hcl.block("a_block") do |b|
         b.attribute("title") { "Isn't this grand" }
@@ -53,6 +54,7 @@ describe HCL::Builder do
     hello = "world"
     life = 42
     contrived = true
+    nothing = null
 
     a_block {
       title = "Isn't this grand"

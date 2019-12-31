@@ -435,6 +435,8 @@ module HCL
         {% end %}
       {% end %}
 
+      on_to_hcl(builder)
+
       builder
     end
 
@@ -456,7 +458,7 @@ module HCL
     protected def on_unknown_hcl_label(node, idx, ctx)
     end
 
-    protected def on_to_hcl(hcl)
+    protected def on_to_hcl(builder)
     end
 
     module Strict
@@ -514,7 +516,7 @@ module HCL
         hcl_unmapped_labels[idx] = node.labels[idx]
       end
 
-      protected def on_to_hcl(hcl)
+      protected def on_to_hcl(builder)
         # TODO: Translate to HCL
         # json_unmapped.each do |key, value|
         #   json.field(key) { value.to_json(json) }
