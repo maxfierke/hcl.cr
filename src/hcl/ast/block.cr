@@ -7,9 +7,9 @@ module HCL
 
       def initialize(
         id : String,
-        labels : Array(BlockLabel),
-        attributes : Hash(String, Node),
-        blocks : Array(Block),
+        labels : Array(BlockLabel) = Array(BlockLabel).new,
+        attributes : Hash(String, Node) = Hash(String, Node).new,
+        blocks : Array(Block) = Array(Block).new,
         **kwargs
       )
         super(attributes, blocks, **kwargs)
@@ -29,15 +29,23 @@ module HCL
           end
         end
 
-        io << "{\n"
+        io << "{"
+        io << "\n" if attributes.any? || blocks.any?
 
         indent = "  "
 
         attributes.each do |key, value|
           io << indent
           io << "#{key} = "
-          value.to_s(io)
-          io << "\n"
+
+          attr_lines = value.to_s.split("\n")
+          attr_lines.each do |line|
+            if line != ""
+              io << indent if line != attr_lines.first
+              io << line
+              io << "\n"
+            end
+          end
         end
 
         if blocks.any?

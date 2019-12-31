@@ -4,8 +4,8 @@ module HCL
       getter :attributes, :blocks
 
       def initialize(
-        attributes : Hash(String, Node),
-        blocks : Array(Block),
+        attributes : Hash(String, Node) = Hash(String, Node).new,
+        blocks : Array(Block) = Array(Block).new,
         **kwargs
       )
         super(**kwargs)
@@ -26,7 +26,7 @@ module HCL
 
         blocks.each do |block|
           block.to_s(io)
-          io << "\n"
+          io << "\n" unless blocks.last == block
         end
       end
 

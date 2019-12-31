@@ -3,23 +3,23 @@ module HCL
     class Map < Node
       getter :attributes
 
-      def initialize(attributes : Hash(String, Node), **kwargs)
+      def initialize(attributes : Hash(String, Node) = Hash(String, Node).new, **kwargs)
         super(**kwargs)
 
         @attributes = attributes
       end
 
       def to_s(io : IO)
-        io << "{ "
+        io << "{\n"
 
         pairs = [] of String
 
         attributes.each do |key, value|
-          pairs << "#{key} = #{value.to_s}"
+          pairs << "  #{key} = #{value.to_s}"
         end
 
-        io << pairs.join(", ")
-        io << " }"
+        io << pairs.join(",\n")
+        io << "\n}"
       end
 
       def value(ctx : ExpressionContext) : Any

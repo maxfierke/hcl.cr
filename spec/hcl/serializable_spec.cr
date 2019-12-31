@@ -113,6 +113,13 @@ describe "HCL::Serializable" do
     parsed.empty_block.should be_a(TestEmptyBlock)
   end
 
+  it "allows rendering an HCL file from a schema" do
+    parsed = LaxTestDocument.from_hcl(valid_src_hcl)
+    rendered = parsed.to_hcl
+
+    rendered.should eq(valid_src_hcl)
+  end
+
   it "raises an error on missing attributes" do
     src_hcl = <<-HCL
     an_attr = "hello"

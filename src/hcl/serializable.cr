@@ -360,6 +360,90 @@ module HCL
       after_initialize
     end
 
+    def to_hcl(io : IO, node : AST::Node? = AST::Document.new)
+      to_hcl(HCL::Builder.new(node)).to_s(io)
+    end
+
+    def to_hcl(builder : HCL::Builder)
+      {% begin %}
+        {% options = @type.annotation(::HCL::Serializable::Options) %}
+        {% emit_nulls = options && options[:emit_nulls] %}
+        {% attributes = {} of Nil => Nil %}
+        {% blocks = {} of Nil => Nil %}
+        {% labels = {} of Nil => Nil %}
+        {% current_label_idx = 0 %}
+        {% for ivar in @type.instance_vars %}
+          {% if ann = ivar.annotation(::HCL::Attribute) %}
+            {%
+              attributes[ivar.id] = {
+                key:       ((ann && ann[:key]) || ivar).id.stringify,
+                emit_null: (ann && (ann[:emit_null] != nil) ? ann[:emit_null] : emit_nulls),
+              }
+            %}
+          {% elsif ann = ivar.annotation(::HCL::Block) %}
+            {%
+              blocks[ivar.id] = {
+                key: ((ann && ann[:key]) || ivar).id.stringify
+              }
+            %}
+          {% elsif ann = ivar.annotation(::HCL::Label) %}
+            {%
+              labels[ivar.id] = {
+                type:  ivar.type,
+                index: ann[:index] || current_label_idx,
+              }
+            %}
+            {% current_label_idx = ann[:index] ? (ann[:index] + 1) : (current_label_idx + 1) %}
+          {% end %}
+        {% end %}
+
+        {% for name, value in attributes %}
+          %var{name} = self.{{name}}
+
+          if !%var{name}.nil? || {{value[:emit_null]}}
+            builder.attribute({{value[:key]}}) { %var{name} }
+          end
+        {% end %}
+
+        {% for name, value in blocks %}
+          %var{name} = self.{{name}}
+
+          if %var{name}.is_a?(Array)
+            %var{name}.each do |block|
+              builder.block({{value[:key]}}) do |block_builder|
+                block.to_hcl(block_builder)
+              end
+            end
+          elsif !%var{name}.nil?
+            builder.block({{value[:key]}}) do |block_builder|
+              %var{name}.to_hcl(block_builder)
+            end
+          end
+        {% end %}
+
+        {%
+          sorted_labels = labels.to_a.sort_by do |item|
+            label = item[1]
+            label[:index]
+          end
+        %}
+
+        {% for item in sorted_labels %}
+          {% name = item[0] %}
+          %var{name} = self.{{name}}
+          builder.label(%var{name}) if !%var{name}.nil?
+        {% end %}
+      {% end %}
+
+      builder
+    end
+
+    def to_hcl
+      String.build do |builder|
+        to_hcl(builder)
+      end
+    end
+
     protected def after_initialize
     end
 

@@ -15,6 +15,12 @@ module HCL
         end
       end
 
+      def initialize(number : Value, **kwargs)
+        super(**kwargs)
+        @source = number.to_s
+        @value = number
+      end
+
       def to_s(io : IO)
         @value.to_s(io)
       end
