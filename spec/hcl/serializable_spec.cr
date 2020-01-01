@@ -71,6 +71,35 @@ class UnmappedTestDocument < TestDocument(UnmappedTestBlock, UnmappedTestBlockLa
   include HCL::Serializable::Unmapped
 end
 
+class Location
+  include HCL::Serializable
+
+  @[HCL::Attribute(key: "lat")]
+  property latitude : Float64
+
+  @[HCL::Attribute(key: "lng")]
+  property longitude : Float64
+end
+
+class House
+  include HCL::Serializable
+
+  @[HCL::Attribute]
+  property address : String
+
+  @[HCL::Block]
+  property location : Location?
+end
+
+hcl_house = <<-HCL
+  address = "Crystal Road 1234"
+  location {
+    lat = 12.3
+    lng = 34.5
+  }
+
+HCL
+
 describe "HCL::Serializable" do
   valid_src_hcl = <<-HCL
   an_attr = "hello"
@@ -118,6 +147,29 @@ describe "HCL::Serializable" do
     rendered = parsed.to_hcl
 
     rendered.should eq(valid_src_hcl)
+  end
+
+  it "allows parsing an HCL file according to a schema with nilable blocks" do
+    house = House.from_hcl(hcl_house)
+    house.address.should eq("Crystal Road 1234")
+    house.location.should_not be_nil
+    loc = house.location.not_nil!
+    loc.latitude.should eq(12.3)
+    loc.longitude.should eq(34.5)
+  end
+
+  it "allows rendering an HCL file from a schema with nilable blocks" do
+    house = House.from_hcl(hcl_house)
+
+    house.to_hcl.should eq(<<-HCL)
+    address = "Crystal Road 1234"
+
+    location {
+      lat = 12.3
+      lng = 34.5
+    }
+
+    HCL
   end
 
   it "raises an error on missing attributes" do

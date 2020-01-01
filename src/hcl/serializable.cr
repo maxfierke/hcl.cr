@@ -277,7 +277,13 @@ module HCL
               {% item_type = value[:type].type_vars.first %}
               %var{name} << {{item_type}}.new(block_node, __ctx_from_hcl)
             {% else %}
-              %var{name} = {{value[:type]}}.new(block_node, __ctx_from_hcl)
+              {% for t in value[:type].union_types %}
+              {% unless t == Nil %}
+              if %var{name}.nil?
+                %var{name} = {{t}}.new(block_node, __ctx_from_hcl) rescue nil
+              end
+              {% end %}
+            {% end %}
             {% end %}
           {% end %}
           else
