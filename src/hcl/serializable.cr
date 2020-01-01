@@ -341,7 +341,7 @@ module HCL
               {% if value[:has_default] != nil %}
                 @{{name}} = %found{name} ? %var{name}.as({{value[:type]}}) : {{value[:default]}}
               {% else %}
-                @{{name}} = %var{name}.as({{value[:type]}})
+                @{{name}} = %var{name}
               {% end %}
             {% elsif value[:has_default] %}
               @{{name}} = %var{name}.nil? ? {{value[:default]}} : %var{name}.as({{value[:type]}})
