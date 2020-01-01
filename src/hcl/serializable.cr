@@ -8,7 +8,7 @@ module HCL
   annotation Label
   end
 
-  # The `HCL::Serializable` module automatically generates methods for HCL serialization when included.
+  # The `HCL::Serializable` module automatically generates methods for HCL serialization and deserialization when included.
   #
   # ### Example
   #
@@ -27,7 +27,11 @@ module HCL
   #
   # class House
   #   include HCL::Serializable
+  #
+  #   @[HCL::Attribute]
   #   property address : String
+  #
+  #   @[HCL::Block]
   #   property location : Location?
   # end
   #
@@ -44,29 +48,25 @@ module HCL
   # house.location # => #<Location:0x10cd93d80 @latitude=12.3, @longitude=34.5>
   # house.to_hcl  # => "
   #   address = \"Crystal Road 1234\"
+  #
   #   location {
   #     lat = 12.3
   #     lng = 34.5
   #   }
   # "
-  # TODO: Check this:
-  # houses = Array(House).from_hcl(%([{"address": "Crystal Road 1234", "location": {"lat": 12.3, "lng": 34.5}}]))
-  # houses.size    # => 1
-  # houses.to_json # => %([{"address":"Crystal Road 1234","location":{"lat":12.3,"lng":34.5}}])
-  # ```
   #
   # ### Usage
   #
   # Including `HCL::Serializable` will create `#to_hcl` and `self.from_hcl` methods on the current class,
-  # and a constructor which takes an `HCL::Block` and an `HCL::ExpressionContext`.
+  # and a constructor which takes an `HCL::Body` and an `HCL::ExpressionContext`.
   # By default, these methods serialize into an HCL document containing the value of every tagged instance
   # variable, the keys being the instance variable name. Most primitives and collections supported as
   # instance variable values (string, integer, array, hash, etc.), along with objects which define `to_hcl`
-  # and a constructor taking an `HCL::Block` and an `HCL::ExpressionContext`.
-  # Union types are supported for attributes, including unions with nil. If multiple types in a union parse correctly,
-  # it is undefined which one will be chosen. Union types are not supported for blocks.
+  # and a constructor taking an `HCL::Body` and an `HCL::ExpressionContext`.
+  # Union types are supported for attributes and blocks, including unions with nil.
+  # If multiple types in a union parse correctly, it is undefined which one will be chosen.
   #
-  # To denote an individual instance variables to be parsed and serialized, the annotation `HCL::Attribute`
+  # To denote an individual instance variable to be parsed and serialized, the annotation `HCL::Attribute`
   # must be placed on the instance variable. Annotating property, getter and setter macros is also allowed.
   # ```
   # require "json"
@@ -81,8 +81,6 @@ module HCL
   #
   # `HCL::Attribute` properties:
   # * **key**: the value of the key in the HCL document or block (by default the name of the instance variable)
-  # * **converter**: specify an alternate type for parsing and generation. The converter must define `from_json(JSON::PullParser)` and `to_json(value, JSON::Builder)` as class methods. Examples of converters are `Time::Format` and `Time::EpochConverter` for `Time`.
-  # * **presence**: if `true`, a `@{{key}}_present` instance variable will be generated when the key was present (even if it has a `null` value), `false` by default
   # * **emit_null**: if `true`, emits a `null` value for nilable property (by default nulls are not emitted)
   #
   # Deserialization also respects default values of variables:
@@ -91,11 +89,15 @@ module HCL
   #
   # struct A
   #   include HCL::Serializable
+  #
+  #   @[HCL::Attribute]
   #   @a : Int64
+  #
+  #   @[HCL::Attribute]
   #   @b : Float64 = 1.0
   # end
   #
-  # A.from_json(%<{"a":1}>) # => A(@a=1, @b=1.0)
+  # A.from_hcl("a = 1\n") # => A(@a=1, @b=1.0)
   # ```
   #
   # ### Extensions: `JSON::Serializable::Strict` and `JSON::Serializable::Unmapped`.
@@ -104,20 +106,24 @@ module HCL
   # document will raise a parse exception. By default the unknown properties
   # are silently ignored.
   # If the `HCL::Serializable::Unmapped` module is included, unknown properties in the HCL
-  # document will be stored in a `Hash(String, HCL::Any)`. On serialization, any keys
+  # document will be stored in a `Hash(String, HCL::AST::Node)`. On serialization, any keys
   # inside hcl_unmapped_attributes, hcl_unmapped_blocks, and hcl_unmapped_labels
   # will be serialized and appended to the current HCL block or document.
+  # The resultant values are nodes to allow for later evaluation, perhaps with a
+  # different expression context than the original document.
   # ```
   # require "hcl"
   #
   # struct A
   #   include HCL::Serializable
   #   include HCL::Serializable::Unmapped
+  #
+  #   @[HCL::Attribute]
   #   @a : Int32
   # end
   #
-  # a = A.from_json(%({"a":1,"b":2})) # => A(@json_unmapped={"b" => 2_i64}, @a=1)
-  # a.to_json                         # => {"a":1,"b":2}
+  # a = A.from_hcl("a = 1\nb = 2\n") # => A(@hcl_unmapped_attributes={"b" => 2_i64}, @a=1)
+  # a.to_hcl # => "a = 1\nb = 2\n"
   # ```
   #
   #
@@ -132,6 +138,8 @@ module HCL
   # @[HCL::Serializable::Options(emit_nulls: true)]
   # class A
   #   include HCL::Serializable
+  #
+  #   @[HCL::Serializable]
   #   @a : Int32?
   # end
   # ```
@@ -404,7 +412,7 @@ module HCL
         {% end %}
 
         {% for name, value in attributes %}
-          %var{name} = self.{{name}}
+          %var{name} = @{{name}}
 
           if !%var{name}.nil? || {{value[:emit_null]}}
             builder.attribute({{value[:key]}}) { %var{name} }
@@ -412,7 +420,7 @@ module HCL
         {% end %}
 
         {% for name, value in blocks %}
-          %var{name} = self.{{name}}
+          %var{name} = @{{name}}
 
           if %var{name}.is_a?(Array)
             %var{name}.each do |block|
@@ -436,7 +444,7 @@ module HCL
 
         {% for item in sorted_labels %}
           {% name = item[0] %}
-          %var{name} = self.{{name}}
+          %var{name} = @{{name}}
           builder.label(%var{name}) if !%var{name}.nil?
         {% end %}
       {% end %}

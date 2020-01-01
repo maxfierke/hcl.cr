@@ -23,6 +23,24 @@ work as they should. Please report any issues [here](https://github.com/maxfierk
 
 ## Usage
 
+### Schema-based parsing
+
+For most use-cases, schema-based parsing will be the easiest to work with.
+`hcl.cr` provides an `HCL::Serializable` module, which can be used much like
+`JSON::Serializable` and `YAML::Serializable` from the Crystal standard library.
+
+The module allows you to define mappings for attributes, blocks, and labels on
+your own classes and structs, and provides convienent `self.from_hcl` and `to_hcl`
+methods.
+
+See documentation on [`HCL::Serializable`](src/hcl/serializable.cr) for more information.
+
+### Using the AST directly
+
+For more advanced use cases, you can use the `HCL::Parser` class and work
+with the AST nodes directly. `HCL::Builder` can also be used to build HCL ASTs
+using a DSL, and create arbitrary HCL documents.
+
 ```crystal
 require "hcl"
 
@@ -47,18 +65,12 @@ resource "aws_instance" "web" {
 }
 HEREDOC
 
-parser = HCL::Parser.new(SRC_TEXT) # Parser object. Is also an Iterator of tokens.
+parser = HCL::Parser.new(SRC_TEXT) # Parser object.
 
 document = parser.parse! # Returns an HCL::AST::Document
 value = document.value   # Returns the HCL structure as Crystal data types
 string = document.to_s # Returns string reconstruction of HCL configuration
 ```
-
-TODO: Write usage instructions here
-
-## Development
-
-TODO: Write development instructions here
 
 ## TODO
 
@@ -76,6 +88,8 @@ TODO: Write development instructions here
 - [X] Add support for function evaluation
 - [X] Add support for heredocs
 - [X] Add standard functions
+- [X] Add support for partial- and full-schema decoding and encoding of HCL documents
+- [ ] Add support for splats
 - [ ] Add support for parsing interpolations/templates
 - [ ] Add support for evaluating interpolations/templates
 - [ ] More validations, better parse errors
