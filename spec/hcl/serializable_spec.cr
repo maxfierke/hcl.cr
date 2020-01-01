@@ -340,12 +340,36 @@ describe "HCL::Serializable" do
       parsed.hcl_unmapped_attributes["some_attribute_not_mapped"].should eq(
         doc.attributes["some_attribute_not_mapped"]
       )
+
+      parsed.to_hcl.should eq(<<-HCL)
+      an_attr = "hello"
+      numbered_attr = 123
+      hash_map = {
+        potato = "yes"
+      }
+      listicle = ["these", "are", "items", 1, 2, 3]
+      some_attribute_not_mapped = true
+
+      a_block {
+        title = "The A Block"
+      }
+
+      b_block "one" {
+        title = "The First B Block"
+      }
+
+      b_block "two" "point-one" {
+        title = "The Second B Block"
+      }
+
+      empty_block {}
+
+      HCL
     end
 
     it "saves unmapped blocks" do
       src_hcl = <<-HCL
       #{valid_src_hcl}
-
       novel_block {
         an_attr = "yo"
       }
@@ -370,11 +394,14 @@ describe "HCL::Serializable" do
       parsed.hcl_unmapped_blocks["array_block"].should eq(
         doc.blocks.select { |block| block.id == "array_block" }
       )
+
+      parsed.to_hcl.should eq(src_hcl)
     end
 
     it "saves unmapped labels" do
       src_hcl = <<-HCL
-      some_block "one" "point-one" "undefined" {
+      #{valid_src_hcl}
+      b_block "one" "point-one" "undefined" {
         title = "I am a Block"
       }
 
@@ -383,12 +410,40 @@ describe "HCL::Serializable" do
       doc = HCL::Parser.parse!(src_hcl)
       ctx = HCL::ExpressionContext.default_context
 
-      block_node = doc.blocks.find { |b| b.id == "some_block" }.not_nil!
+      block_node = doc.blocks.select { |b| b.id == "b_block" }.last
 
-      parsed = UnmappedTestBlockLabels.new(block_node, ctx)
-      parsed.which.should eq("one")
-      parsed.part.should eq("point-one")
-      parsed.hcl_unmapped_labels[2].should eq(block_node.labels[2])
+      parsed = UnmappedTestDocument.new(doc, ctx)
+      parsed.b_blocks.last.which.should eq("one")
+      parsed.b_blocks.last.part.should eq("point-one")
+      parsed.b_blocks.last.hcl_unmapped_labels[2].should eq(block_node.labels[2])
+
+      parsed.to_hcl.should eq(<<-HCL)
+      an_attr = "hello"
+      numbered_attr = 123
+      hash_map = {
+        potato = "yes"
+      }
+      listicle = ["these", "are", "items", 1, 2, 3]
+
+      a_block {
+        title = "The A Block"
+      }
+
+      b_block "one" {
+        title = "The First B Block"
+      }
+
+      b_block "two" "point-one" {
+        title = "The Second B Block"
+      }
+
+      b_block "one" "point-one" "undefined" {
+        title = "I am a Block"
+      }
+
+      empty_block {}
+
+      HCL
     end
   end
 end

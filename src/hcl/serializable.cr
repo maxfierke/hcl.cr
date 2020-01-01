@@ -515,7 +515,6 @@ module HCL
 
       protected def on_unknown_hcl_block(node, key, ctx)
         hcl_unmapped_blocks[key] = node.blocks.select { |block| block.id == key }
-
       end
 
       protected def on_unknown_hcl_label(node, idx, ctx)
@@ -523,10 +522,30 @@ module HCL
       end
 
       protected def on_to_hcl(builder)
-        # TODO: Translate to HCL
-        # json_unmapped.each do |key, value|
-        #   json.field(key) { value.to_json(json) }
-        # end
+        builder_node = builder.node
+
+        if builder_node.is_a?(::HCL::AST::Block)
+          hcl_unmapped_labels.to_a.
+            sort_by { |label_tuple| label_tuple[0] }.
+            map { |label_tuple| label_tuple[1] }.
+            each do |label|
+              builder_node.labels << label.as(::HCL::AST::BlockLabel)
+            end
+        end
+
+        if builder_node.is_a?(::HCL::AST::Body)
+          hcl_unmapped_attributes.each do |key, attr_node|
+            builder.attribute(key) { attr_node }
+          end
+
+          hcl_unmapped_blocks.each do |key, block_type|
+            block_type.each do |block_node|
+              builder_node.blocks << block_node
+            end
+          end
+        else
+          raise "Expected builder node to be an HCL::AST::Body, received #{builder_node.class}"
+        end
       end
     end
   end
