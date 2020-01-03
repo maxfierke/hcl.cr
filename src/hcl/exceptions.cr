@@ -12,6 +12,8 @@ module HCL
     end
   end
 
+  class BuildError < Exception; end
+
   # Base error class for expressions within HCL
   class ExpressionError < Exception; end
 
