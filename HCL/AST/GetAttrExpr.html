@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Crystal Docs 0.31.1">
+
+<link href="../../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../../js/doc.js"></script>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+
+  <meta id="repository-name" content="github.com/maxfierke/hcl.cr">
+  <title>HCL::AST::GetAttrExpr - github.com/maxfierke/hcl.cr</title>
+  <script type="text/javascript">
+    CrystalDoc.base_path = "../../";
+  </script>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="repository-links">
+      <a href="../../index.html">README</a>
+    </div>
+  </div>
+
+  <div class="search-results" class="hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/toplevel" data-name="top level namespace">
+      <a href="../../toplevel.html">Top Level Namespace</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/Array" data-name="array(t)">
+      <a href="../../Array.html">Array</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/Bool" data-name="bool">
+      <a href="../../Bool.html">Bool</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/Hash" data-name="hash(k, v)">
+      <a href="../../Hash.html">Hash</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="github.com/maxfierke/hcl.cr/HCL" data-name="hcl">
+      <a href="../../HCL.html">HCL</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="github.com/maxfierke/hcl.cr/HCL/Any" data-name="hcl::any">
+      <a href="../../HCL/Any.html">Any</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Any/RawType" data-name="hcl::any::rawtype">
+      <a href="../../HCL/Any/RawType.html">RawType</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Any/Type" data-name="hcl::any::type">
+      <a href="../../HCL/Any/Type.html">Type</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/ArityMismatchError" data-name="hcl::aritymismatcherror">
+      <a href="../../HCL/ArityMismatchError.html">ArityMismatchError</a>
+      
+    </li>
+  
+  <li class="parent open current" data-id="github.com/maxfierke/hcl.cr/HCL/AST" data-name="hcl::ast">
+      <a href="../../HCL/AST.html">AST</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/Block" data-name="hcl::ast::block">
+      <a href="../../HCL/AST/Block.html">Block</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/BlockLabel" data-name="hcl::ast::blocklabel">
+      <a href="../../HCL/AST/BlockLabel.html">BlockLabel</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/Body" data-name="hcl::ast::body">
+      <a href="../../HCL/AST/Body.html">Body</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/CallExpr" data-name="hcl::ast::callexpr">
+      <a href="../../HCL/AST/CallExpr.html">CallExpr</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/CondExpr" data-name="hcl::ast::condexpr">
+      <a href="../../HCL/AST/CondExpr.html">CondExpr</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/Document" data-name="hcl::ast::document">
+      <a href="../../HCL/AST/Document.html">Document</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/Expression" data-name="hcl::ast::expression">
+      <a href="../../HCL/AST/Expression.html">Expression</a>
+      
+    </li>
+  
+  <li class=" current" data-id="github.com/maxfierke/hcl.cr/HCL/AST/GetAttrExpr" data-name="hcl::ast::getattrexpr">
+      <a href="../../HCL/AST/GetAttrExpr.html">GetAttrExpr</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/Heredoc" data-name="hcl::ast::heredoc">
+      <a href="../../HCL/AST/Heredoc.html">Heredoc</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/Identifier" data-name="hcl::ast::identifier">
+      <a href="../../HCL/AST/Identifier.html">Identifier</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/IndexExpr" data-name="hcl::ast::indexexpr">
+      <a href="../../HCL/AST/IndexExpr.html">IndexExpr</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/List" data-name="hcl::ast::list">
+      <a href="../../HCL/AST/List.html">List</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/Literal" data-name="hcl::ast::literal">
+      <a href="../../HCL/AST/Literal.html">Literal</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/Map" data-name="hcl::ast::map">
+      <a href="../../HCL/AST/Map.html">Map</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/Node" data-name="hcl::ast::node">
+      <a href="../../HCL/AST/Node.html">Node</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/maxfierke/hcl.cr/HCL/AST/Number" data-name="hcl::ast::number">
+      <a href="../../HCL/AST/Number.html">Number</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/Number/Value" data-name="hcl::ast::number::value">
+      <a href="../../HCL/AST/Number/Value.html">Value</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/Operand" data-name="hcl::ast::operand">
+      <a href="../../HCL/AST/Operand.html">Operand</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/OpExpr" data-name="hcl::ast::opexpr">
+      <a href="../../HCL/AST/OpExpr.html">OpExpr</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/SplatExpr" data-name="hcl::ast::splatexpr">
+      <a href="../../HCL/AST/SplatExpr.html">SplatExpr</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Attribute" data-name="hcl::attribute">
+      <a href="../../HCL/Attribute.html">Attribute</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Block" data-name="hcl::block">
+      <a href="../../HCL/Block.html">Block</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Builder" data-name="hcl::builder">
+      <a href="../../HCL/Builder.html">Builder</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/BuildError" data-name="hcl::builderror">
+      <a href="../../HCL/BuildError.html">BuildError</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/CallError" data-name="hcl::callerror">
+      <a href="../../HCL/CallError.html">CallError</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/ExpressionContext" data-name="hcl::expressioncontext">
+      <a href="../../HCL/ExpressionContext.html">ExpressionContext</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/ExpressionError" data-name="hcl::expressionerror">
+      <a href="../../HCL/ExpressionError.html">ExpressionError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/maxfierke/hcl.cr/HCL/Function" data-name="hcl::function">
+      <a href="../../HCL/Function.html">Function</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Function/ArgumentTypeError" data-name="hcl::function::argumenttypeerror">
+      <a href="../../HCL/Function/ArgumentTypeError.html">ArgumentTypeError</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Function/FunctionArgumentError" data-name="hcl::function::functionargumenterror">
+      <a href="../../HCL/Function/FunctionArgumentError.html">FunctionArgumentError</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Function/FunctionEvalError" data-name="hcl::function::functionevalerror">
+      <a href="../../HCL/Function/FunctionEvalError.html">FunctionEvalError</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/maxfierke/hcl.cr/HCL/Functions" data-name="hcl::functions">
+      <a href="../../HCL/Functions.html">Functions</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/Abs" data-name="hcl::functions::abs">
+      <a href="../../HCL/Functions/Abs.html">Abs</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/Coalesce" data-name="hcl::functions::coalesce">
+      <a href="../../HCL/Functions/Coalesce.html">Coalesce</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/Compact" data-name="hcl::functions::compact">
+      <a href="../../HCL/Functions/Compact.html">Compact</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/Concat" data-name="hcl::functions::concat">
+      <a href="../../HCL/Functions/Concat.html">Concat</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/Format" data-name="hcl::functions::format">
+      <a href="../../HCL/Functions/Format.html">Format</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/HasIndex" data-name="hcl::functions::hasindex">
+      <a href="../../HCL/Functions/HasIndex.html">HasIndex</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/Int" data-name="hcl::functions::int">
+      <a href="../../HCL/Functions/Int.html">Int</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/JSONDecode" data-name="hcl::functions::jsondecode">
+      <a href="../../HCL/Functions/JSONDecode.html">JSONDecode</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/JSONEncode" data-name="hcl::functions::jsonencode">
+      <a href="../../HCL/Functions/JSONEncode.html">JSONEncode</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/Length" data-name="hcl::functions::length">
+      <a href="../../HCL/Functions/Length.html">Length</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/Lower" data-name="hcl::functions::lower">
+      <a href="../../HCL/Functions/Lower.html">Lower</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/Max" data-name="hcl::functions::max">
+      <a href="../../HCL/Functions/Max.html">Max</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/Min" data-name="hcl::functions::min">
+      <a href="../../HCL/Functions/Min.html">Min</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/SetHas" data-name="hcl::functions::sethas">
+      <a href="../../HCL/Functions/SetHas.html">SetHas</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/SetIntersection" data-name="hcl::functions::setintersection">
+      <a href="../../HCL/Functions/SetIntersection.html">SetIntersection</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/SetSubtract" data-name="hcl::functions::setsubtract">
+      <a href="../../HCL/Functions/SetSubtract.html">SetSubtract</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/SetSymDiff" data-name="hcl::functions::setsymdiff">
+      <a href="../../HCL/Functions/SetSymDiff.html">SetSymDiff</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/SetUnion" data-name="hcl::functions::setunion">
+      <a href="../../HCL/Functions/SetUnion.html">SetUnion</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/Strlen" data-name="hcl::functions::strlen">
+      <a href="../../HCL/Functions/Strlen.html">Strlen</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/Substr" data-name="hcl::functions::substr">
+      <a href="../../HCL/Functions/Substr.html">Substr</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/Upper" data-name="hcl::functions::upper">
+      <a href="../../HCL/Functions/Upper.html">Upper</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/FunctionUndefinedError" data-name="hcl::functionundefinederror">
+      <a href="../../HCL/FunctionUndefinedError.html">FunctionUndefinedError</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Label" data-name="hcl::label">
+      <a href="../../HCL/Label.html">Label</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/ParseException" data-name="hcl::parseexception">
+      <a href="../../HCL/ParseException.html">ParseException</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Parser" data-name="hcl::parser">
+      <a href="../../HCL/Parser.html">Parser</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/maxfierke/hcl.cr/HCL/Serializable" data-name="hcl::serializable">
+      <a href="../../HCL/Serializable.html">Serializable</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Serializable/Options" data-name="hcl::serializable::options">
+      <a href="../../HCL/Serializable/Options.html">Options</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Serializable/Strict" data-name="hcl::serializable::strict">
+      <a href="../../HCL/Serializable/Strict.html">Strict</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Serializable/Unmapped" data-name="hcl::serializable::unmapped">
+      <a href="../../HCL/Serializable/Unmapped.html">Unmapped</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/VariableUndefinedError" data-name="hcl::variableundefinederror">
+      <a href="../../HCL/VariableUndefinedError.html">VariableUndefinedError</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/NamedTuple" data-name="namedtuple(**t)">
+      <a href="../../NamedTuple.html">NamedTuple</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/Nil" data-name="nil">
+      <a href="../../Nil.html">Nil</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/Number" data-name="number">
+      <a href="../../Number.html">Number</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/Object" data-name="object">
+      <a href="../../Object.html">Object</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/Reference" data-name="reference">
+      <a href="../../Reference.html">Reference</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/Set" data-name="set(t)">
+      <a href="../../Set.html">Set</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/String" data-name="string">
+      <a href="../../String.html">String</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/Symbol" data-name="symbol">
+      <a href="../../Symbol.html">Symbol</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/Tuple" data-name="tuple(*t)">
+      <a href="../../Tuple.html">Tuple</a>
+      
+    </li>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/Value" data-name="value">
+      <a href="../../Value.html">Value</a>
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> HCL::AST::GetAttrExpr
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../HCL/AST/GetAttrExpr.html">HCL::AST::GetAttrExpr</a></li><li class="superclass"><a href="../../HCL/AST/Node.html">HCL::AST::Node</a></li><li class="superclass"><a href="../../Reference.html">Reference</a></li><li class="superclass"><a href="../../Object.html">Object</a></li></ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/maxfierke/hcl.cr/blob/fa1f5a9331d769bfa108efeee2c3137fef174390/src/hcl/ast/get_attr_expr.cr#L3" target="_blank">
+        hcl/ast/get_attr_expr.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new(attribute:Identifier,**kwargs)-class-method" class="signature"><strong>.new</strong>(attribute : Identifier, **kwargs)</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#attribute_name:String-instance-method" class="signature"><strong>#attribute_name</strong> : String</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#to_s(io:IO)-instance-method" class="signature"><strong>#to_s</strong>(io : IO)</a>
+        
+          <div class="summary"><p>Appends a short String representation of this object which includes its class name and its object address.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#value(ctx:ExpressionContext):Any-instance-method" class="signature"><strong>#value</strong>(ctx : ExpressionContext) : Any</a>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+<div class="methods-inherited">
+  
+    
+
+  <h3>Instance methods inherited from class <code><a href="../../HCL/AST/Node.html">HCL::AST::Node</a></code></h3>
+  
+  
+    <a href="../../HCL/AST/Node.html#source:String-instance-method" class="tooltip">
+      <span>source : String</span>
+    source</a>, 
+    
+  
+    <a href="../../HCL/AST/Node.html#to_s(io:IO)-instance-method" class="tooltip">
+      <span>to_s(io : IO)</span>
+    to_s</a>, 
+    
+  
+    <a href="../../HCL/AST/Node.html#value(ctx:ExpressionContext):Any-instance-method" class="tooltip">
+      <span>value(ctx : ExpressionContext) : Any</span>
+    value</a>
+    
+  
+
+
+    
+
+  <h3>Constructor methods inherited from class <code><a href="../../HCL/AST/Node.html">HCL::AST::Node</a></code></h3>
+  
+  
+    <a href="../../HCL/AST/Node.html#new(source:String=&quot;&quot;,token:Pegmatite::Token?=nil)-class-method" class="tooltip">
+      <span>new(source : String = <span class="s">&quot;&quot;</span>, token : Pegmatite::Token? = <span class="n">nil</span>)</span>
+    new</a>
+    
+  
+
+
+    
+
+
+  
+    
+
+  <h3>Instance methods inherited from class <code><a href="../../Reference.html">Reference</a></code></h3>
+  
+  
+    <a href="../../Reference.html#==(other:HCL::Any)-instance-method" class="tooltip">
+      <span>==(other : HCL::Any)</span>
+    ==</a>
+    
+  
+
+
+    
+
+
+    
+
+
+  
+    
+
+  <h3>Instance methods inherited from class <code><a href="../../Object.html">Object</a></code></h3>
+  
+  
+    <a href="../../Object.html#===(other:HCL::Any)-instance-method" class="tooltip">
+      <span>===(other : HCL::Any)</span>
+    ===</a>
+    
+  
+
+
+    
+
+
+    
+
+  <h3>Class methods inherited from class <code><a href="../../Object.html">Object</a></code></h3>
+  
+  
+    <a href="../../Object.html#from_hcl(string_or_io:String%7CIO,ctx:HCL::ExpressionContext=HCL::ExpressionContext.default_context)-class-method" class="tooltip">
+      <span>from_hcl(string_or_io : String | IO, ctx : HCL::ExpressionContext = <span class="t">HCL</span><span class="t">::</span><span class="t">ExpressionContext</span>.default_context)</span>
+    from_hcl</a>
+    
+  
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(attribute:Identifier,**kwargs)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(attribute : <a href="../../HCL/AST/Identifier.html">Identifier</a>, **kwargs)
+
+        <a class="method-permalink" href="#new(attribute:Identifier,**kwargs)-class-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/fa1f5a9331d769bfa108efeee2c3137fef174390/src/hcl/ast/get_attr_expr.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="attribute_name:String-instance-method">
+      <div class="signature">
+        
+        def <strong>attribute_name</strong> : <a href="../../String.html">String</a>
+
+        <a class="method-permalink" href="#attribute_name:String-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/fa1f5a9331d769bfa108efeee2c3137fef174390/src/hcl/ast/get_attr_expr.cr#L6" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="to_s(io:IO)-instance-method">
+      <div class="signature">
+        
+        def <strong>to_s</strong>(io : IO)
+
+        <a class="method-permalink" href="#to_s(io:IO)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+            <div class="doc-inherited">
+              Description copied from class <a href="../../Reference.html">Reference</a>
+            </div>
+          
+          <p>Appends a short String representation of this object
+which includes its class name and its object address.</p>
+
+<pre><code><span class="k">class</span> <span class="t">Person</span>
+  <span class="k">def</span> <span class="m">initialize</span>(@name : <span class="t">String</span>, @age : <span class="t">Int32</span>)
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="t">Person</span>.<span class="k">new</span>(<span class="s">&quot;John&quot;</span>, <span class="n">32</span>).to_s <span class="c"># =&gt; #&lt;Person:0x10a199f20&gt;</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/fa1f5a9331d769bfa108efeee2c3137fef174390/src/hcl/ast/get_attr_expr.cr#L13" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="value(ctx:ExpressionContext):Any-instance-method">
+      <div class="signature">
+        
+        def <strong>value</strong>(ctx : <a href="../../HCL/ExpressionContext.html">ExpressionContext</a>) : <a href="../../HCL/Any.html">Any</a>
+
+        <a class="method-permalink" href="#value(ctx:ExpressionContext):Any-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/fa1f5a9331d769bfa108efeee2c3137fef174390/src/hcl/ast/get_attr_expr.cr#L18" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+</div>
+
+</body>
+</html>
