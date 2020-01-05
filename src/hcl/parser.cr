@@ -85,6 +85,7 @@ module HCL
         when :number then AST::Number.new(token: main, source: source[start...finish])
         when :object then build_map(main, iter, source)
         when :operation then build_operation(main, iter, source)
+        when :splat then AST::SplatExpr.new(token: main, source: source[start...finish])
         when :string then build_string(main, iter, source)
         when :tuple then build_list(main, iter, source)
         else raise NotImplementedError.new(kind)

@@ -357,6 +357,41 @@ describe HCL::Parser do
       })
     end
 
+    it "can parse splats" do
+      hcl_string = <<-HEREDOC
+        resource "aws_instance" "web" {
+          security_group_ids = security_groups[*].id
+        }
+
+      HEREDOC
+
+      parser = HCL::Parser.new(hcl_string)
+      doc = parser.parse!
+
+      ctx = HCL::ExpressionContext.new
+      ctx.variables["security_groups"] = HCL::Any.new(
+        [
+          { "id" => "sg-1234" },
+          { "id" => "sg-4567" },
+          { "id" => "sg-7890" }
+        ]
+      )
+
+      doc.value(ctx).should eq({
+        "resource" => {
+          "aws_instance" => {
+            "web" => {
+              "security_group_ids" => [
+                "sg-1234",
+                "sg-4567",
+                "sg-7890"
+              ]
+            }
+          }
+        }
+      })
+    end
+
     it "can parse nested identifiers" do
       hcl_string = <<-HEREDOC
         resource "aws_instance" "web" {

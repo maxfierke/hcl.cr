@@ -89,10 +89,10 @@ string = document.to_s # Returns string reconstruction of HCL configuration
 - [X] Add support for heredocs
 - [X] Add standard functions
 - [X] Add support for partial- and full-schema decoding and encoding of HCL documents
-- [ ] Add support for splats
+- [X] Add support for splats
 - [ ] Add support for parsing interpolations/templates
 - [ ] Add support for evaluating interpolations/templates
-- [ ] More validations, better parse errors
+- [ ] More validations, better parse/eval errors
 - [ ] Investigate directives
 - [ ] Add support for `for` expressions
 

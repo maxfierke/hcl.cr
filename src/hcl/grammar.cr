@@ -61,9 +61,9 @@ module HCL
     get_attr = (char('.') >> identifier).named(:get_attr)
     index = (char('[') >> snl >> expression >> snl >> char(']')).named(:index)
     splat = (
-      (char('.') >> char('*') >> get_attr.repeat) |
-      (char('[') >> char('*') >> char(']') >> (get_attr | index).repeat)
-    ).named(:splat)
+      ((char('.') >> char('*')).named(:splat) >> get_attr.repeat) |
+      ((char('[') >> char('*') >> char(']')).named(:splat) >> (get_attr | index).repeat)
+    )
 
     arguments = (
       expression >> (char(',') >> s >> expression).repeat >>
