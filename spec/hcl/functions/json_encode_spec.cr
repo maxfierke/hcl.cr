@@ -24,15 +24,15 @@ describe HCL::Functions::JSONEncode do
       hsh["prop4"] = HCL::Any.new([
         HCL::Any.new(0_i64),
         HCL::Any.new(1_i64),
-        HCL::Any.new(2_i64)
+        HCL::Any.new(2_i64),
       ])
 
       fn.call([
-        HCL::Any.new(10_i64)
+        HCL::Any.new(10_i64),
       ]).should eq("10")
 
       fn.call([
-        HCL::Any.new(hsh)
+        HCL::Any.new(hsh),
       ]).should eq(<<-JSON)
       {"prop1":123,"prop2":"hello","prop3":{},"prop4":[0,1,2]}
       JSON

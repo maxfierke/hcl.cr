@@ -80,7 +80,7 @@ module HCL
       def value(ctx : ExpressionContext) : Any
         block_value = super(ctx)
         block_header(ctx).reverse.reduce(block_value) do |acc, val|
-          Any.new({ val.to_s => acc })
+          Any.new({val.to_s => acc})
         end
       end
     end

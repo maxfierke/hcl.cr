@@ -32,7 +32,7 @@ module HCL
           )
         end
 
-        HCL::Any.new(str[offset..(offset+length)])
+        HCL::Any.new(str[offset..(offset + length)])
       end
     end
   end

@@ -26,7 +26,7 @@ describe HCL::Functions::JSONDecode do
       hsh["prop4"] = HCL::Any.new([
         HCL::Any.new(0_i64),
         HCL::Any.new(1_i64),
-        HCL::Any.new(2_i64)
+        HCL::Any.new(2_i64),
       ])
 
       deserialized = fn.call([HCL::Any.new(json)])
@@ -34,7 +34,7 @@ describe HCL::Functions::JSONDecode do
         "prop1" => 123_i64,
         "prop2" => "hello",
         "prop3" => {} of String => HCL::Any::RawType,
-        "prop4" => [0_i64, 1_i64, 2_i64]
+        "prop4" => [0_i64, 1_i64, 2_i64],
       })
     end
   end

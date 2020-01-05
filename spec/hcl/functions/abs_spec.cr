@@ -16,16 +16,16 @@ describe HCL::Functions::Abs do
       fn = HCL::Functions::Abs.new
 
       fn.call([
-        HCL::Any.new(10_i64)
+        HCL::Any.new(10_i64),
       ]).should eq(10_i64)
       fn.call([
-        HCL::Any.new(-5_i64)
+        HCL::Any.new(-5_i64),
       ]).should eq(5_i64)
       fn.call([
-        HCL::Any.new(3.12_f64)
+        HCL::Any.new(3.12_f64),
       ]).should eq(3.12_f64)
       fn.call([
-        HCL::Any.new(-18.23_f64)
+        HCL::Any.new(-18.23_f64),
       ]).should eq(18.23_f64)
     end
   end

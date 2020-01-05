@@ -1,7 +1,9 @@
 module HCL
   abstract class Function
     class FunctionEvalError < Exception; end
+
     class FunctionArgumentError < FunctionEvalError; end
+
     class ArgumentTypeError < FunctionArgumentError; end
 
     ARG_MAX = 100_u32

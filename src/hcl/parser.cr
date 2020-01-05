@@ -73,22 +73,22 @@ module HCL
       # Build the node from the given main token and possibly further recursion.
       value =
         case kind
-        when :block then build_block(main, iter, source)
-        when :conditional then build_conditional(main, iter, source)
-        when :expression then build_expression(main, iter, source)
+        when :block         then build_block(main, iter, source)
+        when :conditional   then build_conditional(main, iter, source)
+        when :expression    then build_expression(main, iter, source)
         when :function_call then build_call(main, iter, source)
-        when :get_attr then build_get_attr(main, iter, source)
-        when :heredoc then build_heredoc(main, iter, source)
-        when :identifier then build_identifier(main, iter, source)
-        when :index then build_index(main, iter, source)
-        when :literal then AST::Literal.new(token: main, source: source[start...finish])
-        when :number then AST::Number.new(token: main, source: source[start...finish])
-        when :object then build_map(main, iter, source)
-        when :operation then build_operation(main, iter, source)
-        when :splat then AST::SplatExpr.new(token: main, source: source[start...finish])
-        when :string then build_string(main, iter, source)
-        when :tuple then build_list(main, iter, source)
-        else raise NotImplementedError.new(kind)
+        when :get_attr      then build_get_attr(main, iter, source)
+        when :heredoc       then build_heredoc(main, iter, source)
+        when :identifier    then build_identifier(main, iter, source)
+        when :index         then build_index(main, iter, source)
+        when :literal       then AST::Literal.new(token: main, source: source[start...finish])
+        when :number        then AST::Number.new(token: main, source: source[start...finish])
+        when :object        then build_map(main, iter, source)
+        when :operation     then build_operation(main, iter, source)
+        when :splat         then AST::SplatExpr.new(token: main, source: source[start...finish])
+        when :string        then build_string(main, iter, source)
+        when :tuple         then build_list(main, iter, source)
+        else                     raise NotImplementedError.new(kind)
         end
 
       # Assert that we have consumed all child tokens.
@@ -364,7 +364,7 @@ module HCL
             "Cannot specify additional arguments after a varadic argument (...)",
             source: source,
             token: child
-           ) if varadic
+          ) if varadic
           args << build_node(child, iter, source)
         end
       end

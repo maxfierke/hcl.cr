@@ -17,18 +17,18 @@ describe HCL::Functions::HasIndex do
 
       fn.call([
         HCL::Any.new(Hash(String, HCL::Any).new),
-        HCL::Any.new("hello")
+        HCL::Any.new("hello"),
       ]).should eq(false)
       fn.call([
         HCL::Any.new(Array(HCL::Any).new),
-        HCL::Any.new(99_i64)
+        HCL::Any.new(99_i64),
       ]).should eq(false)
       fn.call([
         HCL::Any.new([
           HCL::Any.new("🧄"),
-          HCL::Any.new("🧇")
+          HCL::Any.new("🧇"),
         ]),
-        HCL::Any.new(0_i64)
+        HCL::Any.new(0_i64),
       ]).should eq(true)
 
       some_hash = Hash(String, HCL::Any).new.tap do |hsh|
@@ -38,7 +38,7 @@ describe HCL::Functions::HasIndex do
       end
       fn.call([
         HCL::Any.new(some_hash),
-        HCL::Any.new("two")
+        HCL::Any.new("two"),
       ]).should eq(true)
     end
 
@@ -58,7 +58,7 @@ describe HCL::Functions::HasIndex do
         ) do
           fn.call([
             HCL::Any.new(val),
-            HCL::Any.new("doesn't matter")
+            HCL::Any.new("doesn't matter"),
           ])
         end
       end
@@ -76,7 +76,7 @@ describe HCL::Functions::HasIndex do
       ) do
         fn.call([
           HCL::Any.new(hsh),
-          HCL::Any.new(0_i64)
+          HCL::Any.new(0_i64),
         ])
       end
 
@@ -86,7 +86,7 @@ describe HCL::Functions::HasIndex do
       ) do
         fn.call([
           HCL::Any.new(arr),
-          HCL::Any.new("hello")
+          HCL::Any.new("hello"),
         ])
       end
     end

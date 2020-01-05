@@ -17,12 +17,12 @@ describe HCL::Functions::SetSubtract do
 
       arr1 = [
         HCL::Any.new("🧄"),
-        HCL::Any.new("🧇")
+        HCL::Any.new("🧇"),
       ]
       arr2 = [
         HCL::Any.new("hello"),
         HCL::Any.new(1_i64),
-        HCL::Any.new("🧇")
+        HCL::Any.new("🧇"),
       ]
 
       fn.call([
@@ -40,7 +40,7 @@ describe HCL::Functions::SetSubtract do
       ) do
         arr = HCL::Any.new([
           HCL::Any.new("🧄"),
-          HCL::Any.new("🧇")
+          HCL::Any.new("🧇"),
         ])
 
         fn.call([arr, HCL::Any.new("hello")])

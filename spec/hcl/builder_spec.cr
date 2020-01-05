@@ -23,7 +23,7 @@ describe HCL::Builder do
             "zuccini",
             "carrot",
             4,
-            false
+            false,
           ]
         end
       end
@@ -39,15 +39,15 @@ describe HCL::Builder do
         end
         b.attribute("world_map") do
           {
-            "usa" => "maybe",
-            "france" => "i suppose",
-            "finland" => "yes",
-            "tierra_del_fuego" => "could be"
+            "usa"              => "maybe",
+            "france"           => "i suppose",
+            "finland"          => "yes",
+            "tierra_del_fuego" => "could be",
           }
         end
       end
 
-      hcl.block("empty_block") {}
+      hcl.block("empty_block") { }
     end
 
     builder.to_s.should eq(<<-HCL)

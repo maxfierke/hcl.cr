@@ -3,8 +3,8 @@ module HCL
     class Literal < Node
       @value : Any?
 
-      NULL_STR = "null"
-      TRUE_STR = "true"
+      NULL_STR  = "null"
+      TRUE_STR  = "true"
       FALSE_STR = "false"
 
       def to_s(io : IO)

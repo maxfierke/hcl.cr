@@ -28,7 +28,7 @@ describe HCL::Functions::Lower do
         123.456_f64,
         true,
         Hash(String, HCL::Any).new,
-        Array(HCL::Any).new
+        Array(HCL::Any).new,
       ].each do |val|
         expect_raises(
           HCL::Function::ArgumentTypeError,

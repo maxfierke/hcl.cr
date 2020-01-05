@@ -18,7 +18,7 @@ describe HCL::Functions::Min do
       arr = [
         HCL::Any.new(-1_i64),
         HCL::Any.new(38_i64),
-        HCL::Any.new(0_i64)
+        HCL::Any.new(0_i64),
       ]
 
       fn.call(arr).should eq(-1)
@@ -44,7 +44,7 @@ describe HCL::Functions::Min do
       ) do
         fn.call([
           HCL::Any.new(1_i64),
-          HCL::Any.new("hello")
+          HCL::Any.new("hello"),
         ])
       end
     end

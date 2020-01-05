@@ -141,7 +141,7 @@ module HCL
   # end
   #
   # a = A.from_hcl("a = 1\nb = 2\n") # => A(@hcl_unmapped_attributes={"b" => HCL::AST::Number.new(2_i64)}, @a=1)
-  # a.to_hcl # => "a = 1\nb = 2\n"
+  # a.to_hcl                         # => "a = 1\nb = 2\n"
   # ```
   #
   #
@@ -208,7 +208,7 @@ module HCL
                 key:         ((ann && ann[:key]) || ivar).id.stringify,
                 has_default: ivar.has_default_value?,
                 default:     ivar.default_value,
-                nilable:     ivar.type.nilable?
+                nilable:     ivar.type.nilable?,
               }
             %}
           {% elsif ann = ivar.annotation(::HCL::Block) %}
@@ -228,7 +228,7 @@ module HCL
                 index:       ann[:index] || current_label_idx,
                 has_default: ivar.has_default_value?,
                 default:     ivar.default_value,
-                nilable:     ivar.type.nilable?
+                nilable:     ivar.type.nilable?,
               }
             %}
             {% current_label_idx = ann[:index] ? (ann[:index] + 1) : (current_label_idx + 1) %}
@@ -420,7 +420,7 @@ module HCL
           {% elsif ann = ivar.annotation(::HCL::Block) %}
             {%
               blocks[ivar.id] = {
-                key: ((ann && ann[:key]) || ivar).id.stringify
+                key: ((ann && ann[:key]) || ivar).id.stringify,
               }
             %}
           {% elsif ann = ivar.annotation(::HCL::Label) %}
@@ -573,10 +573,10 @@ module HCL
         builder_node = builder.node
 
         if builder_node.is_a?(::HCL::AST::Block)
-          hcl_unmapped_labels.to_a.
-            sort_by { |label_tuple| label_tuple[0] }.
-            map { |label_tuple| label_tuple[1] }.
-            each do |label|
+          hcl_unmapped_labels.to_a
+            .sort_by { |label_tuple| label_tuple[0] }
+            .map { |label_tuple| label_tuple[1] }
+            .each do |label|
               builder_node.labels << label.as(::HCL::AST::BlockLabel)
             end
         end

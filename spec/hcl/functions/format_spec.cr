@@ -19,7 +19,7 @@ describe HCL::Functions::Format do
         HCL::Any.new("hello %s + %s = %s"),
         HCL::Any.new("🧄"),
         HCL::Any.new("🧇"),
-        HCL::Any.new("gross")
+        HCL::Any.new("gross"),
       ]).should eq("hello 🧄 + 🧇 = gross")
     end
 
@@ -33,7 +33,7 @@ describe HCL::Functions::Format do
         fn.call([
           HCL::Any.new(0_i64),
           HCL::Any.new("hello"),
-          HCL::Any.new("world")
+          HCL::Any.new("world"),
         ])
       end
     end

@@ -182,11 +182,11 @@ module HCL
 
     private def assert_value_node!(possible_value_node)
       unless possible_value_node.is_a?(AST::Identifier) ||
-        possible_value_node.is_a?(AST::Expression) ||
-        possible_value_node.is_a?(AST::Literal) ||
-        possible_value_node.is_a?(AST::Number) ||
-        possible_value_node.is_a?(AST::Map) ||
-        possible_value_node.is_a?(AST::List)
+             possible_value_node.is_a?(AST::Expression) ||
+             possible_value_node.is_a?(AST::Literal) ||
+             possible_value_node.is_a?(AST::Number) ||
+             possible_value_node.is_a?(AST::Map) ||
+             possible_value_node.is_a?(AST::List)
         raise BuildError.new(
           "#{possible_value_node.class} cannot be used as a value inside #{node.class}"
         )

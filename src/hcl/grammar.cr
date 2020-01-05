@@ -26,9 +26,9 @@ module HCL
     digits = digit.repeat(1)
     int =
       (char('-') >> digit19 >> digits) |
-      (char('-') >> digit) |
-      (digit19 >> digits) |
-      digit
+        (char('-') >> digit) |
+        (digit19 >> digits) |
+        digit
     frac = char('.') >> digits
     exp = (char('e') | char('E')) >> (char('+') | char('-')).maybe >> digits
     numeric = int >> frac.maybe >> exp.maybe
@@ -37,10 +37,10 @@ module HCL
     hex = digit | range('a', 'f') | range('A', 'F')
     string_char =
       str("\\\"") | str("\\\\") |
-      str("\\n") | str("\\r") | str("\\t") |
-      (str("\\u") >> hex >> hex >> hex >> hex) |
-      (str("\\U") >> hex >> hex >> hex >> hex >> hex >> hex >> hex >> hex) |
-      (~char('"') >> ~char('\\') >> range(' ', 0x10FFFF_u32))
+        str("\\n") | str("\\r") | str("\\t") |
+        (str("\\u") >> hex >> hex >> hex >> hex) |
+        (str("\\U") >> hex >> hex >> hex >> hex >> hex >> hex >> hex >> hex) |
+        (~char('"') >> ~char('\\') >> range(' ', 0x10FFFF_u32))
     string_lit = char('"') >> string_char.repeat.named(:string) >> char('"')
 
     # TODO: support the spec fully: https://github.com/hashicorp/hcl/blob/hcl2/hclsyntax/spec.md#identifiers
@@ -52,7 +52,7 @@ module HCL
     _logic_operator = str("&&") | str("||") | char('!')
     _arithetic_operator = char('+') | char('-') | char('*') | char('/') | char('%')
     _compare_operator = str("==") | str("!=") | str("<=") | str(">=") |
-      char('<') | char('>')
+                        char('<') | char('>')
     _binary_operator = (_compare_operator | _arithetic_operator | _logic_operator).named(:operator)
     _binary_op = expr_term >> s >> _binary_operator >> s >> expr_term
     _unary_op = (char('-') | char('!')).named(:operator) >> expr_term
@@ -114,16 +114,16 @@ module HCL
     _nested_expr_term = (char('(') >> snl >> expression >> snl >> char(')'))
     _prop_expr_term =
       _nested_expr_term |
-      literal_value |
-      _object |
-      function_call |
-      variable_expr
+        literal_value |
+        _object |
+        function_call |
+        variable_expr
 
     _index_expr_term =
       _nested_expr_term |
-      collection_value |
-      function_call |
-      variable_expr
+        collection_value |
+        function_call |
+        variable_expr
 
     _access_expr_term =
       _index_expr_term | _prop_expr_term
@@ -133,15 +133,15 @@ module HCL
 
     _conditional_expr_term =
       _nested_expr_term |
-      (
-        operation |
-        _traversal_expr_term |
-        template_expr |
-        literal_value |
-        collection_value |
-        function_call |
-        variable_expr
-      ).named(:expression)
+        (
+          operation |
+            _traversal_expr_term |
+            template_expr |
+            literal_value |
+            collection_value |
+            function_call |
+            variable_expr
+        ).named(:expression)
 
     expr_term.define \
       _nested_expr_term |

@@ -25,9 +25,9 @@ describe HCL::Parser do
       doc.value.should eq({
         "variable" => {
           "ami" => {
-            "description" => "the AMI to use"
-          }
-        }
+            "description" => "the AMI to use",
+          },
+        },
       })
     end
 
@@ -44,9 +44,9 @@ describe HCL::Parser do
       doc.value.should eq({
         "variable" => {
           "ami" => {
-            "description" => "the \\\"AMI to use"
-          }
-        }
+            "description" => "the \\\"AMI to use",
+          },
+        },
       })
     end
 
@@ -64,8 +64,8 @@ describe HCL::Parser do
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
       doc.value.should eq({
-        "description" => "once upon a time\nthere was a complicated\nparsing rule\n",
-        "another_prop" => "hello"
+        "description"  => "once upon a time\nthere was a complicated\nparsing rule\n",
+        "another_prop" => "hello",
       })
     end
 
@@ -86,13 +86,13 @@ describe HCL::Parser do
       doc.value.should eq({
         "provider" => {
           "foo" => {
-            "foo" => 0.1_f64,
-            "bar" => 1_i64,
-            "baz" => "1234",
-            "biz" => "1234.56",
-            "flim" => -6_i64
-          }
-        }
+            "foo"  => 0.1_f64,
+            "bar"  => 1_i64,
+            "baz"  => "1234",
+            "biz"  => "1234.56",
+            "flim" => -6_i64,
+          },
+        },
       })
     end
 
@@ -124,24 +124,24 @@ describe HCL::Parser do
       doc.value.should eq({
         "provider" => {
           "foo" => {
-            "foo" => 0.1_f64 * 0.5_f64,
-            "bar" => 9_i64,
-            "baz" => 1_i64,
-            "biz" => 6_i64,
-            "boingo" => 3_f64,
-            "flim" => 9.0_f64 / 4.0_f64,
-            "flam" => true,
-            "bim"  => true,
-            "bam"  => nil,
-            "gt"   => true,
-            "gte"  => true,
-            "lt"   => true,
-            "lte"  => false,
-            "eq"   => true,
-            "neq"  => false,
-            "double_not" => false
-          }
-        }
+            "foo"        => 0.1_f64 * 0.5_f64,
+            "bar"        => 9_i64,
+            "baz"        => 1_i64,
+            "biz"        => 6_i64,
+            "boingo"     => 3_f64,
+            "flim"       => 9.0_f64 / 4.0_f64,
+            "flam"       => true,
+            "bim"        => true,
+            "bam"        => nil,
+            "gt"         => true,
+            "gte"        => true,
+            "lt"         => true,
+            "lte"        => false,
+            "eq"         => true,
+            "neq"        => false,
+            "double_not" => false,
+          },
+        },
       })
     end
 
@@ -161,12 +161,12 @@ describe HCL::Parser do
         "resource" => {
           "aws_instance" => {
             "web" => {
-              "source_dest_check" => false,
-              "another_boolean"   => true,
-              "something_i_want_default" => nil
-            }
-          }
-        }
+              "source_dest_check"        => false,
+              "another_boolean"          => true,
+              "something_i_want_default" => nil,
+            },
+          },
+        },
       })
     end
 
@@ -181,7 +181,7 @@ describe HCL::Parser do
       doc = parser.parse!
       doc.value.should eq({
         "hello" => "it's me",
-        "works" => true
+        "works" => true,
       })
     end
 
@@ -204,15 +204,15 @@ describe HCL::Parser do
         "resource" => {
           "aws_instance" => {
             "web" => {
-              "ami_id" => "spatula",
-              "size"   => 9,
-              "region" => "world",
+              "ami_id"            => "spatula",
+              "size"              => 9,
+              "region"            => "world",
               "something_numeric" => 8,
-              "an_op" => 5,
-              "an_array" => 8
-            }
-          }
-        }
+              "an_op"             => 5,
+              "an_array"          => 8,
+            },
+          },
+        },
       })
     end
 
@@ -234,17 +234,17 @@ describe HCL::Parser do
       doc.value.should eq({
         "config" => {
           "hello" => {
-            "yoo" => "yes",
+            "yoo"         => "yes",
             "development" => {
               "some_setting" => true,
               "another_prop" => 123_i64,
               "maybe_a_list" => [
                 123_i64,
-                231_i64
-              ]
-            }
-          }
-        }
+                231_i64,
+              ],
+            },
+          },
+        },
       })
     end
 
@@ -269,13 +269,13 @@ describe HCL::Parser do
               {
                 "foo" => [
                   {
-                    "bar" => {} of String => HCL::Any
-                  }
-                ]
-              }
-            ]
-          }
-        }
+                    "bar" => {} of String => HCL::Any,
+                  },
+                ],
+              },
+            ],
+          },
+        },
       })
     end
 
@@ -310,27 +310,27 @@ describe HCL::Parser do
       doc = parser.parse!
       doc.value.should eq({
         "variable" => {
-          "ami" => {"description" => "the AMI to use"}
+          "ami" => {"description" => "the AMI to use"},
         },
         "resource" => {
           "aws_instance" => {
             "web" => {
-              "ami" => "${var.ami}",
-              "count" => 2,
-              "source_dest_check" => false,
-              "another_boolean" => true,
+              "ami"                      => "${var.ami}",
+              "count"                    => 2,
+              "source_dest_check"        => false,
+              "another_boolean"          => true,
               "something_i_want_default" => nil,
-              "connection" => {
-                "user" => "root",
+              "connection"               => {
+                "user"      => "root",
                 "something" => {
                   "else" => {
-                    "foo" => "bar"
-                  }
-                }
-              }
-            }
-          }
-        }
+                    "foo" => "bar",
+                  },
+                },
+              },
+            },
+          },
+        },
       })
     end
 
@@ -349,11 +349,11 @@ describe HCL::Parser do
         "resource" => {
           "aws_instance" => {
             "web" => {
-              "ami" => "evil this way comes",
-              "security_group_id" => 1_i64
-            }
-          }
-        }
+              "ami"               => "evil this way comes",
+              "security_group_id" => 1_i64,
+            },
+          },
+        },
       })
     end
 
@@ -371,9 +371,9 @@ describe HCL::Parser do
       ctx = HCL::ExpressionContext.new
       ctx.variables["security_groups"] = HCL::Any.new(
         [
-          { "id" => "sg-1234" },
-          { "id" => "sg-4567" },
-          { "id" => "sg-7890" }
+          {"id" => "sg-1234"},
+          {"id" => "sg-4567"},
+          {"id" => "sg-7890"},
         ]
       )
 
@@ -384,11 +384,11 @@ describe HCL::Parser do
               "security_group_ids" => [
                 "sg-1234",
                 "sg-4567",
-                "sg-7890"
-              ]
-            }
-          }
-        }
+                "sg-7890",
+              ],
+            },
+          },
+        },
       })
     end
 
@@ -407,8 +407,8 @@ describe HCL::Parser do
       ctx.variables["var"] = HCL::Any.new(
         {
           "something" => {
-            "ami_id" => "ami-1234"
-          }
+            "ami_id" => "ami-1234",
+          },
         }
       )
 
@@ -416,10 +416,10 @@ describe HCL::Parser do
         "resource" => {
           "aws_instance" => {
             "web" => {
-              "ami" => "ami-1234"
-            }
-          }
-        }
+              "ami" => "ami-1234",
+            },
+          },
+        },
       })
     end
 
@@ -442,12 +442,12 @@ describe HCL::Parser do
               "other_thing" => {
                 "some_list" => [
                   {
-                    "ami_id" => "ami-1234"
-                  }
-                ]
-              }
-            }
-          ]
+                    "ami_id" => "ami-1234",
+                  },
+                ],
+              },
+            },
+          ],
         }
       )
 
@@ -455,10 +455,10 @@ describe HCL::Parser do
         "resource" => {
           "aws_instance" => {
             "web" => {
-              "ami" => "ami-1234"
-            }
-          }
-        }
+              "ami" => "ami-1234",
+            },
+          },
+        },
       })
     end
 
@@ -480,9 +480,9 @@ describe HCL::Parser do
       doc.value(ctx).should eq({
         "config" => {
           "hello" => {
-            "yoo" => "hello world [1, 2, 3]"
-          }
-        }
+            "yoo" => "hello world [1, 2, 3]",
+          },
+        },
       })
     end
 
@@ -503,9 +503,9 @@ describe HCL::Parser do
       doc.value(ctx).should eq({
         "config" => {
           "hello" => {
-            "yoo" => "hello 1 2 3"
-          }
-        }
+            "yoo" => "hello 1 2 3",
+          },
+        },
       })
     end
   end

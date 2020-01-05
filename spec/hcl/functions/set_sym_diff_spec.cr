@@ -17,7 +17,7 @@ describe HCL::Functions::SetSymDiff do
 
       arr1 = [
         HCL::Any.new("🧄"),
-        HCL::Any.new("🧇")
+        HCL::Any.new("🧇"),
       ]
       arr2 = [
         HCL::Any.new("hello"),
@@ -26,13 +26,13 @@ describe HCL::Functions::SetSymDiff do
       arr3 = [
         HCL::Any.new("world"),
         HCL::Any.new(true),
-        HCL::Any.new("🧇")
+        HCL::Any.new("🧇"),
       ]
 
       fn.call([
         HCL::Any.new(arr1),
         HCL::Any.new(arr2),
-        HCL::Any.new(arr3)
+        HCL::Any.new(arr3),
       ]).should eq(["🧄", "hello", 1_i64, "world", true])
     end
 
@@ -45,7 +45,7 @@ describe HCL::Functions::SetSymDiff do
       ) do
         arr = HCL::Any.new([
           HCL::Any.new("🧄"),
-          HCL::Any.new("🧇")
+          HCL::Any.new("🧇"),
         ])
 
         fn.call([arr, HCL::Any.new("hello")])

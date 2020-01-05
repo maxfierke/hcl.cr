@@ -9,10 +9,10 @@ module HCL
         super(source: source.strip('"'), token: token)
 
         @value = if @source.includes?('.')
-          @source.to_f64
-        else
-          @source.to_i64
-        end
+                   @source.to_f64
+                 else
+                   @source.to_i64
+                 end
       end
 
       def initialize(number : Value, **kwargs)

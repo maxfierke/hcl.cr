@@ -21,29 +21,29 @@ describe HCL::Functions::Compact do
       fn.call([
         HCL::Any.new(hsh),
         HCL::Any.new(nil),
-        HCL::Any.new("hello")
+        HCL::Any.new("hello"),
       ]).should eq([
         HCL::Any.new(hsh),
-        HCL::Any.new("hello")
+        HCL::Any.new("hello"),
       ])
       fn.call([
         HCL::Any.new(arr),
-        HCL::Any.new(nil)
+        HCL::Any.new(nil),
       ]).should eq([
-        HCL::Any.new(arr)
+        HCL::Any.new(arr),
       ])
       fn.call([
         HCL::Any.new(nil),
         HCL::Any.new("🧄"),
-        HCL::Any.new("🧇")
+        HCL::Any.new("🧇"),
       ]).should eq([
         HCL::Any.new("🧄"),
-        HCL::Any.new("🧇")
+        HCL::Any.new("🧇"),
       ])
 
       fn.call([
         HCL::Any.new(nil),
-        HCL::Any.new(nil)
+        HCL::Any.new(nil),
       ]).should eq(Array(HCL::Any).new)
 
       some_hash = Hash(String, HCL::Any).new.tap do |hsh|
@@ -53,9 +53,9 @@ describe HCL::Functions::Compact do
       end
       fn.call([
         HCL::Any.new(nil),
-        HCL::Any.new(some_hash)
+        HCL::Any.new(some_hash),
       ]).should eq([
-        HCL::Any.new(some_hash)
+        HCL::Any.new(some_hash),
       ])
     end
   end

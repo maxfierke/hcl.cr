@@ -1,19 +1,19 @@
 module HCL
   struct Any
     alias Type = Nil |
-      Bool |
-      String |
-      Int64 |
-      Float64 |
-      Hash(String, Any) |
-      Array(Any)
+                 Bool |
+                 String |
+                 Int64 |
+                 Float64 |
+                 Hash(String, Any) |
+                 Array(Any)
     alias RawType = Nil |
-      Bool |
-      String |
-      Int64 |
-      Float64 |
-      Hash(String, RawType) |
-      Array(RawType)
+                    Bool |
+                    String |
+                    Int64 |
+                    Float64 |
+                    Hash(String, RawType) |
+                    Array(RawType)
 
     @raw : Type
 

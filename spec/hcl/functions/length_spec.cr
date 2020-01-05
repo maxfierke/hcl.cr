@@ -16,16 +16,16 @@ describe HCL::Functions::Length do
       fn = HCL::Functions::Length.new
 
       fn.call([
-        HCL::Any.new(Hash(String, HCL::Any).new)
+        HCL::Any.new(Hash(String, HCL::Any).new),
       ]).should eq(0)
       fn.call([
-        HCL::Any.new(Array(HCL::Any).new)
+        HCL::Any.new(Array(HCL::Any).new),
       ]).should eq(0)
       fn.call([
         HCL::Any.new([
           HCL::Any.new("🧄"),
-          HCL::Any.new("🧇")
-        ])
+          HCL::Any.new("🧇"),
+        ]),
       ]).should eq(2)
 
       some_hash = Hash(String, HCL::Any).new.tap do |hsh|
@@ -34,7 +34,7 @@ describe HCL::Functions::Length do
         hsh["three"] = HCL::Any.new(3_i64)
       end
       fn.call([
-        HCL::Any.new(some_hash)
+        HCL::Any.new(some_hash),
       ]).should eq(3)
     end
 
@@ -53,7 +53,7 @@ describe HCL::Functions::Length do
           "length(coll): Argument type mismatch. Expected a collection, but got #{val.class}."
         ) do
           fn.call([
-            HCL::Any.new(val)
+            HCL::Any.new(val),
           ])
         end
       end

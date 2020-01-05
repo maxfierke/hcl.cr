@@ -18,7 +18,7 @@ describe HCL::Functions::Substr do
       fn.call([
         HCL::Any.new("hello world"),
         HCL::Any.new(6_i64),
-        HCL::Any.new(5_i64)
+        HCL::Any.new(5_i64),
       ]).should eq("world")
     end
 
@@ -31,7 +31,7 @@ describe HCL::Functions::Substr do
         123.456_f64,
         true,
         Hash(String, HCL::Any).new,
-        Array(HCL::Any).new
+        Array(HCL::Any).new,
       ].each do |val|
         expect_raises(
           HCL::Function::ArgumentTypeError,
@@ -50,7 +50,7 @@ describe HCL::Functions::Substr do
         "hello",
         true,
         Hash(String, HCL::Any).new,
-        Array(HCL::Any).new
+        Array(HCL::Any).new,
       ].each do |val|
         expect_raises(
           HCL::Function::ArgumentTypeError,
@@ -69,7 +69,7 @@ describe HCL::Functions::Substr do
         "hello",
         true,
         Hash(String, HCL::Any).new,
-        Array(HCL::Any).new
+        Array(HCL::Any).new,
       ].each do |val|
         expect_raises(
           HCL::Function::ArgumentTypeError,

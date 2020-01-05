@@ -17,22 +17,22 @@ describe HCL::Functions::Concat do
 
       arr1 = [
         HCL::Any.new("🧄"),
-        HCL::Any.new("🧇")
+        HCL::Any.new("🧇"),
       ]
       arr2 = [
         HCL::Any.new("hello"),
-        HCL::Any.new(1_i64)
+        HCL::Any.new(1_i64),
       ]
 
       fn.call(Array(HCL::Any).new).should eq(Array(HCL::Any).new)
       fn.call([
         HCL::Any.new(arr1),
-        HCL::Any.new(arr2)
+        HCL::Any.new(arr2),
       ]).should eq([
         HCL::Any.new("🧄"),
         HCL::Any.new("🧇"),
         HCL::Any.new("hello"),
-        HCL::Any.new(1_i64)
+        HCL::Any.new(1_i64),
       ])
     end
 
@@ -45,7 +45,7 @@ describe HCL::Functions::Concat do
       ) do
         arr = HCL::Any.new([
           HCL::Any.new("🧄"),
-          HCL::Any.new("🧇")
+          HCL::Any.new("🧇"),
         ])
 
         fn.call([arr, HCL::Any.new("hello")])

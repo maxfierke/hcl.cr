@@ -15,3 +15,5 @@ jobs:
       run: shards install
     - name: Run tests
       run: make spec
+    - name: Validate formatting
+      run: crystal tool format --check

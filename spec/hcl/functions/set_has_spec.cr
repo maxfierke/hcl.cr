@@ -17,14 +17,14 @@ describe HCL::Functions::SetHas do
 
       fn.call([
         HCL::Any.new(Array(HCL::Any).new),
-        HCL::Any.new(99_i64)
+        HCL::Any.new(99_i64),
       ]).should eq(false)
       fn.call([
         HCL::Any.new([
           HCL::Any.new("🧄"),
-          HCL::Any.new("🧇")
+          HCL::Any.new("🧇"),
         ]),
-        HCL::Any.new("🧇")
+        HCL::Any.new("🧇"),
       ]).should eq(true)
     end
 
@@ -37,7 +37,7 @@ describe HCL::Functions::SetHas do
         123.456_f64,
         true,
         "hello",
-        Hash(String, HCL::Any).new
+        Hash(String, HCL::Any).new,
       ].each do |val|
         expect_raises(
           HCL::Function::ArgumentTypeError,
@@ -45,7 +45,7 @@ describe HCL::Functions::SetHas do
         ) do
           fn.call([
             HCL::Any.new(val),
-            HCL::Any.new("doesn't matter")
+            HCL::Any.new("doesn't matter"),
           ])
         end
       end
