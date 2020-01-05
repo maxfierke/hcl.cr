@@ -1,4 +1,5 @@
 module HCL
+  # :nodoc:
   Grammar = Pegmatite::DSL.define do
     # Forward-declare `body`, `expression`, and `expr_term` to refer to them before defining them.
     body = declare

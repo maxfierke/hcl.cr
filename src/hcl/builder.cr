@@ -26,20 +26,20 @@ module HCL
   class Builder
     getter :node
 
-    # Yields an HCL::Builder instance for the given root node, which defaults to
-    # `HCL::AST::Document`. Returns the HCL::Builder instance.
+    # Yields an `HCL::Builder` instance for the given root node, which defaults to
+    # `HCL::AST::Document`. Returns the `HCL::Builder` instance.
     def self.build(node : AST::Node? = AST::Document.new)
       new(node).tap do |builder|
         yield builder
       end
     end
 
-    # Instantiate's a new HCL::Builder with the given root node. This
+    # Instantiate's a new `HCL::Builder` with the given root node. This
     # generally does not need to be invoked directly.
     def initialize(@node : AST::Node)
     end
 
-    # Returns the AST node for the builder.
+    # Returns the `HCL::AST::Node` for the builder.
     def to_hcl(_builder : HCL::Builder)
       node
     end
@@ -54,7 +54,7 @@ module HCL
       to_hcl(io)
     end
 
-    # Appends a node to the underlying list node. Raises if the builder is not
+    # Appends an `HCL::AST::Node` to the underlying list node. Raises if the builder is not
     # for a list or if the node is not usable within a list.
     def <<(value : AST::Node)
       n = node
@@ -76,7 +76,7 @@ module HCL
     end
 
     # Adds an attribute to the open HCL body or map/object with the value of the
-    # passed in block. Value must by an AST node or an objectconvertable to HCL,
+    # passed in block. Value must by an AST node or an object convertable to HCL,
     # either through base types supported by the library or a
     # `#to_hcl(builder : HCL::Builder)` method on the object.
     def attribute(name, &block)
@@ -92,8 +92,8 @@ module HCL
       end
     end
 
-    # Adds a block to the open HCL body. Yields a new HCL::Builder for building
-    # the block. `name` is the first parameter, but subsequent parameters are
+    # Yields a new `HCL::Builder` for building a block. Adds the block to the
+    # open HCL body. `name` is the first parameter, but subsequent parameters are
     # used as label values on the block. `#label` may also be used within the
     # block to set labels.
     #
@@ -114,12 +114,12 @@ module HCL
       end
     end
 
-    # Returns a new AST::Identifier node for the given value.
+    # Returns a new `AST::Identifier` node for the given value.
     def identifier(value)
       AST::Identifier.new(value)
     end
 
-    # Appends a new AST::BlockLabel node with the given value to the block's
+    # Appends a new `AST::BlockLabel` node with the given value to the block's
     # labels collection.
     #
     # Raises if active node is not a block.
@@ -140,31 +140,31 @@ module HCL
       end
     end
 
-    # Yields a new HCL::Builder for building a list.
+    # Yields a new `HCL::Builder` for building a list.
     def list(&block)
       self.class.build(AST::List.new) do |builder|
         yield builder
       end
     end
 
-    # Returns a new AST::Literal node for the given boolean value.
+    # Returns a new `AST::Literal` node for the given boolean value.
     def literal(value : Bool)
       AST::Literal.new(value.to_s)
     end
 
-    # Returns a new AST::Literal node for the given value.
+    # Returns a new `AST::Literal` node for the given value.
     def literal(value)
       AST::Literal.new(value)
     end
 
-    # Yields a new HCL::Builder for building a map/object.
+    # Yields a new `HCL::Builder` for building a map/object.
     def map(&block)
       self.class.build(AST::Map.new) do |builder|
         yield builder
       end
     end
 
-    # Returns a new AST::Number node with the given value
+    # Returns a new `AST::Number` node with the given value
     #
     # Raises if value cannot be used or converted to a supported number format
     def number(value)
@@ -205,15 +205,14 @@ module HCL
     private def value_to_node(value) : AST::Node
       case value
       when AST::Node
-        value
+        assert_value_node!(value)
       when .responds_to?(:to_hcl)
         n = value.to_hcl(self)
         n = n.node if n.is_a?(HCL::Builder)
         assert_value_node!(n)
-        n
       else
         raise BuildError.new(
-          "#{value.class} could not be mapped to an HCL::AST::Node. Please use one of the builder helper methods instead or implement #to_hcl(builder : HCL::Builder)."
+          "#{value.class} could not be mapped to an HCL::AST::Node. Please use one of the builder helper methods instead, pass an HCL::AST::Node, or implement #to_hcl(builder : HCL::Builder)."
         )
       end
     end

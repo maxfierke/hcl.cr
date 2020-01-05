@@ -1,10 +1,24 @@
 module HCL
+  # Denotes an attribute within an HCL body (either a document or block).
+  # Can be applied to getters, setters, `property`, and instance variables.
+  #
+  # See `HCL::Serializable` for more info.
   annotation Attribute
   end
 
+  # Denotes a block within an HCL body (either a document or block).
+  # Can be applied to getters, setters, `property`, and instance variables.
+  #
+  # See `HCL::Serializable` for more info.
   annotation Block
   end
 
+  # Denotes a label within an HCL block
+  # Can be applied to getters, setters, `property`, and instance variables.
+  #
+  # This attribute is order-dependent unless an `index` option is specified.
+  #
+  # See `HCL::Serializable` for more info.
   annotation Label
   end
 
@@ -54,25 +68,27 @@ module HCL
   #     lng = 34.5
   #   }
   # "
+  # ```
   #
   # ### Usage
   #
   # Including `HCL::Serializable` will create `#to_hcl` and `self.from_hcl` methods on the current class,
-  # and a constructor which takes an `HCL::Body` and an `HCL::ExpressionContext`.
+  # and a constructor which takes an `HCL::AST::Body` and an `HCL::ExpressionContext`.
   # By default, these methods serialize into an HCL document containing the value of every tagged instance
   # variable, the keys being the instance variable name. Most primitives and collections supported as
-  # instance variable values (string, integer, array, hash, etc.), along with objects which define `to_hcl`
-  # and a constructor taking an `HCL::Body` and an `HCL::ExpressionContext`.
-  # Union types are supported for attributes and blocks, including unions with nil.
+  # instance variable values (string, integer, array, hash, etc.), along with objects which define
+  # `#to_hcl(builder : HCL::Builder)`.
+  #
+  # Union types are supported for attributes and blocks, including unions with `Nil`.
   # If multiple types in a union parse correctly, it is undefined which one will be chosen.
   #
   # To denote an individual instance variable to be parsed and serialized, the annotation `HCL::Attribute`
   # must be placed on the instance variable. Annotating property, getter and setter macros is also allowed.
   # ```
-  # require "json"
+  # require "hcl"
   #
   # class A
-  #   include JSON::Serializable
+  #   include HCL::Serializable
   #
   #   @[HCL::Attribute(key: "my_key", emit_null: true)]
   #   getter a : Int32?
@@ -100,17 +116,19 @@ module HCL
   # A.from_hcl("a = 1\n") # => A(@a=1, @b=1.0)
   # ```
   #
-  # ### Extensions: `JSON::Serializable::Strict` and `JSON::Serializable::Unmapped`.
+  # ### Extensions: `HCL::Serializable::Strict` and `HCL::Serializable::Unmapped`.
   #
   # If the `HCL::Serializable::Strict` module is included, unknown properties in the HCL
   # document will raise a parse exception. By default the unknown properties
   # are silently ignored.
-  # If the `HCL::Serializable::Unmapped` module is included, unknown properties in the HCL
-  # document will be stored in a `Hash(String, HCL::AST::Node)`. On serialization, any keys
-  # inside hcl_unmapped_attributes, hcl_unmapped_blocks, and hcl_unmapped_labels
+  # If the `HCL::Serializable::Unmapped` module is included, unknown attributes and blocks in the HCL
+  # document will be stored in respective `Hash(String, HCL::AST::Node)`. For blocks,
+  # any unmapped labels will be stored in a `Hash(Int32, HCL::AST::Node)`, where
+  # the key is the label index. On serialization, any keys inside
+  # `hcl_unmapped_attributes`, `hcl_unmapped_blocks`, and `hcl_unmapped_labels`
   # will be serialized and appended to the current HCL block or document.
-  # The resultant values are nodes to allow for later evaluation, perhaps with a
-  # different expression context than the original document.
+  # The deserialied values are AST nodes in order to allow for later evaluation,
+  # perhaps with a different expression context than the original document.
   # ```
   # require "hcl"
   #
@@ -122,7 +140,7 @@ module HCL
   #   @a : Int32
   # end
   #
-  # a = A.from_hcl("a = 1\nb = 2\n") # => A(@hcl_unmapped_attributes={"b" => 2_i64}, @a=1)
+  # a = A.from_hcl("a = 1\nb = 2\n") # => A(@hcl_unmapped_attributes={"b" => HCL::AST::Number.new(2_i64)}, @a=1)
   # a.to_hcl # => "a = 1\nb = 2\n"
   # ```
   #
@@ -133,7 +151,7 @@ module HCL
   # * **emit_nulls**: if `true`, emits a `null` value for all nilable properties (by default nulls are not emitted)
   #
   # ```
-  # require "json"
+  # require "hcl"
   #
   # @[HCL::Serializable::Options(emit_nulls: true)]
   # class A
@@ -374,10 +392,15 @@ module HCL
       after_initialize
     end
 
+    # Serializes HCL and writes it to the given IO as a string. Root node for
+    # building can be specified by `node` argument. Defaults to `AST::Document`.
     def to_hcl(io : IO, node : AST::Node? = AST::Document.new)
       to_hcl(HCL::Builder.new(node)).to_s(io)
     end
 
+    # Appends passed in `HCL::Builder` with the HCL structure of the class/struct.
+    #
+    # Returns the passed in `HCL::Builder`
     def to_hcl(builder : HCL::Builder)
       {% begin %}
         {% options = @type.annotation(::HCL::Serializable::Options) %}
@@ -454,6 +477,7 @@ module HCL
       builder
     end
 
+    # Returns HCL serialization as a String
     def to_hcl
       String.build do |builder|
         to_hcl(builder)
@@ -475,6 +499,9 @@ module HCL
     protected def on_to_hcl(builder)
     end
 
+    # Modifies behavior of `HCL::Serializable` such that unknown properties in
+    # the HCLdocument will raise a parse exception. By default the unknown properties
+    # are silently ignored.
     module Strict
       protected def on_unknown_hcl_attribute(node, key, ctx)
         if node.is_a?(::HCL::AST::Document)
@@ -507,14 +534,27 @@ module HCL
       end
     end
 
+    # Modifies behavior of `HCL::Serializable` such that unknown attributes and
+    # blocks in the HCL document will be stored in respective
+    # `Hash(String, HCL::AST::Node)`. For classes/structs representing blocks,
+    # any unmapped labels will be stored in a `Hash(Int32, HCL::AST::Node)`, where
+    # the key is the label index. On serialization, any keys inside
+    # `hcl_unmapped_attributes`, `hcl_unmapped_blocks`, and `hcl_unmapped_labels`
+    # will be serialized and appended to the current HCL block or document.
+    # The deserialied values are AST nodes in order to allow for later evaluation,
+    # perhaps with a different expression context than the original document.
     module Unmapped
-      # Unmapped attribute nodes
+      # Unmapped attribute nodes. Key is the name of the attribute. Value is the
+      # AST node
       property hcl_unmapped_attributes = Hash(String, ::HCL::AST::Node).new
 
-      # Unmapped block node groups
+      # Unmapped block node groups. Key is the ID/type of the block. Value is the
+      # AST node.
       property hcl_unmapped_blocks = Hash(String, Array(::HCL::AST::Block)).new
 
-      # Unmapped label nodes
+      # Unmapped label nodes. Key is the index of the label. Value is the AST
+      # node. This will only be populated for classes/structs represented as
+      # blocks in another class/struct implementing `HCL::Serializable`.
       property hcl_unmapped_labels = Hash(Int32, ::HCL::AST::Node).new
 
       protected def on_unknown_hcl_attribute(node, key, ctx)

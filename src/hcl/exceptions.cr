@@ -12,6 +12,7 @@ module HCL
     end
   end
 
+  # Raised when an invalid AST is attempted with `HCL::Builder`
   class BuildError < Exception; end
 
   # Base error class for expressions within HCL
