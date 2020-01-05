@@ -1,13 +1,13 @@
 module HCL
   module AST
     abstract class Node
-      @kind : Symbol
+      @source : String
+      @token : Pegmatite::Token?
 
-      getter :source, :kind
+      getter :source
 
-      def initialize(peg_tuple : Pegmatite::Token, source : String)
-        kind, src_start, src_finish = peg_tuple
-        @kind = kind
+      def initialize(source : String = "", token : Pegmatite::Token? = nil)
+        @token = token
         @source = source
       end
 

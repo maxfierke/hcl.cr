@@ -162,7 +162,7 @@ describe HCL::Parser do
           "aws_instance" => {
             "web" => {
               "source_dest_check" => false,
-              "another_boolean"   => "true",
+              "another_boolean"   => true,
               "something_i_want_default" => nil
             }
           }
@@ -318,7 +318,7 @@ describe HCL::Parser do
               "ami" => "${var.ami}",
               "count" => 2,
               "source_dest_check" => false,
-              "another_boolean" => "true",
+              "another_boolean" => true,
               "something_i_want_default" => nil,
               "connection" => {
                 "user" => "root",

@@ -241,6 +241,10 @@ module HCL
       end
     end
 
+    def to_hcl(builder : HCL::Builder)
+      raw.to_hcl(builder)
+    end
+
     # :nodoc:
     def to_json(builder : JSON::Builder)
       raw.to_json(builder)

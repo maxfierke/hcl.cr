@@ -38,6 +38,13 @@ variable "prose" {
     there once
     was a story
   PROSE
+
+  nested = {
+    heredoc = <<-NESTED
+      i am nested
+      and a heredoc
+    NESTED
+  }
 }
 
 HEREDOC

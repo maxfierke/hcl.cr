@@ -1,24 +1,21 @@
 module HCL
   module AST
-    class Block < Node
+    class Block < Body
       @labels : Array(BlockLabel)
 
-      getter :id, :labels, :attributes, :blocks
+      getter :id, :labels
 
       def initialize(
-        peg_tuple : Pegmatite::Token,
-        string : String,
         id : String,
-        labels : Array(BlockLabel),
-        attributes : Hash(String, Node),
-        blocks : Array(Block)
+        labels : Array(BlockLabel) = Array(BlockLabel).new,
+        attributes : Hash(String, Node) = Hash(String, Node).new,
+        blocks : Array(Block) = Array(Block).new,
+        **kwargs
       )
-        super(peg_tuple, string)
+        super(attributes, blocks, **kwargs)
 
         @id = id
         @labels = labels
-        @attributes = attributes
-        @blocks = blocks
       end
 
       def to_s(io : IO)
@@ -32,15 +29,23 @@ module HCL
           end
         end
 
-        io << "{\n"
+        io << "{"
+        io << "\n" if attributes.any? || blocks.any?
 
         indent = "  "
 
         attributes.each do |key, value|
           io << indent
           io << "#{key} = "
-          value.to_s(io)
-          io << "\n"
+
+          attr_lines = value.to_s.split("\n")
+          attr_lines.each do |line|
+            if line != ""
+              io << indent if line != attr_lines.first
+              io << line
+              io << "\n"
+            end
+          end
         end
 
         if blocks.any?
@@ -61,29 +66,22 @@ module HCL
         io << "}\n"
       end
 
-      def value(ctx : ExpressionContext) : Any
-        block_header = [id] + labels.map do |label|
-          label.value(ctx)
-        end
-        block_value = value_dict(ctx)
-        block_header.reverse.reduce(block_value) do |acc, val|
-          Any.new({ val.to_s => acc })
+      def block_header(ctx : ExpressionContext)
+        Array(Any).new(labels.size + 1).tap do |arr|
+          arr << Any.new(id)
+          labels.each do |label|
+            arr << label.value(ctx)
+          end
+
+          arr
         end
       end
 
-      private def value_dict(ctx)
-        dict = {} of String => Any
-
-        attributes.each do |key, value|
-          dict[key] = value.value(ctx)
+      def value(ctx : ExpressionContext) : Any
+        block_value = super(ctx)
+        block_header(ctx).reverse.reduce(block_value) do |acc, val|
+          Any.new({ val.to_s => acc })
         end
-
-        blocks.each do |block|
-          block_dict = block.value(ctx).as_h
-          dict.merge!(block_dict)
-        end
-
-        Any.new(dict)
       end
     end
   end

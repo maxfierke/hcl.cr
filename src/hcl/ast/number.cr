@@ -5,15 +5,20 @@ module HCL
 
       @value : Value
 
-      def initialize(peg_tuple : Pegmatite::Token, string : String)
-        stripped_string = string.strip('"')
-        super(peg_tuple, stripped_string)
+      def initialize(source, token : Pegmatite::Token? = nil)
+        super(source: source.strip('"'), token: token)
 
-        @value = if source.includes?('.')
-          source.to_f64
+        @value = if @source.includes?('.')
+          @source.to_f64
         else
-          source.to_i64
+          @source.to_i64
         end
+      end
+
+      def initialize(number : Value, **kwargs)
+        super(**kwargs)
+        @source = number.to_s
+        @value = number
       end
 
       def to_s(io : IO)

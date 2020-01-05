@@ -19,13 +19,12 @@ module HCL
       NOT = :"!"
 
       def initialize(
-        peg_tuple : Pegmatite::Token,
-        string : String,
         operator : String,
         left_operand : Node,
-        right_operand : Node?
+        right_operand : Node?,
+        **kwargs
       )
-        super(peg_tuple, string)
+        super(**kwargs)
 
         @operator = case operator
           when "+" then ADDITION

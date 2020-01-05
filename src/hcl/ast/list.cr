@@ -3,8 +3,8 @@ module HCL
     class List < Node
       getter :children
 
-      def initialize(peg_tuple : Pegmatite::Token, string : String)
-        super(peg_tuple, string)
+      def initialize(**kwargs)
+        super(**kwargs)
         @children = [] of Node
       end
 
