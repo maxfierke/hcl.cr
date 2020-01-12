@@ -30,6 +30,7 @@ clean:
 
 .PHONY: test
 test: deps $(SOURCES)
+	$(CRYSTAL_BIN) tool format --check
 	$(CRYSTAL_BIN) spec $(CRFLAGS)
 
 .PHONY: spec
