@@ -170,7 +170,7 @@ describe "HCL::Serializable" do
     HCL
 
     parsed.dictionary.should eq({
-      "hello" => "world",
+      "hello"   => "world",
       "goodbye" => "moon",
     })
     parsed.strings.should eq(["yarn", "twine", "nylon"])
