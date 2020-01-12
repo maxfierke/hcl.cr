@@ -502,25 +502,6 @@
 
 
 
-  <h2>
-    <a id="overview" class="anchor" href="#overview">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Overview
-  </h2>
-
-  <p>Modifies behavior of <code><a href="../../HCL/Serializable.html">HCL::Serializable</a></code> such that unknown attributes and
-blocks in the HCL document will be stored in respective
-<code><a href="../../Hash.html">Hash</a>(<a href="../../String.html">String</a>, <a href="../../HCL/AST/Node.html">HCL::AST::Node</a>)</code>. For classes/structs representing blocks,
-any unmapped labels will be stored in a <code><a href="../../Hash.html">Hash</a>(Int32, <a href="../../HCL/AST/Node.html">HCL::AST::Node</a>)</code>, where
-the key is the label index. On serialization, any keys inside
-<code><a href="../../HCL/Serializable/Unmapped.html#hcl_unmapped_attributes-instance-method">#hcl_unmapped_attributes</a></code>, <code><a href="../../HCL/Serializable/Unmapped.html#hcl_unmapped_blocks-instance-method">#hcl_unmapped_blocks</a></code>, and <code><a href="../../HCL/Serializable/Unmapped.html#hcl_unmapped_labels-instance-method">#hcl_unmapped_labels</a></code>
-will be serialized and appended to the current HCL block or document.
-The deserialied values are AST nodes in order to allow for later evaluation,
-perhaps with a different expression context than the original document.</p>
-
 
 
 
@@ -544,7 +525,7 @@ perhaps with a different expression context than the original document.</p>
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/8a17c0c4cee768fb007fa95732d382403861beaf/src/hcl/serializable.cr#L546" target="_blank">
+      <a href="https://github.com/maxfierke/hcl.cr/blob/e003941fc38039718e17b3c8fad9ef8bc7ef3b6c/src/hcl/serializable.cr#L579" target="_blank">
         hcl/serializable.cr
       </a>
     
@@ -572,42 +553,42 @@ perhaps with a different expression context than the original document.</p>
       <li class="entry-summary">
         <a href="#hcl_unmapped_attributes-instance-method" class="signature"><strong>#hcl_unmapped_attributes</strong></a>
         
-          <div class="summary"><p>Unmapped attribute nodes.</p></div>
+          <div class="summary"><p>Unmapped attribute nodes</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#hcl_unmapped_attributes=(hcl_unmapped_attributes)-instance-method" class="signature"><strong>#hcl_unmapped_attributes=</strong>(hcl_unmapped_attributes)</a>
         
-          <div class="summary"><p>Unmapped attribute nodes.</p></div>
+          <div class="summary"><p>Unmapped attribute nodes</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#hcl_unmapped_blocks-instance-method" class="signature"><strong>#hcl_unmapped_blocks</strong></a>
         
-          <div class="summary"><p>Unmapped block node groups.</p></div>
+          <div class="summary"><p>Unmapped block node groups</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#hcl_unmapped_blocks=(hcl_unmapped_blocks)-instance-method" class="signature"><strong>#hcl_unmapped_blocks=</strong>(hcl_unmapped_blocks)</a>
         
-          <div class="summary"><p>Unmapped block node groups.</p></div>
+          <div class="summary"><p>Unmapped block node groups</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#hcl_unmapped_labels-instance-method" class="signature"><strong>#hcl_unmapped_labels</strong></a>
         
-          <div class="summary"><p>Unmapped label nodes.</p></div>
+          <div class="summary"><p>Unmapped label nodes</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#hcl_unmapped_labels=(hcl_unmapped_labels)-instance-method" class="signature"><strong>#hcl_unmapped_labels=</strong>(hcl_unmapped_labels)</a>
         
-          <div class="summary"><p>Unmapped label nodes.</p></div>
+          <div class="summary"><p>Unmapped label nodes</p></div>
         
       </li>
     
@@ -645,14 +626,13 @@ perhaps with a different expression context than the original document.</p>
       
         <div class="doc">
           
-          <p>Unmapped attribute nodes. Key is the name of the attribute. Value is the
-AST node</p>
+          <p>Unmapped attribute nodes</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/8a17c0c4cee768fb007fa95732d382403861beaf/src/hcl/serializable.cr#L549" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/e003941fc38039718e17b3c8fad9ef8bc7ef3b6c/src/hcl/serializable.cr#L581" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -667,14 +647,13 @@ AST node</p>
       
         <div class="doc">
           
-          <p>Unmapped attribute nodes. Key is the name of the attribute. Value is the
-AST node</p>
+          <p>Unmapped attribute nodes</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/8a17c0c4cee768fb007fa95732d382403861beaf/src/hcl/serializable.cr#L549" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/e003941fc38039718e17b3c8fad9ef8bc7ef3b6c/src/hcl/serializable.cr#L581" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -689,14 +668,13 @@ AST node</p>
       
         <div class="doc">
           
-          <p>Unmapped block node groups. Key is the ID/type of the block. Value is the
-AST node.</p>
+          <p>Unmapped block node groups</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/8a17c0c4cee768fb007fa95732d382403861beaf/src/hcl/serializable.cr#L553" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/e003941fc38039718e17b3c8fad9ef8bc7ef3b6c/src/hcl/serializable.cr#L584" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -711,14 +689,13 @@ AST node.</p>
       
         <div class="doc">
           
-          <p>Unmapped block node groups. Key is the ID/type of the block. Value is the
-AST node.</p>
+          <p>Unmapped block node groups</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/8a17c0c4cee768fb007fa95732d382403861beaf/src/hcl/serializable.cr#L553" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/e003941fc38039718e17b3c8fad9ef8bc7ef3b6c/src/hcl/serializable.cr#L584" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -733,15 +710,13 @@ AST node.</p>
       
         <div class="doc">
           
-          <p>Unmapped label nodes. Key is the index of the label. Value is the AST
-node. This will only be populated for classes/structs represented as
-blocks in another class/struct implementing <code><a href="../../HCL/Serializable.html">HCL::Serializable</a></code>.</p>
+          <p>Unmapped label nodes</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/8a17c0c4cee768fb007fa95732d382403861beaf/src/hcl/serializable.cr#L558" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/e003941fc38039718e17b3c8fad9ef8bc7ef3b6c/src/hcl/serializable.cr#L587" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -756,15 +731,13 @@ blocks in another class/struct implementing <code><a href="../../HCL/Serializabl
       
         <div class="doc">
           
-          <p>Unmapped label nodes. Key is the index of the label. Value is the AST
-node. This will only be populated for classes/structs represented as
-blocks in another class/struct implementing <code><a href="../../HCL/Serializable.html">HCL::Serializable</a></code>.</p>
+          <p>Unmapped label nodes</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/8a17c0c4cee768fb007fa95732d382403861beaf/src/hcl/serializable.cr#L558" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/e003941fc38039718e17b3c8fad9ef8bc7ef3b6c/src/hcl/serializable.cr#L587" target="_blank">View source</a>]
         
       </div>
     </div>
