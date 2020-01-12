@@ -679,7 +679,7 @@ a.to_hcl                         <span class="c"># =&gt; &quot;a = 1\nb = 2\n&qu
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/e003941fc38039718e17b3c8fad9ef8bc7ef3b6c/src/hcl/serializable.cr#L166" target="_blank">
+      <a href="https://github.com/maxfierke/hcl.cr/blob/d41f355fc6209971f2b642126655a2a0bd1b8348/src/hcl/serializable.cr#L166" target="_blank">
         hcl/serializable.cr
       </a>
     
@@ -724,15 +724,21 @@ a.to_hcl                         <span class="c"># =&gt; &quot;a = 1\nb = 2\n&qu
       <li class="entry-summary">
         <a href="#to_hcl(io:IO,node:AST::Node?=AST::Document.new)-instance-method" class="signature"><strong>#to_hcl</strong>(io : IO, node : AST::Node? = <span class="t">AST</span><span class="t">::</span><span class="t">Document</span>.<span class="k">new</span>)</a>
         
+          <div class="summary"><p>Serializes HCL and writes it to the given IO as a string.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#to_hcl(builder:HCL::Builder)-instance-method" class="signature"><strong>#to_hcl</strong>(builder : HCL::Builder)</a>
         
+          <div class="summary"><p>Appends passed in <code><a href="../HCL/Builder.html">HCL::Builder</a></code> with the HCL structure of the class/struct.</p></div>
+        
       </li>
     
       <li class="entry-summary">
         <a href="#to_hcl-instance-method" class="signature"><strong>#to_hcl</strong></a>
+        
+          <div class="summary"><p>Returns HCL serialization as a String</p></div>
         
       </li>
     
@@ -767,7 +773,7 @@ a.to_hcl                         <span class="c"># =&gt; &quot;a = 1\nb = 2\n&qu
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/e003941fc38039718e17b3c8fad9ef8bc7ef3b6c/src/hcl/serializable.cr#L195" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/d41f355fc6209971f2b642126655a2a0bd1b8348/src/hcl/serializable.cr#L195" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -794,10 +800,16 @@ a.to_hcl                         <span class="c"># =&gt; &quot;a = 1\nb = 2\n&qu
         <a class="method-permalink" href="#to_hcl(io:IO,node:AST::Node?=AST::Document.new)-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Serializes HCL and writes it to the given IO as a string. Root node for
+building can be specified by <code>node</code> argument. Defaults to <code><a href="../HCL/AST/Document.html">AST::Document</a></code>.</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/e003941fc38039718e17b3c8fad9ef8bc7ef3b6c/src/hcl/serializable.cr#L446" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/d41f355fc6209971f2b642126655a2a0bd1b8348/src/hcl/serializable.cr#L448" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -810,10 +822,17 @@ a.to_hcl                         <span class="c"># =&gt; &quot;a = 1\nb = 2\n&qu
         <a class="method-permalink" href="#to_hcl(builder:HCL::Builder)-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Appends passed in <code><a href="../HCL/Builder.html">HCL::Builder</a></code> with the HCL structure of the class/struct.</p>
+
+<p>Returns the passed in <code><a href="../HCL/Builder.html">HCL::Builder</a></code></p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/e003941fc38039718e17b3c8fad9ef8bc7ef3b6c/src/hcl/serializable.cr#L450" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/d41f355fc6209971f2b642126655a2a0bd1b8348/src/hcl/serializable.cr#L455" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -826,10 +845,15 @@ a.to_hcl                         <span class="c"># =&gt; &quot;a = 1\nb = 2\n&qu
         <a class="method-permalink" href="#to_hcl-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Returns HCL serialization as a String</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/e003941fc38039718e17b3c8fad9ef8bc7ef3b6c/src/hcl/serializable.cr#L526" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/d41f355fc6209971f2b642126655a2a0bd1b8348/src/hcl/serializable.cr#L532" target="_blank">View source</a>]
         
       </div>
     </div>
