@@ -141,7 +141,7 @@ module HCL
   # end
   #
   # a = A.from_hcl("a = 1\nb = 2\n") # => A(@hcl_unmapped_attributes={"b" => HCL::AST::Number.new(2_i64)}, @a=1)
-  # a.to_hcl                         # => "a = 1\nb = 2\n"
+  # a.to_hcl # => "a = 1\nb = 2\n"
   # ```
   #
   #
@@ -209,6 +209,7 @@ module HCL
                 has_default: ivar.has_default_value?,
                 default:     ivar.default_value,
                 nilable:     ivar.type.nilable?,
+                presence:    ann && ann[:presence],
               }
             %}
           {% elsif ann = ivar.annotation(::HCL::Block) %}
@@ -219,6 +220,7 @@ module HCL
                 has_default: ivar.has_default_value?,
                 default:     ivar.default_value,
                 nilable:     ivar.type.nilable?,
+                presence:    ann && ann[:presence],
               }
             %}
           {% elsif ann = ivar.annotation(::HCL::Label) %}
@@ -229,6 +231,7 @@ module HCL
                 has_default: ivar.has_default_value?,
                 default:     ivar.default_value,
                 nilable:     ivar.type.nilable?,
+                presence:    ann && ann[:presence],
               }
             %}
             {% current_label_idx = ann[:index] ? (ann[:index] + 1) : (current_label_idx + 1) %}
@@ -278,7 +281,10 @@ module HCL
           {% elsif value[:has_default] %}
             @{{name}} = %var{name}.nil? ? {{value[:default]}} : %var{name}.as({{value[:type]}})
           {% else %}
-            @{{name}} = (%var{name}).as({{value[:type]}})
+          {% end %}
+
+          {% if value[:presence] %}
+            @{{name}}_present = %found{name}
           {% end %}
         {% end %}
 
@@ -343,6 +349,10 @@ module HCL
           {% else %}
             @{{name}} = (%var{name}).as({{value[:type]}})
           {% end %}
+
+          {% if value[:presence] %}
+            @{{name}}_present = %found{name}
+          {% end %}
         {% end %}
 
         # Process labels
@@ -380,6 +390,10 @@ module HCL
             {% else %}
               @{{name}} = (%var{name}).as({{value[:type]}})
             {% end %}
+
+            {% if value[:presence] %}
+              @{{name}}_present = %found{name}
+            {% end %}
           {% end %}
         else
           {% unless labels.keys.empty? %}
@@ -392,15 +406,10 @@ module HCL
       after_initialize
     end
 
-    # Serializes HCL and writes it to the given IO as a string. Root node for
-    # building can be specified by `node` argument. Defaults to `AST::Document`.
     def to_hcl(io : IO, node : AST::Node? = AST::Document.new)
       to_hcl(HCL::Builder.new(node)).to_s(io)
     end
 
-    # Appends passed in `HCL::Builder` with the HCL structure of the class/struct.
-    #
-    # Returns the passed in `HCL::Builder`
     def to_hcl(builder : HCL::Builder)
       {% begin %}
         {% options = @type.annotation(::HCL::Serializable::Options) %}
@@ -420,7 +429,7 @@ module HCL
           {% elsif ann = ivar.annotation(::HCL::Block) %}
             {%
               blocks[ivar.id] = {
-                key: ((ann && ann[:key]) || ivar).id.stringify,
+                key: ((ann && ann[:key]) || ivar).id.stringify
               }
             %}
           {% elsif ann = ivar.annotation(::HCL::Label) %}
@@ -477,7 +486,6 @@ module HCL
       builder
     end
 
-    # Returns HCL serialization as a String
     def to_hcl
       String.build do |builder|
         to_hcl(builder)
@@ -499,9 +507,6 @@ module HCL
     protected def on_to_hcl(builder)
     end
 
-    # Modifies behavior of `HCL::Serializable` such that unknown properties in
-    # the HCLdocument will raise a parse exception. By default the unknown properties
-    # are silently ignored.
     module Strict
       protected def on_unknown_hcl_attribute(node, key, ctx)
         if node.is_a?(::HCL::AST::Document)
@@ -534,27 +539,14 @@ module HCL
       end
     end
 
-    # Modifies behavior of `HCL::Serializable` such that unknown attributes and
-    # blocks in the HCL document will be stored in respective
-    # `Hash(String, HCL::AST::Node)`. For classes/structs representing blocks,
-    # any unmapped labels will be stored in a `Hash(Int32, HCL::AST::Node)`, where
-    # the key is the label index. On serialization, any keys inside
-    # `hcl_unmapped_attributes`, `hcl_unmapped_blocks`, and `hcl_unmapped_labels`
-    # will be serialized and appended to the current HCL block or document.
-    # The deserialied values are AST nodes in order to allow for later evaluation,
-    # perhaps with a different expression context than the original document.
     module Unmapped
-      # Unmapped attribute nodes. Key is the name of the attribute. Value is the
-      # AST node
+      # Unmapped attribute nodes
       property hcl_unmapped_attributes = Hash(String, ::HCL::AST::Node).new
 
-      # Unmapped block node groups. Key is the ID/type of the block. Value is the
-      # AST node.
+      # Unmapped block node groups
       property hcl_unmapped_blocks = Hash(String, Array(::HCL::AST::Block)).new
 
-      # Unmapped label nodes. Key is the index of the label. Value is the AST
-      # node. This will only be populated for classes/structs represented as
-      # blocks in another class/struct implementing `HCL::Serializable`.
+      # Unmapped label nodes
       property hcl_unmapped_labels = Hash(Int32, ::HCL::AST::Node).new
 
       protected def on_unknown_hcl_attribute(node, key, ctx)
@@ -573,10 +565,10 @@ module HCL
         builder_node = builder.node
 
         if builder_node.is_a?(::HCL::AST::Block)
-          hcl_unmapped_labels.to_a
-            .sort_by { |label_tuple| label_tuple[0] }
-            .map { |label_tuple| label_tuple[1] }
-            .each do |label|
+          hcl_unmapped_labels.to_a.
+            sort_by { |label_tuple| label_tuple[0] }.
+            map { |label_tuple| label_tuple[1] }.
+            each do |label|
               builder_node.labels << label.as(::HCL::AST::BlockLabel)
             end
         end

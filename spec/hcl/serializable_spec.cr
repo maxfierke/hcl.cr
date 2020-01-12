@@ -87,8 +87,10 @@ class House
   @[HCL::Attribute]
   property address : String
 
-  @[HCL::Block]
+  @[HCL::Block(presence: true)]
   property location : Location?
+
+  getter? location_present : Bool
 end
 
 hcl_house = <<-HCL
@@ -153,9 +155,15 @@ describe "HCL::Serializable" do
     house = House.from_hcl(hcl_house)
     house.address.should eq("Crystal Road 1234")
     house.location.should_not be_nil
+    house.location_present?.should eq(true)
     loc = house.location.not_nil!
     loc.latitude.should eq(12.3)
     loc.longitude.should eq(34.5)
+
+    house = House.from_hcl("address = \"Crystal Road 1234\"\n")
+    house.address.should eq("Crystal Road 1234")
+    house.location.should be_nil
+    house.location_present?.should eq(false)
   end
 
   it "allows rendering an HCL file from a schema with nilable blocks" do
