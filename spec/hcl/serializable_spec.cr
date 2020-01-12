@@ -93,6 +93,19 @@ class House
   getter? location_present : Bool
 end
 
+class NativeTypesDocument
+  include HCL::Serializable
+
+  @[HCL::Attribute]
+  property dictionary : Hash(String, String)
+
+  @[HCL::Attribute]
+  property strings : Array(String)
+
+  @[HCL::Attribute]
+  property union_list : Array(String | Int64)
+end
+
 hcl_house = <<-HCL
   address = "Crystal Road 1234"
   location {
@@ -142,6 +155,26 @@ describe "HCL::Serializable" do
     parsed.b_blocks[1].which.should eq("two")
     parsed.b_blocks[1].part.should eq("point-one")
     parsed.empty_block.should be_a(TestEmptyBlock)
+  end
+
+  it "allows parsing an HCL file mapped to complex native types" do
+    parsed = NativeTypesDocument.from_hcl(<<-HCL)
+    dictionary = {
+      hello = "world",
+      goodbye = "moon"
+    }
+
+    strings = ["yarn", "twine", "nylon"]
+    union_list = ["the answer is", 42]
+
+    HCL
+
+    parsed.dictionary.should eq({
+      "hello" => "world",
+      "goodbye" => "moon",
+    })
+    parsed.strings.should eq(["yarn", "twine", "nylon"])
+    parsed.union_list.should eq(["the answer is", 42])
   end
 
   it "allows rendering an HCL file from a schema" do

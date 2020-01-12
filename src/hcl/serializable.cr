@@ -141,7 +141,7 @@ module HCL
   # end
   #
   # a = A.from_hcl("a = 1\nb = 2\n") # => A(@hcl_unmapped_attributes={"b" => HCL::AST::Number.new(2_i64)}, @a=1)
-  # a.to_hcl # => "a = 1\nb = 2\n"
+  # a.to_hcl                         # => "a = 1\nb = 2\n"
   # ```
   #
   #
@@ -250,7 +250,43 @@ module HCL
           {% for name, value in attributes %}
             when {{value[:key]}}
               %found{name} = true
-              %var{name} = attr_node.value(__ctx_from_hcl).raw
+              node_val = attr_node.value(__ctx_from_hcl).raw
+              %var{name} = begin
+                case node_val
+                when {{value[:type]}}
+                  node_val
+                when Array(::HCL::Any)
+                  {% if value[:type] <= Array %}
+                    {% if value[:type].type_vars.includes?(::HCL::Any) %}
+                      node_val
+                    {% else %}
+                      node_val.map { |v| v.raw.as({{value[:type].type_vars.join(" | ").id}}) }
+                    {% end %}
+                  {% else %}
+                    raise ::HCL::ParseException.new(
+                      "HCL deserialized an array but it was not expected. Expected {{value[:type]}}."
+                    )
+                  {% end %}
+                when Hash(String, ::HCL::Any)
+                  {% if value[:type] <= Hash %}
+                    {% if value[:type].type_vars.includes?(::HCL::Any) %}
+                      node_val
+                    {% else %}
+                      node_val.transform_values do |val|
+                        val.raw.as({{value[:type].type_vars.uniq.join(" | ").id}})
+                      end
+                    {% end %}
+                  {% else %}
+                    raise ::HCL::ParseException.new(
+                      "HCL deserialized a hash but it was not expected. Expected {{value[:type]}}."
+                    )
+                  {% end %}
+                else
+                  raise ::HCL::ParseException.new(
+                      "HCL deserialized #{node_val.class} but it was not expected. Expected {{value[:type]}}."
+                    )
+                end
+              end.as({{value[:type]}})
           {% end %}
           else
             on_unknown_hcl_attribute(__node_from_hcl, key, __ctx_from_hcl)
@@ -274,13 +310,14 @@ module HCL
 
           {% if value[:nilable] %}
             {% if value[:has_default] != nil %}
-              @{{name}} = %found{name} ? %var{name}.as({{value[:type]}}) : {{value[:default]}}
+              @{{name}} = %found{name} ? %var{name} : {{value[:default]}}
             {% else %}
-              @{{name}} = %var{name}.as({{value[:type]}})
+              @{{name}} = %var{name}
             {% end %}
           {% elsif value[:has_default] %}
-            @{{name}} = %var{name}.nil? ? {{value[:default]}} : %var{name}.as({{value[:type]}})
+            @{{name}} = %var{name}.nil? ? {{value[:default]}} : %var{name}.not_nil!.as({{value[:type]}})
           {% else %}
+            @{{name}} = %var{name}.not_nil!.as({{value[:type]}})
           {% end %}
 
           {% if value[:presence] %}
@@ -304,7 +341,7 @@ module HCL
 
               %found{name} = true
 
-            {% if value[:type] < Array && !value[:type].type_vars.empty? %}
+            {% if value[:type] <= Array && !value[:type].type_vars.empty? %}
               %var{name} ||= {{value[:type]}}.new
               {% item_type = value[:type].type_vars.first %}
               %var{name} << {{item_type}}.new(block_node, __ctx_from_hcl)
@@ -429,7 +466,7 @@ module HCL
           {% elsif ann = ivar.annotation(::HCL::Block) %}
             {%
               blocks[ivar.id] = {
-                key: ((ann && ann[:key]) || ivar).id.stringify
+                key: ((ann && ann[:key]) || ivar).id.stringify,
               }
             %}
           {% elsif ann = ivar.annotation(::HCL::Label) %}
