@@ -73,22 +73,24 @@ module HCL
       # Build the node from the given main token and possibly further recursion.
       value =
         case kind
-        when :block         then build_block(main, iter, source)
-        when :conditional   then build_conditional(main, iter, source)
-        when :expression    then build_expression(main, iter, source)
-        when :function_call then build_call(main, iter, source)
-        when :get_attr      then build_get_attr(main, iter, source)
-        when :heredoc       then build_heredoc(main, iter, source)
-        when :identifier    then build_identifier(main, iter, source)
-        when :index         then build_index(main, iter, source)
-        when :literal       then AST::Literal.new(token: main, source: source[start...finish])
-        when :number        then AST::Number.new(token: main, source: source[start...finish])
-        when :object        then build_map(main, iter, source)
-        when :operation     then build_operation(main, iter, source)
-        when :splat         then AST::SplatExpr.new(token: main, source: source[start...finish])
-        when :string        then build_string(main, iter, source)
-        when :tuple         then build_list(main, iter, source)
-        else                     raise NotImplementedError.new(kind)
+        when :block                  then build_block(main, iter, source)
+        when :conditional            then build_conditional(main, iter, source)
+        when :expression             then build_expression(main, iter, source)
+        when :function_call          then build_call(main, iter, source)
+        when :get_attr               then build_get_attr(main, iter, source)
+        when :heredoc                then build_heredoc(main, iter, source)
+        when :identifier             then build_identifier(main, iter, source)
+        when :index                  then build_index(main, iter, source)
+        when :literal                then AST::Literal.new(token: main, source: source[start...finish])
+        when :number                 then AST::Number.new(token: main, source: source[start...finish])
+        when :object                 then build_map(main, iter, source)
+        when :operation              then build_operation(main, iter, source)
+        when :splat                  then AST::SplatExpr.new(token: main, source: source[start...finish])
+        when :string                 then build_string(main, iter, source)
+        when :template               then build_template(main, iter, source)
+        when :template_interpolation then build_template_interpolation(main, iter, source)
+        when :tuple                  then build_list(main, iter, source)
+        else                              raise NotImplementedError.new(kind)
         end
 
       # Assert that we have consumed all child tokens.
@@ -238,6 +240,41 @@ module HCL
     private def build_string(main, iter, source) : AST::Literal
       kind, start, finish = main
       AST::Literal.new(token: main, source: source[start...finish])
+    end
+
+    private def build_template(main, iter, source) : AST::Template
+      _, start, finish = main
+
+      template_nodes = [] of AST::Node
+
+      iter.while_next_is_child_of(main) do |child|
+        template_nodes << build_node(child, iter, source)
+      end
+
+      unless template_nodes.any?
+        raise "BUG: expected template to have content"
+      end
+
+      AST::Template.new(
+        template_nodes,
+        token: main,
+        source: source[start...finish]
+      )
+    end
+
+    private def build_template_interpolation(main, iter, source) : AST::TemplateInterpolation
+      _, start, finish = main
+
+      next_token = iter.next_as_child_of(main)
+      assert_token_kind!(next_token, :expression)
+
+      expr_node = build_expression(next_token, iter, source)
+
+      AST::TemplateInterpolation.new(
+        expr_node,
+        token: main,
+        source: source[start...finish]
+      )
     end
 
     private def build_list(main, iter, source) : AST::List

@@ -67,7 +67,10 @@ puts "#" * 80
 puts "END DOCUMENT DUMP"
 puts "#" * 80
 
-doc_value = doc.value
+ctx = HCL::ExpressionContext.default_context
+ctx.variables["var"] = HCL::Any.new({"ami" => "ami-12345"})
+
+doc_value = doc.value(ctx)
 puts "#" * 80
 puts "START DOC VALUE DUMP"
 puts "#" * 80
@@ -76,7 +79,7 @@ puts "#" * 80
 puts "END DOC VALUE DUMP"
 puts "#" * 80
 
-doc_unwrap = doc.unwrap
+doc_unwrap = doc.unwrap(ctx)
 puts "#" * 80
 puts "START DOC UNWRAP DUMP"
 puts "#" * 80
