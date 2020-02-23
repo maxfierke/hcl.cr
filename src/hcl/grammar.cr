@@ -5,6 +5,7 @@ module HCL
     body = declare
     expression = declare
     expr_term = declare
+    template = declare
 
     newline = (char('\r').maybe >> char('\n')).named(:newline, false)
 
@@ -75,12 +76,56 @@ module HCL
 
     variable_expr = identifier
 
+    _tpl_literal_char =
+      str("$${") |
+        str("%%{") |
+        (~str("${") >> ~(s >> str("${~")) >> ~str("%{") >> ~(s >> str("%{~")) >> string_char)
+    _tpl_interp_begin = ((s >> str("${~")) | str("${"))
+    _tpl_interp_end = ((str("~}") >> s) | str("}"))
+    _tpl_directive_begin = ((s >> str("%{~")) | str("%{"))
+    _tpl_directive_end = _tpl_interp_end
+
+    template_literal = _tpl_literal_char.repeat(1).named(:literal)
+
+    template_interpolation = (
+      _tpl_interp_begin >>
+      s >> expression >> s >>
+      _tpl_interp_end
+    ).named(:template_interpolation)
+
+    template_if = (
+      (_tpl_directive_begin >> s >> str("if") >> s >> expression >> s >> _tpl_directive_end) >> snl >>
+      template >>
+      (
+        (_tpl_directive_begin >> s >> str("else") >> s >> _tpl_directive_end) >> snl >>
+        template
+      ).maybe >> snl >>
+      (_tpl_directive_begin >> s >> str("endif") >> s >> _tpl_directive_end)
+    ).named(:template_if)
+
+    template_for = (
+      _tpl_directive_begin >> s >> str("for") >> s >>
+      identifier >> (char(',') >> s >> identifier).maybe >>
+      str("in") >> s >> expression >> s >> _tpl_directive_end >>
+      template >>
+      _tpl_directive_begin >> s >> str("endfor") >> s >> _tpl_directive_end
+    ).named(:template_for)
+
+    template_directive = template_if | template_for
+    template.define (
+      char('"') >> (
+        template_interpolation | # TODO: | template_directive
+        template_literal
+      ).repeat(1) >>
+      char('"')
+    ).named(:template)
+
     _heredoc_template = (
       (str("<<-") | str("<<")) >> identifier.dynamic_push(:heredoc) >> s >> newline >>
       (s >> ~dynamic_match(:heredoc) >> string_char.repeat >> newline).repeat.named(:string) >>
       s >> identifier.dynamic_pop(:heredoc)
     ).named(:heredoc)
-    _quoted_template = string_lit
+    _quoted_template = template | string_lit
     template_expr = _quoted_template | _heredoc_template
 
     # TODO: Spec says expression should work w/ identifier too, but Pegmatite is

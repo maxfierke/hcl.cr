@@ -289,7 +289,7 @@ describe HCL::Parser do
         /* A multi
           line comment. */
         resource "aws_instance" "web" {
-          ami               = "${var.ami}"
+          ami               = "ami-12345"
           count             = 2
           source_dest_check = false
           another_boolean = "true"
@@ -315,7 +315,7 @@ describe HCL::Parser do
         "resource" => {
           "aws_instance" => {
             "web" => {
-              "ami"                      => "${var.ami}",
+              "ami"                      => "ami-12345",
               "count"                    => 2,
               "source_dest_check"        => false,
               "another_boolean"          => true,
@@ -505,6 +505,62 @@ describe HCL::Parser do
           "hello" => {
             "yoo" => "hello 1 2 3",
           },
+        },
+      })
+    end
+
+    it "can parse interpolations" do
+      hcl_string = <<-HCL
+        ec2_instance {
+          ami               = "${var.ami}"
+          name              = "prd-inst-${var.instance_id}"
+          description       = "${"production" ~}${" instance"} in AZ 1"
+          region            = "us- ${~ "east-1" }"
+          az                = "az$${1}"
+        }
+
+      HCL
+
+      parser = HCL::Parser.new(hcl_string)
+      doc = parser.parse!
+
+      ctx = HCL::ExpressionContext.default_context
+      ctx.variables["var"] = HCL::Any.new({
+        "ami"         => "ami-abcd1234",
+        "instance_id" => "01",
+      })
+
+      doc.value(ctx).should eq({
+        "ec2_instance" => {
+          "ami"         => "ami-abcd1234",
+          "name"        => "prd-inst-01",
+          "description" => "production instance in AZ 1",
+          "region"      => "us-east-1",
+          "az"          => "az$${1}",
+        },
+      })
+    end
+
+    it "can perform interpolation unwrapping" do
+      hcl_string = <<-HCL
+        block {
+          boolean = "${true}"
+          wrapped_boolean = "${"${true}"}"
+          mixed_types = "hello ${true}"
+          empties = "${""}${true}"
+        }
+
+      HCL
+
+      parser = HCL::Parser.new(hcl_string)
+      doc = parser.parse!
+
+      doc.value.should eq({
+        "block" => {
+          "boolean"         => true,
+          "wrapped_boolean" => true,
+          "mixed_types"     => "hello true",
+          "empties"         => "true",
         },
       })
     end
