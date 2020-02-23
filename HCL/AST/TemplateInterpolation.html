@@ -15,7 +15,7 @@
 </svg>
 
   <meta id="repository-name" content="github.com/maxfierke/hcl.cr">
-  <title>HCL::Functions::HasIndex - github.com/maxfierke/hcl.cr</title>
+  <title>HCL::AST::TemplateInterpolation - github.com/maxfierke/hcl.cr</title>
   <script type="text/javascript">
     CrystalDoc.base_path = "../../";
   </script>
@@ -90,7 +90,7 @@
       
     </li>
   
-  <li class="parent " data-id="github.com/maxfierke/hcl.cr/HCL/AST" data-name="hcl::ast">
+  <li class="parent open current" data-id="github.com/maxfierke/hcl.cr/HCL/AST" data-name="hcl::ast">
       <a href="../../HCL/AST.html">AST</a>
       
         <ul>
@@ -205,7 +205,7 @@
       
     </li>
   
-  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/TemplateInterpolation" data-name="hcl::ast::templateinterpolation">
+  <li class=" current" data-id="github.com/maxfierke/hcl.cr/HCL/AST/TemplateInterpolation" data-name="hcl::ast::templateinterpolation">
       <a href="../../HCL/AST/TemplateInterpolation.html">TemplateInterpolation</a>
       
     </li>
@@ -275,7 +275,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="github.com/maxfierke/hcl.cr/HCL/Functions" data-name="hcl::functions">
+  <li class="parent " data-id="github.com/maxfierke/hcl.cr/HCL/Functions" data-name="hcl::functions">
       <a href="../../HCL/Functions.html">Functions</a>
       
         <ul>
@@ -305,7 +305,7 @@
       
     </li>
   
-  <li class=" current" data-id="github.com/maxfierke/hcl.cr/HCL/Functions/HasIndex" data-name="hcl::functions::hasindex">
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Functions/HasIndex" data-name="hcl::functions::hasindex">
       <a href="../../HCL/Functions/HasIndex.html">HasIndex</a>
       
     </li>
@@ -504,12 +504,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> HCL::Functions::HasIndex
+  <span class="kind">class</span> HCL::AST::TemplateInterpolation
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../HCL/Functions/HasIndex.html">HCL::Functions::HasIndex</a></li><li class="superclass"><a href="../../HCL/Function.html">HCL::Function</a></li><li class="superclass"><a href="../../Reference.html">Reference</a></li><li class="superclass"><a href="../../Object.html">Object</a></li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../HCL/AST/TemplateInterpolation.html">HCL::AST::TemplateInterpolation</a></li><li class="superclass"><a href="../../HCL/AST/Node.html">HCL::AST::Node</a></li><li class="superclass"><a href="../../Reference.html">Reference</a></li><li class="superclass"><a href="../../Object.html">Object</a></li></ul>
 
 
 
@@ -537,8 +537,8 @@
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/7968674405f7c45da95e580ea52b95b98d552ccd/src/hcl/functions/has_index.cr#L3" target="_blank">
-        hcl/functions/has_index.cr
+      <a href="https://github.com/maxfierke/hcl.cr/blob/7968674405f7c45da95e580ea52b95b98d552ccd/src/hcl/ast/template_interpolation.cr#L3" target="_blank">
+        hcl/ast/template_interpolation.cr
       </a>
     
     <br/>
@@ -559,7 +559,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new-class-method" class="signature"><strong>.new</strong></a>
+        <a href="#new(expression:Expression,**kwargs)-class-method" class="signature"><strong>.new</strong>(expression : Expression, **kwargs)</a>
         
       </li>
     
@@ -580,7 +580,19 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#call(args:Array(Any)):Any-instance-method" class="signature"><strong>#call</strong>(args : Array(Any)) : Any</a>
+        <a href="#expression:HCL::AST::Expression-instance-method" class="signature"><strong>#expression</strong> : HCL::AST::Expression</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#to_s(io:IO)-instance-method" class="signature"><strong>#to_s</strong>(io : IO)</a>
+        
+          <div class="summary"><p>Appends a short String representation of this object which includes its class name and its object address.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#value(ctx:ExpressionContext):Any-instance-method" class="signature"><strong>#value</strong>(ctx : ExpressionContext) : Any</a>
         
       </li>
     
@@ -594,43 +606,33 @@
   
     
 
-  <h3>Instance methods inherited from class <code><a href="../../HCL/Function.html">HCL::Function</a></code></h3>
+  <h3>Instance methods inherited from class <code><a href="../../HCL/AST/Node.html">HCL::AST::Node</a></code></h3>
   
   
-    <a href="../../HCL/Function.html#arity:Range(UInt32,UInt32)%7CUInt32-instance-method" class="tooltip">
-      <span>arity : Range(UInt32, UInt32) | UInt32</span>
-    arity</a>, 
+    <a href="../../HCL/AST/Node.html#source:String-instance-method" class="tooltip">
+      <span>source : String</span>
+    source</a>, 
     
   
-    <a href="../../HCL/Function.html#call(args:Array(Any)):Any-instance-method" class="tooltip">
-      <span>call(args : Array(Any)) : Any</span>
-    call</a>, 
+    <a href="../../HCL/AST/Node.html#to_s(io:IO)-instance-method" class="tooltip">
+      <span>to_s(io : IO)</span>
+    to_s</a>, 
     
   
-    <a href="../../HCL/Function.html#matches_arity?(args_size:Range(UInt32,UInt32)):Bool-instance-method" class="tooltip">
-      <span>matches_arity?(args_size : Range(UInt32, UInt32)) : Bool<br/>matches_arity?(args_size) : Bool</span>
-    matches_arity?</a>, 
-    
-  
-    <a href="../../HCL/Function.html#name:String-instance-method" class="tooltip">
-      <span>name : String</span>
-    name</a>, 
-    
-  
-    <a href="../../HCL/Function.html#varadic?:Bool-instance-method" class="tooltip">
-      <span>varadic? : Bool</span>
-    varadic?</a>
+    <a href="../../HCL/AST/Node.html#value(ctx:ExpressionContext):Any-instance-method" class="tooltip">
+      <span>value(ctx : ExpressionContext) : Any</span>
+    value</a>
     
   
 
 
     
 
-  <h3>Constructor methods inherited from class <code><a href="../../HCL/Function.html">HCL::Function</a></code></h3>
+  <h3>Constructor methods inherited from class <code><a href="../../HCL/AST/Node.html">HCL::AST::Node</a></code></h3>
   
   
-    <a href="../../HCL/Function.html#new(name:String,arity:UInt32%7CRange(UInt32,UInt32),varadic=false)-class-method" class="tooltip">
-      <span>new(name : String, arity : UInt32 | Range(UInt32, UInt32), varadic = <span class="n">false</span>)</span>
+    <a href="../../HCL/AST/Node.html#new(source:String=&quot;&quot;,token:Pegmatite::Token?=nil)-class-method" class="tooltip">
+      <span>new(source : String = <span class="s">&quot;&quot;</span>, token : Pegmatite::Token? = <span class="n">nil</span>)</span>
     new</a>
     
   
@@ -699,18 +701,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new-class-method">
+    <div class="entry-detail" id="new(expression:Expression,**kwargs)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>
+        def self.<strong>new</strong>(expression : <a href="../../HCL/AST/Expression.html">Expression</a>, **kwargs)
 
-        <a class="method-permalink" href="#new-class-method">#</a>
+        <a class="method-permalink" href="#new(expression:Expression,**kwargs)-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/7968674405f7c45da95e580ea52b95b98d552ccd/src/hcl/functions/has_index.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/7968674405f7c45da95e580ea52b95b98d552ccd/src/hcl/ast/template_interpolation.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -729,18 +731,67 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="call(args:Array(Any)):Any-instance-method">
+    <div class="entry-detail" id="expression:HCL::AST::Expression-instance-method">
       <div class="signature">
         
-        def <strong>call</strong>(args : <a href="../../Array.html">Array</a>(<a href="../../HCL/Any.html">Any</a>)) : <a href="../../HCL/Any.html">Any</a>
+        def <strong>expression</strong> : <a href="../../HCL/AST/Expression.html">HCL::AST::Expression</a>
 
-        <a class="method-permalink" href="#call(args:Array(Any)):Any-instance-method">#</a>
+        <a class="method-permalink" href="#expression:HCL::AST::Expression-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/7968674405f7c45da95e580ea52b95b98d552ccd/src/hcl/functions/has_index.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/7968674405f7c45da95e580ea52b95b98d552ccd/src/hcl/ast/template_interpolation.cr#L4" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="to_s(io:IO)-instance-method">
+      <div class="signature">
+        
+        def <strong>to_s</strong>(io : IO)
+
+        <a class="method-permalink" href="#to_s(io:IO)-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+            <div class="doc-inherited">
+              Description copied from class <a href="../../Reference.html">Reference</a>
+            </div>
+          
+          <p>Appends a short String representation of this object
+which includes its class name and its object address.</p>
+
+<pre><code><span class="k">class</span> <span class="t">Person</span>
+  <span class="k">def</span> <span class="m">initialize</span>(@name : <span class="t">String</span>, @age : <span class="t">Int32</span>)
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="t">Person</span>.<span class="k">new</span>(<span class="s">&quot;John&quot;</span>, <span class="n">32</span>).to_s <span class="c"># =&gt; #&lt;Person:0x10a199f20&gt;</span></code></pre>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/7968674405f7c45da95e580ea52b95b98d552ccd/src/hcl/ast/template_interpolation.cr#L11" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="value(ctx:ExpressionContext):Any-instance-method">
+      <div class="signature">
+        
+        def <strong>value</strong>(ctx : <a href="../../HCL/ExpressionContext.html">ExpressionContext</a>) : <a href="../../HCL/Any.html">Any</a>
+
+        <a class="method-permalink" href="#value(ctx:ExpressionContext):Any-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/7968674405f7c45da95e580ea52b95b98d552ccd/src/hcl/ast/template_interpolation.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
