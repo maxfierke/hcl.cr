@@ -130,6 +130,11 @@
       
     </li>
   
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/ForExpr" data-name="hcl::ast::forexpr">
+      <a href="HCL/AST/ForExpr.html">ForExpr</a>
+      
+    </li>
+  
   <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/AST/GetAttrExpr" data-name="hcl::ast::getattrexpr">
       <a href="HCL/AST/GetAttrExpr.html">GetAttrExpr</a>
       
@@ -550,7 +555,7 @@
   <dl>
     
       <dt class="entry-const" id="SRC_TEXT">
-        <strong>SRC_TEXT</strong> = <code><span class="s">&quot;document_attr = \&quot;i am here at the top\&quot;\n\n# An AMI\nvariable \&quot;ami\&quot; {\n  description = \&quot;the AMI to use\&quot;\n}\n\n/* A multi\n  line comment. */\nresource \&quot;aws_instance\&quot; \&quot;web\&quot; {\n  ami               = \&quot;${var.ami}\&quot;\n  count             = 2\n  source_dest_check = false\n  another_boolean = \&quot;true\&quot;\n  something_i_want_default = null\n\n  connection {\n    user = \&quot;root\&quot;\n    port = 100 + 2\n  }\n}\n\n# One-line block\ndata \&quot;a_single_datum\&quot; { foo = \&quot;bar\&quot; }\n\n# escaping strings\nvariable \&quot;token\&quot; {\n  my_secure_password = \&quot;something \\\&quot;with a quote\&quot;\n}\n\n\n# heredocs\nvariable \&quot;prose\&quot; {\n  value = &lt;&lt;-PROSE\n    there once\n    was a story\n  PROSE\n\n  nested = {\n    heredoc = &lt;&lt;-NESTED\n      i am nested\n      and a heredoc\n    NESTED\n  }\n}\n&quot;</span></code>
+        <strong>SRC_TEXT</strong> = <code><span class="s">&quot;document_attr = \&quot;i am here at the top\&quot;\n\n# An AMI\nvariable \&quot;ami\&quot; {\n  description = \&quot;the AMI to use\&quot;\n}\n\n/* A multi\n  line comment. */\nresource \&quot;aws_instance\&quot; \&quot;web\&quot; {\n  ami               = \&quot;${var.ami}\&quot;\n  count             = 2\n  source_dest_check = false\n  another_boolean = \&quot;true\&quot;\n  something_i_want_default = null\n\n  connection {\n    user = \&quot;root\&quot;\n    port = 100 + 2\n  }\n}\n\n# One-line block\ndata \&quot;a_single_datum\&quot; { foo = \&quot;bar\&quot; }\n\n# escaping strings\nvariable \&quot;token\&quot; {\n  my_secure_password = \&quot;something \\\&quot;with a quote\&quot;\n}\n\n\n# heredocs\nvariable \&quot;prose\&quot; {\n  value = &lt;&lt;-PROSE\n    there once\n    was a story\n  PROSE\n\n  nested = {\n    heredoc = &lt;&lt;-NESTED\n      i am nested\n      and a heredoc\n    NESTED\n  }\n}\n\nvariable \&quot;list_of_things\&quot; {\n  value = [for v in [\&quot;a\&quot;, \&quot;b\&quot;]: v]\n}\n&quot;</span></code>
       </dt>
       
     
