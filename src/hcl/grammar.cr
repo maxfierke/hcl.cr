@@ -155,6 +155,25 @@ module HCL
       (str("true") | str("false") | str("null")).named(:literal)
     )
 
+    _for_cond = (str("if") >> s >> expression)
+    _for_intro =
+      str("for") >> s >> identifier >> (char(',') >> s >> identifier).maybe >> s >>
+        str("in") >> s >> expression >> s >> char(':')
+    _for_tuple_expr =
+      char('[') >> s >>
+        _for_intro >> s >>
+        expression >> s >>
+        _for_cond.maybe >> s >>
+        char(']')
+    _for_object_expr =
+      char('{') >> s >>
+        _for_intro >> s >>
+        expression >> s >> str("=>") >> s >> expression >> s >>
+        str("...").maybe >> s >>
+        _for_cond.maybe >> s >>
+        char('}')
+    for_expr = (_for_tuple_expr | _for_object_expr).named(:for_expr)
+
     # ExprTerm that may have properties
     _nested_expr_term = (char('(') >> snl >> expression >> snl >> char(')'))
     _prop_expr_term =
@@ -192,10 +211,10 @@ module HCL
       _nested_expr_term |
       _traversal_expr_term |
       template_expr |
+      for_expr |
       literal_value |
       collection_value |
       function_call |
-      # for_expr |
       variable_expr
 
     conditional = (

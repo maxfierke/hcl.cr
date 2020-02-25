@@ -565,4 +565,28 @@ describe HCL::Parser do
       })
     end
   end
+
+  it "can parse for expressions" do
+    hcl_string = <<-HCL
+        block {
+          each = [for v in ["a", "b"]: v]
+          each_with_index = [for i, v in ["a", "b"]: i]
+          hash_each = {for i, v in ["a", "b"]: v => i}
+          cond_each = [for i, v in ["a", "b", "c"]: v if i < 2]
+        }
+
+      HCL
+
+    parser = HCL::Parser.new(hcl_string)
+    doc = parser.parse!
+
+    doc.value.should eq({
+      "block" => {
+        "each"            => ["a", "b"],
+        "each_with_index" => [0, 1],
+        "hash_each"       => {"a" => 0, "b" => 1},
+        "cond_each"       => ["a", "b"],
+      },
+    })
+  end
 end

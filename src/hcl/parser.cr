@@ -78,6 +78,7 @@ module HCL
         when :expression             then build_expression(main, iter, source)
         when :function_call          then build_call(main, iter, source)
         when :get_attr               then build_get_attr(main, iter, source)
+        when :for_expr               then build_for_expr(main, iter, source)
         when :heredoc                then build_heredoc(main, iter, source)
         when :identifier             then build_identifier(main, iter, source)
         when :index                  then build_index(main, iter, source)
@@ -135,6 +136,61 @@ module HCL
 
       AST::Expression.new(
         exp_terms,
+        token: main,
+        source: source[start...finish],
+      )
+    end
+
+    private def build_for_expr(main, iter, source) : AST::ForExpr
+      _, start, finish = main
+
+      for_type = source[start] == '{' ? AST::ForExpr::TYPE_MAP : AST::ForExpr::TYPE_LIST
+
+      key_name_token = iter.next_as_child_of(main)
+      assert_token_kind!(key_name_token, :identifier)
+      key_name_node = build_identifier(key_name_token, iter, source)
+
+      next_token = iter.peek_as_child_of(main)
+      if next_token && next_token[0] == :identifier
+        value_name_token = iter.next_as_child_of(main)
+        value_name_node = build_identifier(value_name_token, iter, source)
+      else
+        value_name_node = key_name_node
+        key_name_node = nil
+      end
+
+      coll_expr_token = iter.next_as_child_of(main)
+      assert_token_kind!(coll_expr_token, :expression)
+      coll_expr_node = build_expression(coll_expr_token, iter, source)
+
+      if for_type == AST::ForExpr::TYPE_MAP
+        key_expr_token = iter.next_as_child_of(main)
+        assert_token_kind!(key_expr_token, :expression)
+        key_expr_node = build_expression(key_expr_token, iter, source)
+      else
+        key_expr_node = nil
+      end
+
+      value_expr_token = iter.next_as_child_of(main)
+      assert_token_kind!(value_expr_token, :expression)
+      value_expr_node = build_expression(value_expr_token, iter, source)
+
+      next_token = iter.peek_as_child_of(main)
+      if next_token && next_token[0] == :expression
+        cond_expr_token = iter.next_as_child_of(main)
+        cond_expr_node = build_expression(cond_expr_token, iter, source)
+      else
+        cond_expr_node = nil
+      end
+
+      AST::ForExpr.new(
+        for_type,
+        coll_expr_node,
+        value_name_node,
+        value_expr_node,
+        key_name: key_name_node,
+        key_expr: key_expr_node,
+        cond_expr: cond_expr_node,
         token: main,
         source: source[start...finish],
       )
@@ -216,7 +272,7 @@ module HCL
         left_operand = iter.next_as_child_of(main)
         left_operand_node = build_node(left_operand, iter, source)
         right_operand_node = nil
-      elsif kind == :number || kind == :literal
+      elsif kind == :identifier || kind == :number || kind == :literal
         left_operand = iter.next_as_child_of(main)
         left_operand_node = build_node(left_operand, iter, source)
         operator = iter.next_as_child_of(main)

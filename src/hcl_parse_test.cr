@@ -47,6 +47,10 @@ variable "prose" {
   }
 }
 
+variable "list_of_things" {
+  value = [for v in ["a", "b"]: v]
+}
+
 HEREDOC
 
 puts "#" * 80
