@@ -93,7 +93,7 @@ string = document.to_s # Returns string reconstruction of HCL configuration
 - [X] Add support for parsing interpolations/templates
 - [X] Add support for evaluating interpolations/templates
 - [X] Add support for `for` expressions
-- [ ] Add support for template directives
+- [X] Add support for template directives
 - [ ] Spec compliance
 - [ ] Run against HCL2 test suite
 - [ ] More validations, better parse/eval errors

@@ -51,6 +51,11 @@ variable "list_of_things" {
   value = [for v in ["a", "b"]: v]
 }
 
+block {
+  cond = "%{ if true ~} hello %{~ endif }"
+  for_expr = "%{ for i, v in [true, 1, "hello"] }${i}: ${v}\n%{ endfor }"
+}
+
 HEREDOC
 
 puts "#" * 80

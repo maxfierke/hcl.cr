@@ -89,6 +89,8 @@ module HCL
         when :splat                  then AST::SplatExpr.new(token: main, source: source[start...finish])
         when :string                 then build_string(main, iter, source)
         when :template               then build_template(main, iter, source)
+        when :template_for           then build_template_for_expr(main, iter, source)
+        when :template_if            then build_template_if(main, iter, source)
         when :template_interpolation then build_template_interpolation(main, iter, source)
         when :tuple                  then build_list(main, iter, source)
         else                              raise NotImplementedError.new(kind)
@@ -315,6 +317,67 @@ module HCL
         template_nodes,
         token: main,
         source: source[start...finish]
+      )
+    end
+
+    private def build_template_for_expr(main, iter, source) : AST::TemplateForExpr
+      _, start, finish = main
+
+      key_name_token = iter.next_as_child_of(main)
+      assert_token_kind!(key_name_token, :identifier)
+      key_name_node = build_identifier(key_name_token, iter, source)
+
+      next_token = iter.peek_as_child_of(main)
+      if next_token && next_token[0] == :identifier
+        value_name_token = iter.next_as_child_of(main)
+        value_name_node = build_identifier(value_name_token, iter, source)
+      else
+        value_name_node = key_name_node
+        key_name_node = nil
+      end
+
+      coll_expr_token = iter.next_as_child_of(main)
+      assert_token_kind!(coll_expr_token, :expression)
+      coll_expr_node = build_expression(coll_expr_token, iter, source)
+
+      tpl_expr_token = iter.next_as_child_of(main)
+      assert_token_kind!(tpl_expr_token, :template)
+      tpl_expr_node = build_template(tpl_expr_token, iter, source)
+
+      AST::TemplateForExpr.new(
+        coll_expr_node,
+        value_name_node,
+        tpl_expr_node,
+        key_name: key_name_node,
+        token: main,
+        source: source[start...finish],
+      )
+    end
+
+    private def build_template_if(main, iter, source) : AST::TemplateIf
+      _, start, finish = main
+
+      predicate = iter.next_as_child_of(main)
+      assert_token_kind!(predicate, :expression)
+      predicate_node = build_expression(predicate, iter, source)
+
+      true_tpl = iter.next_as_child_of(main)
+      assert_token_kind!(true_tpl, :template)
+      true_tpl_node = build_template(true_tpl, iter, source)
+
+      false_tpl = iter.peek_as_child_of(main)
+      if false_tpl && false_tpl[0] == :template
+        false_tpl_node = build_template(false_tpl, iter, source)
+      else
+        false_tpl_node = nil
+      end
+
+      AST::TemplateIf.new(
+        predicate_node,
+        true_tpl_node,
+        false_tpl_node,
+        token: main,
+        source: source[start...finish],
       )
     end
 

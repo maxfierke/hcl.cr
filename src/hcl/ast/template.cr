@@ -1,6 +1,8 @@
 module HCL
   module AST
     class Template < Node
+      @quoted : Bool? = nil
+
       getter :children
 
       def initialize(children : Array(Node), **kwargs)
@@ -9,14 +11,13 @@ module HCL
       end
 
       def to_s(io : IO)
-        if children.size == 1
-          children.first.to_s(io)
-        else
-          io << "\""
-          children.each do |exp|
+        children.each do |exp|
+          case exp
+          when Literal
+            exp.to_s(io, quoted: false)
+          else
             exp.to_s(io)
           end
-          io << "\""
         end
       end
 
@@ -33,6 +34,14 @@ module HCL
 
           HCL::Any.new(builder.to_s)
         end
+      end
+
+      def quoted?
+        if (q = @quoted).nil? && !source.empty?
+          @quoted = source[0] == '"' && source[source.size - 1] == '"'
+        end
+
+        @quoted
       end
     end
   end

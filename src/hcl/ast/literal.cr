@@ -7,8 +7,8 @@ module HCL
       TRUE_STR  = "true"
       FALSE_STR = "false"
 
-      def to_s(io : IO)
-        if ![NULL_STR, TRUE_STR, FALSE_STR].includes?(source)
+      def to_s(io : IO, quoted = true)
+        if string? && quoted
           io << "\""
           io << source
           io << "\""
@@ -27,6 +27,10 @@ module HCL
         else
           Any.new(source)
         end
+      end
+
+      def string?
+        ![NULL_STR, TRUE_STR, FALSE_STR].includes?(source)
       end
     end
   end

@@ -15,6 +15,10 @@ module HCL
             io << "("
             exp.to_s(io)
             io << ")"
+          when Template
+            io << "\"" if exp.quoted?
+            exp.to_s(io)
+            io << "\"" if exp.quoted?
           else
             exp.to_s(io)
           end
