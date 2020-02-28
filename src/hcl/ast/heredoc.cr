@@ -3,15 +3,14 @@ module HCL
     class Heredoc < Node
       getter :content, :delimiter, :indent_size
 
-      def initialize(delimiter : String, content : String, **kwargs)
+      def initialize(delimiter : String, content : Template, **kwargs)
         super(**kwargs)
         @delimiter = delimiter
+        @content = content
 
-        if m = content.match(/^\s+/)
+        if m = content.source.match(/^\s+/)
           @indent_size = m[0].size
-          @content = content.gsub(/^\s{1,#{indent_size}}/m, "")
         else
-          @content = content
           @indent_size = 0
         end
       end
@@ -22,7 +21,7 @@ module HCL
         io << "\n"
 
         if indent_size > 0
-          lines = content.split("\n")
+          lines = content.to_s.split("\n")
           indent = " " * Math.max(2, indent_size - 2)
           lines.each do |line|
             if line != ""
@@ -42,7 +41,7 @@ module HCL
       end
 
       def value(ctx : ExpressionContext) : Any
-        Any.new(content)
+        content.value(ctx)
       end
     end
   end

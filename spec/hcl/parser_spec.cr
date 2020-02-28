@@ -57,14 +57,26 @@ describe HCL::Parser do
           there was a complicated
           parsing rule
         DOC
+        interpolated = <<-DOC
+          one bottle of ${var.beverage} on the wall
+          one bottle of ${var.beverage}
+          take it down
+        DOC
         another_prop = "hello"
 
       HEREDOC
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+
+      ctx = HCL::ExpressionContext.new
+      ctx.variables["var"] = HCL::Any.new({
+        "beverage" => "beer",
+      })
+
+      doc.value(ctx).should eq({
         "description"  => "once upon a time\nthere was a complicated\nparsing rule\n",
+        "interpolated" => "one bottle of beer on the wall\none bottle of beer\ntake it down\n",
         "another_prop" => "hello",
       })
     end

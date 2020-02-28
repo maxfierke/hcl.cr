@@ -219,16 +219,14 @@ module HCL
       start_ident = extract_identifier(iter.next_as_child_of(main), iter, source)
 
       content_token = iter.next_as_child_of(main)
-      assert_token_kind!(content_token, :string)
+      assert_token_kind!(content_token, :template)
+      content = build_template(content_token, iter, source)
 
       end_ident = extract_identifier(iter.next_as_child_of(main), iter, source)
 
       if start_ident != end_ident
         raise "BUG: Expected heredoc start and end identifiers to match"
       end
-
-      _, content_start, content_finish = content_token
-      content = source[content_start...content_finish]
 
       AST::Heredoc.new(
         start_ident,
