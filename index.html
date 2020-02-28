@@ -526,11 +526,19 @@
 <p>A general-purpose HCL2 parser written in Crystal. Does not make any domain assumptions.
 Aims to supports the standard HCL2 types and map to the HCL2 informational model.</p>
 
-<p>This is considered a work-in-progress, though may work already for many HCL2
-documents. Much of the HCL2 spec is supported, except interpolation/template
-expressions and <code>for</code> expressions. However, it does not yet run against or pass
+<p>HCL2 support is considered feature complete. However, it does not yet run against
 the spec test suite, so there may be situations in which some documents do not
 work as they should. Please report any issues <a href="https://github.com/maxfierke/hcl.cr/issues/new" target="_blank">here</a>.</p>
+
+<h2><a id="aims" class="anchor" href="#aims">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Aims</h2>
+
+<p><code>hcl.cr</code> has the following goals, in order of importance:</p>
+
+<ol><li>Correctly implement the HCL2 spec</li><li>Be compatible with <a href="https://github.com/Hashicorp/hcl/tree/hcl2" target="_blank">the Go implementation</a></li><li>Easy to work with</li><li>Reasonably performant and efficient</li></ol>
 
 <h2><a id="installation" class="anchor" href="#installation">
   <svg class="octicon-link" aria-hidden="true">
