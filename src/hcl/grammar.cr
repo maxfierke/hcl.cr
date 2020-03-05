@@ -130,7 +130,7 @@ module HCL
     # getting a stack overflow w/ this:
     # (identifier | expression)
     _object_elem = (
-      identifier >> s >> char('=') >> s >> expression
+      identifier >> s >> (char('=') | char(':')) >> s >> expression
     ).named(:attribute)
     _object = (
       char('{') >> snl >> (

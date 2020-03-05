@@ -237,6 +237,10 @@ describe HCL::Parser do
             another_prop = 123,
             maybe_a_list = [123, 231]
           }
+          json = {
+            key: "value",
+            other_key: "other_value"
+          }
         }
 
       HCL
@@ -254,6 +258,10 @@ describe HCL::Parser do
                 123_i64,
                 231_i64,
               ],
+            },
+            "json" => {
+              "key"       => "value",
+              "other_key" => "other_value",
             },
           },
         },
