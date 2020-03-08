@@ -212,6 +212,10 @@ module HCL
       as_h if @raw.is_a?(Hash)
     end
 
+    def hcl_type
+      get_hcl_type(raw)
+    end
+
     # Reads a `HCL::Any` value from the given pull parser.
     #
     # Based on https://github.com/crystal-lang/crystal/blob/6952aacb37682558d1a976b4ebf1b1456d9f8b84/src/json/any.cr#L23
@@ -289,6 +293,45 @@ module HCL
     # Returns a new HCL::Any instance with the `raw` value `clone`ed.
     def clone
       Any.new(raw.clone)
+    end
+
+    private def get_hcl_type(obj)
+      case obj
+      when Any
+        obj.hcl_type
+      when Array
+        types = obj.map { |e| get_hcl_type(e) }
+        uniq_types = types.uniq
+        if uniq_types.size > 1
+          "tuple([#{types.join(", ")}])"
+        elsif uniq_types.size == 1
+          "list(#{uniq_types.first})"
+        else
+          "list(any)"
+        end
+      when Bool
+        "bool"
+      when String
+        "string"
+      when Int64, Float64
+        "number"
+      when Hash
+        type_map = obj.map { |key, value| [key, get_hcl_type(value)] }.to_h
+        uniq_types = type_map.values.uniq
+        if uniq_types.size > 1
+          attr_map = type_map.map do |item|
+            attr, type = item
+            "#{attr} = #{type}"
+          end
+          "object({ #{attr_map.join(", ")} })"
+        elsif uniq_types.size == 1
+          "map(#{uniq_types.first})"
+        else
+          "object(any)"
+        end
+      else
+        "any"
+      end
     end
   end
 end
