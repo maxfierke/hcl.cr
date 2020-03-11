@@ -15,5 +15,11 @@ module HCLDec
     def name
       @name || block_name || ""
     end
+
+    def validate!
+      if name.empty?
+        raise "Missing name in attribute spec: The name attribute is required, to specify the attribute name that is expected in an input HCL file."
+      end
+    end
   end
 end

@@ -12,5 +12,9 @@ module HCLDec
     def block_type
       @block_name || block_type || ""
     end
+
+    def validate!
+      attrs.each(&.validate!)
+    end
   end
 end

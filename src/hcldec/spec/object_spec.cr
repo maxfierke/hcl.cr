@@ -14,5 +14,15 @@ module HCLDec
 
     @[HCL::Block]
     property variables : HCLDec::VariablesSpec? = nil
+
+    def validate!
+      attrs.each(&.validate!)
+      blocks.each(&.validate!)
+      block_lists.each(&.validate!)
+      functions.each(&.validate!)
+      if vars = variables
+        vars.validate!
+      end
+    end
   end
 end

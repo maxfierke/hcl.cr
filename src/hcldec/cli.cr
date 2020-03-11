@@ -57,6 +57,7 @@ module HCLDec
       end
 
       spec = load_spec_file(spec_path)
+      spec.validate!
 
       # Decoder.new(
       #   spec: spec,

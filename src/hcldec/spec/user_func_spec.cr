@@ -12,5 +12,8 @@ module HCLDec
 
     @[HCL::Attribute]
     property result : HCL::AST::Expression
+
+    def validate!
+    end
   end
 end
