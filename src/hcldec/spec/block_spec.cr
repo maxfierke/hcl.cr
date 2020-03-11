@@ -12,5 +12,8 @@ module HCLDec
     def block_type
       @block_type || block_name || ""
     end
+
+    def validate!
+    end
   end
 end

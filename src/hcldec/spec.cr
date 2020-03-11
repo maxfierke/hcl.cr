@@ -38,5 +38,7 @@ module HCLDec
         super
       end
     end
+
+    abstract def validate!
   end
 end

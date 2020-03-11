@@ -5,5 +5,8 @@ module HCLDec
     def attributes
       hcl_unmapped_attributes
     end
+
+    def validate!
+    end
   end
 end
