@@ -9,11 +9,15 @@ SOURCES      = src/*.cr src/**/*.cr
 override CRFLAGS += --error-on-warnings $(if $(RELEASE),--release ,--debug --error-trace )$(if $(STATIC),--static )$(if $(LDFLAGS),--link-flags="$(LDFLAGS)" )
 
 .PHONY: all
-all: deps parse-trace
+all: deps bin/hcl_parse_test bin/hcldec
 
 bin/hcl_parse_test: $(SOURCES)
 	mkdir -p bin
 	$(CRYSTAL_BIN) build $(CRFLAGS) -o bin/hcl_parse_test src/hcl_parse_test.cr
+
+bin/hcldec: $(SOURCES)
+	mkdir -p bin
+	$(CRYSTAL_BIN) build $(CRFLAGS) -o bin/hcldec src/hcldec.cr
 
 .PHONY: parse-trace
 parse-trace: bin/hcl_parse_test

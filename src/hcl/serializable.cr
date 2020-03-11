@@ -250,6 +250,14 @@ module HCL
           {% for name, value in attributes %}
             when {{value[:key]}}
               %found{name} = true
+
+              {% if value[:type] <= ::HCL::AST::Node %}
+              if attr_node.is_a?({{value[:type]}})
+                %var{name} = attr_node
+                next
+              end
+              {% end %}
+
               node_val = attr_node.evaluate(__ctx_from_hcl).raw
               %var{name} = begin
                 case node_val
