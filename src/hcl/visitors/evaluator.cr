@@ -368,6 +368,21 @@ module HCL
         {left_op_val, right_op_val}
       end
 
+      protected def deep_merge_blocks!(dict, other_dict)
+        dict.merge!(other_dict) do |key, v1, v2|
+          if v1.is_a?(Array) && v2.is_a?(Array)
+            v1 + v2
+          elsif v1.is_a?(Array)
+            v1 << v2
+            v1
+          elsif v2.is_a?(Array)
+            [v1] + v2
+          else
+            v2
+          end
+        end
+      end
+
       # TODO: Verify these invariants
       private def truthy?(val : Int64)
         val != 0
@@ -390,7 +405,7 @@ module HCL
 
         node.blocks.each do |block|
           block_dict = block.accept(self).as_h
-          dict.merge!(block_dict)
+          deep_merge_blocks!(dict, block_dict)
         end
 
         Any.new(dict)

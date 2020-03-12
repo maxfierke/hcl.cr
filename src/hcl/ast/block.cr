@@ -17,6 +17,13 @@ module HCL
         @id = id
         @labels = labels
       end
+
+      def as_json(ctx : ExpressionContext) : Any
+        block_value = super(ctx)
+        block_header(ctx).reverse.reduce(block_value) do |acc, val|
+          Any.new({val => acc})
+        end
+      end
     end
   end
 end

@@ -34,6 +34,15 @@ module HCL
         @cond_expr = cond_expr
       end
 
+      def as_json(ctx : ExpressionContext) : Any
+        case ctx.mode
+        when ExpressionContext::Mode::LITERAL
+          Any.new(to_s)
+        else
+          evaluate(ctx)
+        end
+      end
+
       def is_map_type?
         for_type == TYPE_MAP
       end

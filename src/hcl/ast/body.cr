@@ -13,6 +13,21 @@ module HCL
         @attributes = attributes
         @blocks = blocks
       end
+
+      def as_json(ctx : ExpressionContext) : Any
+        dict = {} of String => Any
+
+        attributes.each do |key, value|
+          dict[key] = value.as_json(ctx)
+        end
+
+        blocks.each do |block|
+          block_dict = block.as_json(ctx).as_h
+          deep_merge_blocks!(dict, block_dict)
+        end
+
+        Any.new(dict)
+      end
     end
   end
 end
