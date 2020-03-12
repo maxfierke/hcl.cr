@@ -22,6 +22,10 @@ module HCL
         @source = number.to_s
         @value = number
       end
+
+      def as_json(ctx : ExpressionContext) : Any
+        evaluate(ctx)
+      end
     end
   end
 end

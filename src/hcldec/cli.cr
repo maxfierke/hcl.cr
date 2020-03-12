@@ -59,11 +59,9 @@ module HCLDec
       spec = load_spec_file(spec_path)
       spec.validate!
 
-      # Decoder.new(
-      #   spec: spec,
-      #   vars: vars,
-      #   io: output_io
-      # ).decode
+      HCL.parse(ARGF.gets_to_end).to_json(
+        ctx: HCL::ExpressionContext.default_context
+      )
     end
 
     private def load_spec_file(spec_path)
@@ -71,11 +69,11 @@ module HCLDec
         File.read(spec_path),
         ctx: hcl_spec_context
       )
-      pp! spec_doc
     end
 
     private def hcl_spec_context
       ctx = HCL::ExpressionContext.default_context
+      # ctx.mode = HCL::ExpressionContext::Mode::LITERAL
       ctx.variables["any"] = HCL::Any.new(HCLDec::TYPE_ANY)
       ctx.variables["bool"] = HCL::Any.new(HCLDec::TYPE_BOOL)
       ctx.variables["number"] = HCL::Any.new(HCLDec::TYPE_NUMBER)

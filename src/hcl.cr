@@ -29,7 +29,7 @@ module HCL
     end
   end
 
-  def self.parse(io : IO)
+  def self.parse(io)
     HCL::Parser.parse!(io)
   end
 end

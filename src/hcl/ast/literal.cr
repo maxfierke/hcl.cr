@@ -5,6 +5,10 @@ module HCL
       TRUE_STR  = "true"
       FALSE_STR = "false"
 
+      def as_json(ctx : ExpressionContext) : Any
+        evaluate(ctx)
+      end
+
       def true?
         source == TRUE_STR
       end

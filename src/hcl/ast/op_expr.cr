@@ -47,6 +47,15 @@ module HCL
         @left_operand = left_operand
         @right_operand = right_operand
       end
+
+      def as_json(ctx : ExpressionContext) : Any
+        case ctx.mode
+        when ExpressionContext::Mode::LITERAL
+          Any.new(to_s)
+        else
+          evaluate(ctx)
+        end
+      end
     end
   end
 end

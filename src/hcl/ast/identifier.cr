@@ -12,6 +12,15 @@ module HCL
       def name
         source
       end
+
+      def as_json(ctx : ExpressionContext) : Any
+        case ctx.mode
+        when ExpressionContext::Mode::LITERAL
+          Any.new(to_s)
+        else
+          evaluate(ctx)
+        end
+      end
     end
   end
 end
