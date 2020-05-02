@@ -76,6 +76,8 @@ module HCL
                      raise "Parser bug: Cannot perform numeric inversion on nil" if left_op_val.nil?
                      raise "Parser bug: Cannot perform numeric inversion on boolean" if left_op_val.is_a?(Bool)
                      -left_op_val
+                   else
+                     raise "BUG: unsupported operator: #{operator}"
                    end
 
           Any.new(result)
@@ -127,6 +129,8 @@ module HCL
                      left_op_val && right_op_val
                    when OR
                      left_op_val || right_op_val
+                   else
+                     raise "BUG: unsupported operator: #{operator}"
                    end
 
           Any.new(result)
