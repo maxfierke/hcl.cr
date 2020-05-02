@@ -118,6 +118,8 @@ module HCL
       case @raw
       when Hash, Array
         self[key]?
+      else
+        nil
       end
     end
 
