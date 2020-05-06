@@ -8,12 +8,6 @@ module HCL
         @expression = expression
       end
 
-      def to_s(io : IO)
-        io << "${"
-        expression.to_s(io)
-        io << "}"
-      end
-
       def value(ctx : ExpressionContext) : Any
         expression.value(ctx)
       end

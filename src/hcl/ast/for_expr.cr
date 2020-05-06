@@ -34,34 +34,6 @@ module HCL
         @cond_expr = cond_expr
       end
 
-      def to_s(io : IO)
-        io << start_tag
-        io << "for "
-
-        if key = key_name
-          io << key
-          io << ", "
-        end
-
-        io << value_name
-        io << " in "
-        coll_expr.to_s(io)
-        io << ": "
-
-        if key = key_expr
-          key.to_s(io)
-          io << " => "
-        end
-        value_expr.to_s(io)
-
-        if cond = cond_expr
-          io << " if "
-          cond.to_s(io)
-        end
-
-        io << end_tag
-      end
-
       def value(ctx : ExpressionContext) : Any
         if is_map_type?
           coll = coll_expr.value(ctx).as_h? || coll_expr.value(ctx).as_a
@@ -128,11 +100,11 @@ module HCL
         end
       end
 
-      private def is_map_type?
+      def is_map_type?
         for_type == TYPE_MAP
       end
 
-      private def start_tag
+      def start_tag
         if is_map_type?
           "{"
         else
@@ -140,7 +112,7 @@ module HCL
         end
       end
 
-      private def end_tag
+      def end_tag
         if is_map_type?
           "}"
         else

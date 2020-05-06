@@ -48,19 +48,6 @@ module HCL
         @right_operand = right_operand
       end
 
-      def to_s(io : IO)
-        if right_operand.nil?
-          io << operator
-          left_operand.to_s(io)
-        else
-          left_operand.to_s(io)
-          io << " "
-          io << operator
-          io << " "
-          right_operand.not_nil!.to_s(io)
-        end
-      end
-
       def value(ctx : ExpressionContext) : Any
         # This is wrong. Need to figure out order of operations stuff, probably.
         left_op = left_operand

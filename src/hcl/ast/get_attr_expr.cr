@@ -7,12 +7,7 @@ module HCL
 
       def initialize(attribute : Identifier, **kwargs)
         super(**kwargs)
-        @attribute_name = attribute.to_s
-      end
-
-      def to_s(io : IO)
-        io << "."
-        io << attribute_name
+        @attribute_name = attribute.value
       end
 
       def value(ctx : ExpressionContext) : Any

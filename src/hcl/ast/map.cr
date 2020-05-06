@@ -9,19 +9,6 @@ module HCL
         @attributes = attributes
       end
 
-      def to_s(io : IO)
-        io << "{\n"
-
-        pairs = [] of String
-
-        attributes.each do |key, value|
-          pairs << "  #{key} = #{value.to_s}"
-        end
-
-        io << pairs.join(",\n")
-        io << "\n}"
-      end
-
       def value(ctx : ExpressionContext) : Any
         dict = {} of String => Any
 

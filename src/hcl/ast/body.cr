@@ -14,22 +14,6 @@ module HCL
         @blocks = blocks
       end
 
-      def to_s(io : IO)
-        attributes.each do |key, value|
-          io << key
-          io << " = "
-          value.to_s(io)
-          io << "\n"
-        end
-
-        io << "\n" if attributes.any?
-
-        blocks.each do |block|
-          block.to_s(io)
-          io << "\n" unless blocks.last == block
-        end
-      end
-
       def value(ctx : ExpressionContext) : Any
         dict = {} of String => Any
 

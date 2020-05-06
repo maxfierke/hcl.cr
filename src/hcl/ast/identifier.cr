@@ -9,8 +9,8 @@ module HCL
         super(*args, **kwargs)
       end
 
-      def to_s(io : IO)
-        io << source
+      def value
+        source
       end
 
       def value(ctx : ExpressionContext) : Any

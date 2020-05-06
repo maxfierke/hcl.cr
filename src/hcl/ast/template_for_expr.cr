@@ -22,22 +22,6 @@ module HCL
         @key_name = key_name ? key_name.to_s : nil
       end
 
-      def to_s(io : IO)
-        io << "%{for "
-
-        if key = key_name
-          io << key
-          io << ", "
-        end
-
-        io << value_name
-        io << " in "
-        coll_expr.to_s(io)
-        io << "}"
-        tpl_expr.to_s(io)
-        io << "%{endfor}"
-      end
-
       def value(ctx : ExpressionContext) : Any
         coll = coll_expr.value(ctx).as_h? || coll_expr.value(ctx).as_a
 

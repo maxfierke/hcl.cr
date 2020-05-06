@@ -17,21 +17,6 @@ module HCL
         @varadic = varadic
       end
 
-      def to_s(io : IO)
-        io << id
-        io << "("
-
-        args.each_with_index do |arg, index|
-          arg.to_s(io)
-
-          if varadic? && index == (args.size - 1) && arg.is_a?(Identifier)
-            io << "..."
-          end
-        end
-
-        io << ")"
-      end
-
       def value(ctx : ExpressionContext) : Any
         call_args = evaluate_args(ctx)
         ctx.call_func(id, call_args)

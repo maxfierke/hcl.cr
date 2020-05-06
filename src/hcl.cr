@@ -7,6 +7,8 @@ require "./hcl/ast/body"
 require "./hcl/ast/*"
 require "./hcl/function"
 require "./hcl/functions/*"
+require "./hcl/visitor"
+require "./hcl/visitors/*"
 require "./hcl/*"
 
 module HCL

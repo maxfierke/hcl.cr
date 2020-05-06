@@ -8,23 +8,6 @@ module HCL
         @children = children
       end
 
-      def to_s(io : IO)
-        children.each do |exp|
-          case exp
-          when Expression
-            io << "("
-            exp.to_s(io)
-            io << ")"
-          when Template
-            io << "\"" if exp.quoted?
-            exp.to_s(io)
-            io << "\"" if exp.quoted?
-          else
-            exp.to_s(io)
-          end
-        end
-      end
-
       def value(ctx : ExpressionContext) : Any
         children.reduce(HCL::Any.new(nil)) do |result, child|
           current = result ? result.raw : nil

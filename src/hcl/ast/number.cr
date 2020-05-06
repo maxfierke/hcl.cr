@@ -5,6 +5,8 @@ module HCL
 
       @value : Value
 
+      getter :value
+
       def initialize(source, token : Pegmatite::Token? = nil)
         super(source: source.strip('"'), token: token)
 
@@ -19,10 +21,6 @@ module HCL
         super(**kwargs)
         @source = number.to_s
         @value = number
-      end
-
-      def to_s(io : IO)
-        @value.to_s(io)
       end
 
       def value(ctx : ExpressionContext) : Any

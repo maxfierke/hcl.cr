@@ -1,21 +1,9 @@
 module HCL
   module AST
     class Literal < Node
-      @value : Any?
-
       NULL_STR  = "null"
       TRUE_STR  = "true"
       FALSE_STR = "false"
-
-      def to_s(io : IO, quoted = true)
-        if string? && quoted
-          io << "\""
-          io << source
-          io << "\""
-        else
-          io << source
-        end
-      end
 
       def value(ctx : ExpressionContext) : Any
         if source == TRUE_STR

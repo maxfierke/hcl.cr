@@ -15,20 +15,6 @@ module HCL
         @false_tpl = false_tpl
       end
 
-      def to_s(io : IO)
-        io << "%{if "
-        predicate.to_s(io)
-        io << "}"
-        true_tpl.to_s(io)
-
-        if fals_tpl = false_tpl
-          io << "%{else}"
-          fals_tpl.to_s(io)
-        end
-
-        io << "%{endif}"
-      end
-
       def value(ctx : ExpressionContext) : Any
         predicate_value = predicate.value(ctx).raw
 

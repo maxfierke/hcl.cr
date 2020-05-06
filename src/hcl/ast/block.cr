@@ -18,54 +18,6 @@ module HCL
         @labels = labels
       end
 
-      def to_s(io : IO)
-        io << id
-        io << " "
-
-        if labels.any?
-          labels.each do |label|
-            label.to_s(io)
-            io << " "
-          end
-        end
-
-        io << "{"
-        io << "\n" if attributes.any? || blocks.any?
-
-        indent = "  "
-
-        attributes.each do |key, value|
-          io << indent
-          io << "#{key} = "
-
-          attr_lines = value.to_s.split("\n")
-          attr_lines.each do |line|
-            if line != ""
-              io << indent if line != attr_lines.first
-              io << line
-              io << "\n"
-            end
-          end
-        end
-
-        if blocks.any?
-          io << "\n" if attributes.any?
-
-          blocks.each do |block|
-            block_lines = block.to_s.split("\n")
-            block_lines.each do |line|
-              if line != ""
-                io << indent
-                io << line
-                io << "\n"
-              end
-            end
-          end
-        end
-
-        io << "}\n"
-      end
-
       def block_header(ctx : ExpressionContext)
         Array(Any).new(labels.size + 1).tap do |arr|
           arr << Any.new(id)
