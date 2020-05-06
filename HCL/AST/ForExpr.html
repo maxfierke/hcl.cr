@@ -455,6 +455,26 @@
       
     </li>
   
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Visitor" data-name="hcl::visitor">
+      <a href="../../HCL/Visitor.html">Visitor</a>
+      
+    </li>
+  
+  <li class="parent " data-id="github.com/maxfierke/hcl.cr/HCL/Visitors" data-name="hcl::visitors">
+      <a href="../../HCL/Visitors.html">Visitors</a>
+      
+        <ul>
+  
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Visitors/ToSVisitor" data-name="hcl::visitors::tosvisitor">
+      <a href="../../HCL/Visitors/ToSVisitor.html">ToSVisitor</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
 </ul>
 
       
@@ -552,7 +572,7 @@
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/a7221682557023ffc3f2873cf1d69f78167c9ff7/src/hcl/ast/for_expr.cr#L3" target="_blank">
+      <a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/for_expr.cr#L3" target="_blank">
         hcl/ast/for_expr.cr
       </a>
     
@@ -629,7 +649,17 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#end_tag-instance-method" class="signature"><strong>#end_tag</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#for_type:Symbol-instance-method" class="signature"><strong>#for_type</strong> : Symbol</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#is_map_type?-instance-method" class="signature"><strong>#is_map_type?</strong></a>
         
       </li>
     
@@ -644,9 +674,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#to_s(io:IO)-instance-method" class="signature"><strong>#to_s</strong>(io : IO)</a>
-        
-          <div class="summary"><p>Appends a short String representation of this object which includes its class name and its object address.</p></div>
+        <a href="#start_tag-instance-method" class="signature"><strong>#start_tag</strong></a>
         
       </li>
     
@@ -677,6 +705,21 @@
 
   <h3>Instance methods inherited from class <code><a href="../../HCL/AST/Node.html">HCL::AST::Node</a></code></h3>
   
+  
+    <a href="../../HCL/AST/Node.html#accept(visitor)-instance-method" class="tooltip">
+      <span>accept(visitor)</span>
+    accept</a>, 
+    
+  
+    <a href="../../HCL/AST/Node.html#accept_children(visitor)-instance-method" class="tooltip">
+      <span>accept_children(visitor)</span>
+    accept_children</a>, 
+    
+  
+    <a href="../../HCL/AST/Node.html#inspect(io)-instance-method" class="tooltip">
+      <span>inspect(io)</span>
+    inspect</a>, 
+    
   
     <a href="../../HCL/AST/Node.html#source:String-instance-method" class="tooltip">
       <span>source : String</span>
@@ -781,7 +824,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/a7221682557023ffc3f2873cf1d69f78167c9ff7/src/hcl/ast/for_expr.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/for_expr.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -811,7 +854,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/a7221682557023ffc3f2873cf1d69f78167c9ff7/src/hcl/ast/for_expr.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/for_expr.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -827,7 +870,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/a7221682557023ffc3f2873cf1d69f78167c9ff7/src/hcl/ast/for_expr.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/for_expr.cr#L15" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="end_tag-instance-method">
+      <div class="signature">
+        
+        def <strong>end_tag</strong>
+
+        <a class="method-permalink" href="#end_tag-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/for_expr.cr#L115" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -843,7 +902,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/a7221682557023ffc3f2873cf1d69f78167c9ff7/src/hcl/ast/for_expr.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/for_expr.cr#L15" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="is_map_type?-instance-method">
+      <div class="signature">
+        
+        def <strong>is_map_type?</strong>
+
+        <a class="method-permalink" href="#is_map_type?-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/for_expr.cr#L103" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -859,7 +934,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/a7221682557023ffc3f2873cf1d69f78167c9ff7/src/hcl/ast/for_expr.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/for_expr.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -875,40 +950,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/a7221682557023ffc3f2873cf1d69f78167c9ff7/src/hcl/ast/for_expr.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/for_expr.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="to_s(io:IO)-instance-method">
+    <div class="entry-detail" id="start_tag-instance-method">
       <div class="signature">
         
-        def <strong>to_s</strong>(io : IO)
+        def <strong>start_tag</strong>
 
-        <a class="method-permalink" href="#to_s(io:IO)-instance-method">#</a>
+        <a class="method-permalink" href="#start_tag-instance-method">#</a>
       </div>
-      
-        <div class="doc">
-          
-            <div class="doc-inherited">
-              Description copied from class <a href="../../Reference.html">Reference</a>
-            </div>
-          
-          <p>Appends a short String representation of this object
-which includes its class name and its object address.</p>
-
-<pre><code><span class="k">class</span> <span class="t">Person</span>
-  <span class="k">def</span> <span class="m">initialize</span>(@name : <span class="t">String</span>, @age : <span class="t">Int32</span>)
-  <span class="k">end</span>
-<span class="k">end</span>
-
-<span class="t">Person</span>.<span class="k">new</span>(<span class="s">&quot;John&quot;</span>, <span class="n">32</span>).to_s <span class="c"># =&gt; #&lt;Person:0x10a199f20&gt;</span></code></pre>
-        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/a7221682557023ffc3f2873cf1d69f78167c9ff7/src/hcl/ast/for_expr.cr#L37" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/for_expr.cr#L107" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -924,7 +982,7 @@ which includes its class name and its object address.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/a7221682557023ffc3f2873cf1d69f78167c9ff7/src/hcl/ast/for_expr.cr#L65" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/for_expr.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -940,7 +998,7 @@ which includes its class name and its object address.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/a7221682557023ffc3f2873cf1d69f78167c9ff7/src/hcl/ast/for_expr.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/for_expr.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -956,7 +1014,7 @@ which includes its class name and its object address.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/a7221682557023ffc3f2873cf1d69f78167c9ff7/src/hcl/ast/for_expr.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/for_expr.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
