@@ -465,6 +465,11 @@
       
         <ul>
   
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Visitors/Evaluator" data-name="hcl::visitors::evaluator">
+      <a href="HCL/Visitors/Evaluator.html">Evaluator</a>
+      
+    </li>
+  
   <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Visitors/ToSVisitor" data-name="hcl::visitors::tosvisitor">
       <a href="HCL/Visitors/ToSVisitor.html">ToSVisitor</a>
       
@@ -636,7 +641,7 @@ HEREDOC</span>
 parser <span class="o">=</span> <span class="t">HCL</span><span class="t">::</span><span class="t">Parser</span>.<span class="k">new</span>(<span class="t">SRC_TEXT</span>) <span class="c"># Parser object.</span>
 
 document <span class="o">=</span> parser.parse! <span class="c"># Returns an HCL::AST::Document</span>
-value <span class="o">=</span> document.value   <span class="c"># Returns the HCL structure as Crystal data types</span>
+value <span class="o">=</span> document.evaluate   <span class="c"># Returns the HCL structure as Crystal data types</span>
 string <span class="o">=</span> document.to_s <span class="c"># Returns string reconstruction of HCL configuration</span></code></pre>
 
 <h2><a id="todo" class="anchor" href="#todo">

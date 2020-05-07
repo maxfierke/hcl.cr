@@ -465,6 +465,11 @@
       
         <ul>
   
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Visitors/Evaluator" data-name="hcl::visitors::evaluator">
+      <a href="../../HCL/Visitors/Evaluator.html">Evaluator</a>
+      
+    </li>
+  
   <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Visitors/ToSVisitor" data-name="hcl::visitors::tosvisitor">
       <a href="../../HCL/Visitors/ToSVisitor.html">ToSVisitor</a>
       
@@ -572,7 +577,7 @@
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/document.cr#L3" target="_blank">
+      <a href="https://github.com/maxfierke/hcl.cr/blob/4d0ae34fc593d22ecf3c54241c330bf8c844d2e9/src/hcl/ast/document.cr#L3" target="_blank">
         hcl/ast/document.cr
       </a>
     
@@ -598,17 +603,17 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
+        <a href="#evaluate-instance-method" class="signature"><strong>#evaluate</strong></a>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#unwrap(ctx:ExpressionContext)-instance-method" class="signature"><strong>#unwrap</strong>(ctx : ExpressionContext)</a>
         
       </li>
     
       <li class="entry-summary">
         <a href="#unwrap-instance-method" class="signature"><strong>#unwrap</strong></a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#value-instance-method" class="signature"><strong>#value</strong></a>
         
       </li>
     
@@ -632,12 +637,7 @@
   
     <a href="../../HCL/AST/Body.html#blocks:Array(HCL::AST::Block)-instance-method" class="tooltip">
       <span>blocks : Array(HCL::AST::Block)</span>
-    blocks</a>, 
-    
-  
-    <a href="../../HCL/AST/Body.html#value(ctx:ExpressionContext):Any-instance-method" class="tooltip">
-      <span>value(ctx : ExpressionContext) : Any</span>
-    value</a>
+    blocks</a>
     
   
 
@@ -668,9 +668,9 @@
     accept</a>, 
     
   
-    <a href="../../HCL/AST/Node.html#accept_children(visitor)-instance-method" class="tooltip">
-      <span>accept_children(visitor)</span>
-    accept_children</a>, 
+    <a href="../../HCL/AST/Node.html#evaluate(ctx:ExpressionContext)-instance-method" class="tooltip">
+      <span>evaluate(ctx : ExpressionContext)</span>
+    evaluate</a>, 
     
   
     <a href="../../HCL/AST/Node.html#inspect(io)-instance-method" class="tooltip">
@@ -774,6 +774,22 @@
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="evaluate-instance-method">
+      <div class="signature">
+        
+        def <strong>evaluate</strong>
+
+        <a class="method-permalink" href="#evaluate-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4d0ae34fc593d22ecf3c54241c330bf8c844d2e9/src/hcl/ast/document.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="unwrap(ctx:ExpressionContext)-instance-method">
       <div class="signature">
         
@@ -785,7 +801,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/document.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4d0ae34fc593d22ecf3c54241c330bf8c844d2e9/src/hcl/ast/document.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -801,23 +817,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/document.cr#L4" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="value-instance-method">
-      <div class="signature">
-        
-        def <strong>value</strong>
-
-        <a class="method-permalink" href="#value-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/document.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4d0ae34fc593d22ecf3c54241c330bf8c844d2e9/src/hcl/ast/document.cr#L4" target="_blank">View source</a>]
         
       </div>
     </div>

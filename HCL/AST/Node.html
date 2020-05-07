@@ -465,6 +465,11 @@
       
         <ul>
   
+  <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Visitors/Evaluator" data-name="hcl::visitors::evaluator">
+      <a href="../../HCL/Visitors/Evaluator.html">Evaluator</a>
+      
+    </li>
+  
   <li class=" " data-id="github.com/maxfierke/hcl.cr/HCL/Visitors/ToSVisitor" data-name="hcl::visitors::tosvisitor">
       <a href="../../HCL/Visitors/ToSVisitor.html">ToSVisitor</a>
       
@@ -622,7 +627,7 @@
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/node.cr#L3" target="_blank">
+      <a href="https://github.com/maxfierke/hcl.cr/blob/4d0ae34fc593d22ecf3c54241c330bf8c844d2e9/src/hcl/ast/node.cr#L3" target="_blank">
         hcl/ast/node.cr
       </a>
     
@@ -670,7 +675,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#accept_children(visitor)-instance-method" class="signature"><strong>#accept_children</strong>(visitor)</a>
+        <a href="#evaluate(ctx:ExpressionContext)-instance-method" class="signature"><strong>#evaluate</strong>(ctx : ExpressionContext)</a>
         
       </li>
     
@@ -693,6 +698,8 @@
     
       <li class="entry-summary">
         <a href="#value(ctx:ExpressionContext):Any-instance-method" class="signature"><strong>#value</strong>(ctx : ExpressionContext) : Any</a>
+        
+          <div class="summary"><p><span class="flag red">DEPRECATED</span>  Use <code><a href="../../HCL/AST/Node.html#evaluate(ctx:ExpressionContext)-instance-method">#evaluate</a></code></p></div>
         
       </li>
     
@@ -774,7 +781,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/node.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4d0ae34fc593d22ecf3c54241c330bf8c844d2e9/src/hcl/ast/node.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -804,23 +811,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/node.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4d0ae34fc593d22ecf3c54241c330bf8c844d2e9/src/hcl/ast/node.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="accept_children(visitor)-instance-method">
+    <div class="entry-detail" id="evaluate(ctx:ExpressionContext)-instance-method">
       <div class="signature">
         
-        def <strong>accept_children</strong>(visitor)
+        def <strong>evaluate</strong>(ctx : <a href="../../HCL/ExpressionContext.html">ExpressionContext</a>)
 
-        <a class="method-permalink" href="#accept_children(visitor)-instance-method">#</a>
+        <a class="method-permalink" href="#evaluate(ctx:ExpressionContext)-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/node.cr#L35" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4d0ae34fc593d22ecf3c54241c330bf8c844d2e9/src/hcl/ast/node.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -836,7 +843,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/node.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4d0ae34fc593d22ecf3c54241c330bf8c844d2e9/src/hcl/ast/node.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -852,7 +859,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/node.cr#L7" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4d0ae34fc593d22ecf3c54241c330bf8c844d2e9/src/hcl/ast/node.cr#L7" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -885,23 +892,28 @@ which includes its class name and its object address.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/node.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4d0ae34fc593d22ecf3c54241c330bf8c844d2e9/src/hcl/ast/node.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
   
     <div class="entry-detail" id="value(ctx:ExpressionContext):Any-instance-method">
       <div class="signature">
-        abstract 
+        
         def <strong>value</strong>(ctx : <a href="../../HCL/ExpressionContext.html">ExpressionContext</a>) : <a href="../../HCL/Any.html">Any</a>
 
         <a class="method-permalink" href="#value(ctx:ExpressionContext):Any-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p><span class="flag red">DEPRECATED</span>  Use <code><a href="../../HCL/AST/Node.html#evaluate(ctx:ExpressionContext)-instance-method">#evaluate</a></code></p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/0b57c9ba2dd9590bebd8cbf6ea5302426288227a/src/hcl/ast/node.cr#L23" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4d0ae34fc593d22ecf3c54241c330bf8c844d2e9/src/hcl/ast/node.cr#L33" target="_blank">View source</a>]
         
       </div>
     </div>
