@@ -14,34 +14,6 @@ module HCL
         @true_tpl = true_tpl
         @false_tpl = false_tpl
       end
-
-      def value(ctx : ExpressionContext) : Any
-        predicate_value = predicate.value(ctx).raw
-
-        # TODO: validate "correctness" of both expressions to catch errors in
-        # HCL construction, if even not for the active path
-
-        if truthy?(predicate_value)
-          true_tpl.value(ctx)
-        elsif fals_tpl = false_tpl
-          fals_tpl.value(ctx)
-        else
-          Any.new("")
-        end
-      end
-
-      # TODO: Verify these invariants
-      private def truthy?(val : Int64)
-        val != 0
-      end
-
-      private def truthy?(val : String)
-        val != ""
-      end
-
-      private def truthy?(val)
-        !!val
-      end
     end
   end
 end

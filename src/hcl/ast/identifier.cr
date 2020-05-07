@@ -9,12 +9,8 @@ module HCL
         super(*args, **kwargs)
       end
 
-      def value
+      def name
         source
-      end
-
-      def value(ctx : ExpressionContext) : Any
-        ctx.lookup_var(to_s)
       end
     end
   end

@@ -11,28 +11,27 @@ module HCL
         @source = source
       end
 
+      def accept(visitor)
+        visitor.visit(self)
+      end
+
+      def evaluate(ctx : ExpressionContext)
+        visitor = Visitors::Evaluator.new(ctx)
+        self.accept(visitor)
+      end
+
       def inspect(io)
         to_s(io)
       end
 
       def to_s(io : IO)
         visitor = Visitors::ToSVisitor.new(io)
-        self.accept visitor
+        self.accept(visitor)
       end
 
-      abstract def value(ctx : ExpressionContext) : Any
-
-      def accept(visitor)
-        if visitor.visit_any(self)
-          if visitor.visit(self)
-            accept_children(visitor)
-          end
-          visitor.end_visit(self)
-          visitor.end_visit_any(self)
-        end
-      end
-
-      def accept_children(visitor)
+      # DEPRECATED: Use `evaluate`
+      def value(ctx : ExpressionContext) : Any
+        evaluate(ctx)
       end
     end
   end

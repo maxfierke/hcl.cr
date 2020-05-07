@@ -173,7 +173,7 @@ module HCL
       end
 
       def visit(node : AST::Identifier)
-        io << node.value
+        io << node.name
       end
 
       def visit(node : AST::IndexExpr)

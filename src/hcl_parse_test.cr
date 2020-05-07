@@ -79,7 +79,7 @@ puts "#" * 80
 ctx = HCL::ExpressionContext.default_context
 ctx.variables["var"] = HCL::Any.new({"ami" => "ami-12345"})
 
-doc_value = doc.value(ctx)
+doc_value = doc.evaluate(ctx)
 puts "#" * 80
 puts "START DOC VALUE DUMP"
 puts "#" * 80

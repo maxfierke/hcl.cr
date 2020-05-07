@@ -250,7 +250,7 @@ module HCL
           {% for name, value in attributes %}
             when {{value[:key]}}
               %found{name} = true
-              node_val = attr_node.value(__ctx_from_hcl).raw
+              node_val = attr_node.evaluate(__ctx_from_hcl).raw
               %var{name} = begin
                 case node_val
                 when {{value[:type]}}
@@ -400,7 +400,7 @@ module HCL
           {% for name, value in labels %}
             when {{value[:index]}}
               %found{name} = true
-              %var{name} = label.value(__ctx_from_hcl).raw
+              %var{name} = label.evaluate(__ctx_from_hcl).raw
           {% end %}
             else
               on_unknown_hcl_label(__node_from_hcl, idx, __ctx_from_hcl)

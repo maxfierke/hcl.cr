@@ -22,7 +22,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.evaluate.should eq({
         "variable" => {
           "ami" => {
             "description" => "the AMI to use",
@@ -41,7 +41,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.evaluate.should eq({
         "variable" => {
           "ami" => {
             "description" => "the \\\"AMI to use",
@@ -74,7 +74,7 @@ describe HCL::Parser do
         "beverage" => "beer",
       })
 
-      doc.value(ctx).should eq({
+      doc.evaluate(ctx).should eq({
         "description"  => "once upon a time\nthere was a complicated\nparsing rule\n",
         "interpolated" => "one bottle of beer on the wall\none bottle of beer\ntake it down\n",
         "another_prop" => "hello",
@@ -95,7 +95,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.evaluate.should eq({
         "provider" => {
           "foo" => {
             "foo"  => 0.1_f64,
@@ -133,7 +133,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.evaluate.should eq({
         "provider" => {
           "foo" => {
             "foo"        => 0.1_f64 * 0.5_f64,
@@ -169,7 +169,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.evaluate.should eq({
         "resource" => {
           "aws_instance" => {
             "web" => {
@@ -191,7 +191,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.evaluate.should eq({
         "hello" => "it's me",
         "works" => true,
       })
@@ -212,7 +212,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.evaluate.should eq({
         "resource" => {
           "aws_instance" => {
             "web" => {
@@ -247,7 +247,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.evaluate.should eq({
         "config" => {
           "hello" => {
             "yoo"         => "yes",
@@ -282,7 +282,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.evaluate.should eq({
         "test" => {
           "hello" => {
             "resource" => [
@@ -328,7 +328,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.evaluate.should eq({
         "variable" => {
           "ami" => {"description" => "the AMI to use"},
         },
@@ -365,7 +365,7 @@ describe HCL::Parser do
 
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
-      doc.value.should eq({
+      doc.evaluate.should eq({
         "resource" => {
           "aws_instance" => {
             "web" => {
@@ -397,7 +397,7 @@ describe HCL::Parser do
         ]
       )
 
-      doc.value(ctx).should eq({
+      doc.evaluate(ctx).should eq({
         "resource" => {
           "aws_instance" => {
             "web" => {
@@ -432,7 +432,7 @@ describe HCL::Parser do
         }
       )
 
-      doc.value(ctx).should eq({
+      doc.evaluate(ctx).should eq({
         "resource" => {
           "aws_instance" => {
             "web" => {
@@ -471,7 +471,7 @@ describe HCL::Parser do
         }
       )
 
-      doc.value(ctx).should eq({
+      doc.evaluate(ctx).should eq({
         "resource" => {
           "aws_instance" => {
             "web" => {
@@ -497,7 +497,7 @@ describe HCL::Parser do
       ctx.functions["some_function"] = SomeFunction.new
       ctx.variables["item1"] = HCL::Any.new("world")
 
-      doc.value(ctx).should eq({
+      doc.evaluate(ctx).should eq({
         "config" => {
           "hello" => {
             "yoo" => "hello world [1, 2, 3]",
@@ -520,7 +520,7 @@ describe HCL::Parser do
       ctx = HCL::ExpressionContext.default_context
       ctx.variables["numbers"] = HCL::Any.new([1_i64, 2_i64, 3_i64])
 
-      doc.value(ctx).should eq({
+      doc.evaluate(ctx).should eq({
         "config" => {
           "hello" => {
             "yoo" => "hello 1 2 3",
@@ -550,7 +550,7 @@ describe HCL::Parser do
         "instance_id" => "01",
       })
 
-      doc.value(ctx).should eq({
+      doc.evaluate(ctx).should eq({
         "ec2_instance" => {
           "ami"         => "ami-abcd1234",
           "name"        => "prd-inst-01",
@@ -576,7 +576,7 @@ describe HCL::Parser do
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
 
-      doc.value.should eq({
+      doc.evaluate.should eq({
         "block" => {
           "boolean"         => true,
           "wrapped_boolean" => true,
@@ -601,7 +601,7 @@ describe HCL::Parser do
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
 
-      doc.value.should eq({
+      doc.evaluate.should eq({
         "block" => {
           "each"            => ["a", "b"],
           "each_with_index" => [0, 1],
@@ -623,7 +623,7 @@ describe HCL::Parser do
       parser = HCL::Parser.new(hcl_string)
       doc = parser.parse!
 
-      doc.value.should eq({
+      doc.evaluate.should eq({
         "block" => {
           "cond"     => "hello",
           "for_expr" => "true1hello",

@@ -14,10 +14,6 @@ module HCL
           @indent_size = 0
         end
       end
-
-      def value(ctx : ExpressionContext) : Any
-        content.value(ctx)
-      end
     end
   end
 end

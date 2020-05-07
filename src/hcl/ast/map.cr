@@ -8,16 +8,6 @@ module HCL
 
         @attributes = attributes
       end
-
-      def value(ctx : ExpressionContext) : Any
-        dict = {} of String => Any
-
-        attributes.each do |key, value|
-          dict[key] = value.value(ctx)
-        end
-
-        Any.new(dict)
-      end
     end
   end
 end

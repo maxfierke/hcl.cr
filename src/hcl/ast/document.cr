@@ -6,11 +6,11 @@ module HCL
       end
 
       def unwrap(ctx : ExpressionContext)
-        value(ctx).unwrap
+        evaluate(ctx).unwrap
       end
 
-      def value
-        value(ExpressionContext.default_context)
+      def evaluate
+        evaluate(ExpressionContext.default_context)
       end
     end
   end

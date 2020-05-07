@@ -7,10 +7,6 @@ module HCL
         super(**kwargs)
         @index_exp = index_exp
       end
-
-      def value(ctx : ExpressionContext) : Any
-        raise "BUG: This should not be called, as there is no value to represent."
-      end
     end
   end
 end

@@ -22,10 +22,6 @@ module HCL
         @source = number.to_s
         @value = number
       end
-
-      def value(ctx : ExpressionContext) : Any
-        Any.new(@value)
-      end
     end
   end
 end

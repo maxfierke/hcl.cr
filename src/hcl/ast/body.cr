@@ -13,21 +13,6 @@ module HCL
         @attributes = attributes
         @blocks = blocks
       end
-
-      def value(ctx : ExpressionContext) : Any
-        dict = {} of String => Any
-
-        attributes.each do |key, value|
-          dict[key] = value.value(ctx)
-        end
-
-        blocks.each do |block|
-          block_dict = block.value(ctx).as_h
-          dict.merge!(block_dict)
-        end
-
-        Any.new(dict)
-      end
     end
   end
 end

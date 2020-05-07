@@ -75,7 +75,7 @@ HEREDOC
 parser = HCL::Parser.new(SRC_TEXT) # Parser object.
 
 document = parser.parse! # Returns an HCL::AST::Document
-value = document.value   # Returns the HCL structure as Crystal data types
+value = document.evaluate   # Returns the HCL structure as Crystal data types
 string = document.to_s # Returns string reconstruction of HCL configuration
 ```
 
