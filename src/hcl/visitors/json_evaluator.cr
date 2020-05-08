@@ -84,7 +84,7 @@ module HCL
           end
         end
 
-        Any.new(json_heredoc)
+        Any.new(json_heredoc.to_s)
       end
 
       def visit(node : AST::Identifier)
