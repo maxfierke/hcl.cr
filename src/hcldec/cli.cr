@@ -59,7 +59,7 @@ module HCLDec
       spec = load_spec_file(spec_path)
       spec.validate!
 
-      HCL.parse(ARGF.gets_to_end).to_json(
+      puts HCL.parse(ARGF.gets_to_end).to_json(
         ctx: HCL::ExpressionContext.default_context
       )
     end
@@ -73,7 +73,7 @@ module HCLDec
 
     private def hcl_spec_context
       ctx = HCL::ExpressionContext.default_context
-      # ctx.mode = HCL::ExpressionContext::Mode::LITERAL
+      ctx.mode = HCL::ExpressionContext::Mode::LITERAL
       ctx.variables["any"] = HCL::Any.new(HCLDec::TYPE_ANY)
       ctx.variables["bool"] = HCL::Any.new(HCLDec::TYPE_BOOL)
       ctx.variables["number"] = HCL::Any.new(HCLDec::TYPE_NUMBER)
