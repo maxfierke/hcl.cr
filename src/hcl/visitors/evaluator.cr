@@ -370,13 +370,18 @@ module HCL
 
       protected def deep_merge_blocks!(dict, other_dict)
         dict.merge!(other_dict) do |key, v1, v2|
-          if v1.is_a?(Array) && v2.is_a?(Array)
-            v1 + v2
-          elsif v1.is_a?(Array)
-            v1 << v2
-            v1
-          elsif v2.is_a?(Array)
-            [v1] + v2
+          if (v1_arr = v1.as_a?) && (v2_arr = v2.as_a?)
+            Any.new(v1_arr + v2_arr)
+          elsif v1_arr = v1.as_a?
+            v1_arr << v2
+            Any.new(v1_arr)
+          elsif v2_arr = v2.as_a?
+            v2_arr.unshift(v1)
+            Any.new(v2_arr)
+          elsif (v1_hsh = v1.as_h?) && (v2_hsh = v2.as_h?)
+            Any.new(
+              deep_merge_blocks!(v1_hsh, v2_hsh)
+            )
           else
             v2
           end
