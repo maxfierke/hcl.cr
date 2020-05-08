@@ -11,10 +11,6 @@ module HCL
       def <<(node : Node)
         @children << node
       end
-
-      def as_json(ctx : ExpressionContext) : Any
-        evaluate(ctx)
-      end
     end
   end
 end

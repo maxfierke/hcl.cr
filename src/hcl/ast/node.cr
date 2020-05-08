@@ -16,7 +16,7 @@ module HCL
       end
 
       def as_json(ctx : ExpressionContext)
-        visitor = Visitors::AsJsonEvaluator.new(ctx)
+        visitor = Visitors::JsonEvaluator.new(ctx)
         self.accept(visitor)
       end
 
