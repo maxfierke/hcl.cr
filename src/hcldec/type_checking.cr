@@ -21,7 +21,7 @@ module HCL
       if (r = as_s?) && r.starts_with?(::HCLDec::TYPE_PREFIX)
         r.lstrip(::HCLDec::TYPE_PREFIX).to_s(io)
       else
-        io.to_s(io)
+        raw.to_s(io)
       end
     end
   end
