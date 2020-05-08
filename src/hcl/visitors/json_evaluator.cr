@@ -30,10 +30,12 @@ module HCL
         if children.size == 1
           child = children.first.not_nil!
           case child
-          when AST::List, AST::Map, AST::Number
+          when AST::Expression,
+               AST::List,
+               AST::Map,
+               AST::Number,
+               AST::Template
             return child.accept(self)
-          when AST::Expression, AST::Template
-            return Any.new(node.to_s)
           else
             # Continue
           end
