@@ -24,6 +24,17 @@ module HCL
         to_s(io)
       end
 
+      def to_dot(io : IO, name = "ast")
+        visitor = Visitors::DotVisitor.new(name, io)
+        self.accept(visitor)
+      end
+
+      def to_dot
+        String.build do |io|
+          to_dot(io)
+        end
+      end
+
       def to_s(io : IO)
         visitor = Visitors::ToSVisitor.new(io)
         self.accept(visitor)

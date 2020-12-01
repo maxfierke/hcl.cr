@@ -17,7 +17,7 @@ bin/hcl_parse_test: $(SOURCES)
 
 .PHONY: parse-trace
 parse-trace: bin/hcl_parse_test
-	bin/hcl_parse_test > trace.txt
+	bin/hcl_parse_test > trace.txt && dot -Tpng trace.dot > trace.png
 
 .PHONY: deps
 deps:

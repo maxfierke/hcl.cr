@@ -105,3 +105,7 @@ puts string
 puts "#" * 80
 puts "END DOC STRING DUMP"
 puts "#" * 80
+
+File.open("trace.dot", mode: "w") do |file|
+  doc.to_dot(file, "trace")
+end

@@ -9,3 +9,5 @@
 /shard.lock
 
 trace.txt
+trace.dot
+trace.png
