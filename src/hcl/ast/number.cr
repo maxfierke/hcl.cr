@@ -7,7 +7,7 @@ module HCL
 
       getter :value
 
-      def initialize(source, token : Pegmatite::Token? = nil)
+      def initialize(source : String, token : Pegmatite::Token? = nil)
         super(source: source.strip('"'), token: token)
 
         @value = if @source.includes?('.')
