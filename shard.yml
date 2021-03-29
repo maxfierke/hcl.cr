@@ -8,7 +8,7 @@ crystal: '>= 0.34.0'
 
 dependencies:
   pegmatite:
-    github: maxfierke/crystal-pegmatite
-    branch: mf-crystal_1.0.0
+    github: jemc/crystal-pegmatite
+    branch: master
 
 license: MIT
