@@ -1,7 +1,9 @@
 module HCL
   class Parser
     @source : String
+    @source_offset = 0
     @document : AST::Document?
+    @parse_trace_io : IO?
 
     getter :document, :source
 
@@ -11,12 +13,23 @@ module HCL
 
     def initialize(source : String | IO, offset = 0, io : IO? = nil)
       @source = source.is_a?(IO) ? source.gets_to_end : source
-      @peg_tokens = Pegmatite.tokenize(HCL::Grammar, @source, offset, io)
-      @peg_iter = Pegmatite::TokenIterator.new(@peg_tokens)
+      @source_offset = offset
+      @parse_trace_io = io
     end
 
     def parse!
-      @document ||= build_document(@peg_iter, source)
+      @document ||= begin
+        peg_tokens = Pegmatite.tokenize(
+          HCL::Grammar,
+          @source,
+          @source_offset,
+          @parse_trace_io
+        )
+        peg_iter = Pegmatite::TokenIterator.new(peg_tokens)
+        build_document(peg_iter, @source)
+      rescue e : Pegmatite::Pattern::MatchError
+        raise ParseException.new(e.message)
+      end
     end
 
     private def assert_token_kind!(token : Pegmatite::Token, expected_kind)

@@ -1,14 +1,14 @@
 name: hcl
-version: 0.1.0
+version: 0.2.0
 
 authors:
   - Max Fierke <max@maxfierke.com>
 
-crystal: '>= 0.34.0'
+crystal: '>= 1.0.0'
 
 dependencies:
   pegmatite:
     github: jemc/crystal-pegmatite
-    branch: master
+    commit: 52483e2ffdfac6913342b2dae16ba11d6e4b8d07 # 0.2.0
 
 license: MIT

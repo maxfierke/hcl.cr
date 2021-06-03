@@ -12,6 +12,23 @@ end
 
 describe HCL::Parser do
   describe "#parse" do
+    it "surfaces the Pegmatite error when encountering bad syntax" do
+      hcl_string = <<-HEREDOC
+        variable "ami" {
+          "whats the deal im walkin here"
+
+      HEREDOC
+
+      parser = HCL::Parser.new(hcl_string)
+
+      expect_raises(
+        HCL::ParseException,
+        /^unexpected token at byte offset 23:\n\s+"whats the deal im walkin here"\n\s+\^$/
+      ) do
+        parser.parse!
+      end
+    end
+
     it "can parse simple strings" do
       hcl_string = <<-HEREDOC
         variable "ami" {
