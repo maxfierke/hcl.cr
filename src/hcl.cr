@@ -12,7 +12,7 @@ require "./hcl/visitors/*"
 require "./hcl/*"
 
 module HCL
-  VERSION = "0.1.0"
+  VERSION = "0.2.1"
 
   def self.build(io : IO, &block)
     HCL::Builder.build do |builder|
