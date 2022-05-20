@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.36.1">
-<meta name="crystal_docs.project_version" content="0.2.0">
+<meta name="generator" content="Crystal Docs 1.3.2">
+<meta name="crystal_docs.project_version" content="0.2.1">
 <meta name="crystal_docs.project_name" content="hcl">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="js/doc.js"></script>
 
   <meta name="repository-name" content="hcl">
-  <title>Set(T) - hcl 0.2.0</title>
+  <title>Set(T) - hcl 0.2.1</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.2.0
+        0.2.1
       </span>
     </div>
   </div>
@@ -575,19 +575,17 @@
   </h2>
 
   <p><code><a href="Set.html">Set</a></code> implements a collection of unordered values with no duplicates.</p>
-
 <p>An <code>Enumerable</code> object can be converted to <code><a href="Set.html">Set</a></code> using the <code>#to_set</code> method.</p>
-
 <p><code><a href="Set.html">Set</a></code> uses <code><a href="Hash.html">Hash</a></code> as storage, so you must note the following points:</p>
-
-<ul><li>Equality of elements is determined according to <code>Object#==</code> and <code>Object#hash</code>.</li><li><code><a href="Set.html">Set</a></code> assumes that the identity of each element does not change while it is stored. Modifying an element of a set will render the set to an unreliable state.</li></ul>
-
+<ul>
+<li>Equality of elements is determined according to <code>Object#==</code> and <code>Object#hash</code>.</li>
+<li><code><a href="Set.html">Set</a></code> assumes that the identity of each element does not change while it is stored. Modifying an element of a set will render the set to an unreliable state.</li>
+</ul>
 <h3><a id="example" class="anchor" href="#example">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Example</h3>
-
 <pre><code class="language-crystal">s1 <span class="o">=</span> <span class="t">Set</span>{<span class="n">1</span>, <span class="n">2</span>}
 s2 <span class="o">=</span> [<span class="n">1</span>, <span class="n">2</span>].to_set
 s3 <span class="o">=</span> <span class="t">Set</span>.<span class="k">new</span> [<span class="n">1</span>, <span class="n">2</span>]
@@ -637,9 +635,7 @@ s2.subset_of? s1 <span class="c"># =&gt; true</span></code></pre>
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/to_hcl.cr#L49" target="_blank">
-        hcl/to_hcl.cr
-      </a>
+      hcl/to_hcl.cr
     
     <br/>
   
@@ -663,7 +659,7 @@ s2.subset_of? s1 <span class="c"># =&gt; true</span></code></pre>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#to_hcl(builder:HCL::Builder)-instance-method" class="signature"><strong>#to_hcl</strong>(builder : HCL::Builder)</a>
+        <a href="#to_hcl%28builder%3AHCL%3A%3ABuilder%29-instance-method" class="signature"><strong>#to_hcl</strong>(builder : HCL::Builder)</a>
         
       </li>
     
@@ -710,7 +706,7 @@ s2.subset_of? s1 <span class="c"># =&gt; true</span></code></pre>
   <h3>Instance methods inherited from struct <code><a href="Value.html">Value</a></code></h3>
   
   
-    <a href="Value.html#==(other:HCL::Any)-instance-method" class="tooltip">
+    <a href="Value.html#%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method" class="tooltip">
       <span>==(other : HCL::Any)</span>
     ==</a>
     
@@ -729,7 +725,7 @@ s2.subset_of? s1 <span class="c"># =&gt; true</span></code></pre>
   <h3>Instance methods inherited from class <code><a href="Object.html">Object</a></code></h3>
   
   
-    <a href="Object.html#===(other:HCL::Any)-instance-method" class="tooltip">
+    <a href="Object.html#%3D%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method" class="tooltip">
       <span>===(other : HCL::Any)</span>
     ===</a>
     
@@ -744,7 +740,7 @@ s2.subset_of? s1 <span class="c"># =&gt; true</span></code></pre>
   <h3>Class methods inherited from class <code><a href="Object.html">Object</a></code></h3>
   
   
-    <a href="Object.html#from_hcl(string_or_io:String%7CIO,ctx:HCL::ExpressionContext=HCL::ExpressionContext.default_context)-class-method" class="tooltip">
+    <a href="Object.html#from_hcl%28string_or_io%3AString%7CIO%2Cctx%3AHCL%3A%3AExpressionContext%3DHCL%3A%3AExpressionContext.default_context%29-class-method" class="tooltip">
       <span>from_hcl(string_or_io : String | IO, ctx : HCL::ExpressionContext = <span class="t">HCL</span><span class="t">::</span><span class="t">ExpressionContext</span>.default_context)</span>
     from_hcl</a>
     
@@ -773,13 +769,11 @@ s2.subset_of? s1 <span class="c"># =&gt; true</span></code></pre>
         
         def <strong>to_hcl</strong>(builder : <a href="HCL/Builder.html">HCL::Builder</a>)
 
-        <a class="method-permalink" href="#to_hcl(builder:HCL::Builder)-instance-method">#</a>
+        <a class="method-permalink" href="#to_hcl%28builder%3AHCL%3A%3ABuilder%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/to_hcl.cr#L50" target="_blank">View source</a>]
         
       </div>
     </div>

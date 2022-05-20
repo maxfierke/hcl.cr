@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.36.1">
-<meta name="crystal_docs.project_version" content="0.2.0">
+<meta name="generator" content="Crystal Docs 1.3.2">
+<meta name="crystal_docs.project_version" content="0.2.1">
 <meta name="crystal_docs.project_name" content="hcl">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="js/doc.js"></script>
 
   <meta name="repository-name" content="hcl">
-  <title>hcl 0.2.0</title>
+  <title>hcl 0.2.1</title>
   <script type="text/javascript">
   CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.2.0
+        0.2.1
       </span>
     </div>
   </div>
@@ -553,80 +553,69 @@
 
 
 <div class="main-content">
-<h1><a id="hcl.cr" class="anchor" href="#hcl.cr">
-  <svg class="octicon-link" aria-hidden="true">
+<h1><a id="hcl.cr" class="anchor" href="#hcl.cr">  <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>hcl.cr</h1>
-
 <p>A general-purpose HCL2 parser written in Crystal. Does not make any domain assumptions.
 Aims to supports the standard HCL2 types and map to the HCL2 informational model.</p>
-
 <p>HCL2 support is considered feature complete. However, it does not yet run against
 the spec test suite, so there may be situations in which some documents do not
 work as they should. Please report any issues <a href="https://github.com/maxfierke/hcl.cr/issues/new">here</a>.</p>
-
 <h2><a id="aims" class="anchor" href="#aims">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Aims</h2>
-
 <p><code>hcl.cr</code> has the following goals, in order of importance:</p>
-
-<ol><li>Correctly implement the HCL2 spec</li><li>Be compatible with <a href="https://github.com/Hashicorp/hcl/tree/hcl2">the Go implementation</a></li><li>Easy to work with</li><li>Reasonably performant and efficient</li></ol>
-
+<ol>
+<li>Correctly implement the HCL2 spec</li>
+<li>Be compatible with <a href="https://github.com/Hashicorp/hcl/tree/hcl2">the Go implementation</a></li>
+<li>Easy to work with</li>
+<li>Reasonably performant and efficient</li>
+</ol>
 <h2><a id="installation" class="anchor" href="#installation">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Installation</h2>
-
-<ol><li>Add the dependency to your <code>shard.yml</code>:</li></ol>
-
-<p><code></code>`yaml
-   dependencies:</p>
-
-<pre><code class="language-crystal"> hcl:
-   github: maxfierke/hcl.cr
-   version: ~> 0.2.0</code></pre>
-
-<p><code></code>`</p>
-
-<ol><li>Run <code>shards install</code></li></ol>
-
+<ol>
+<li>
+<p>Add the dependency to your <code>shard.yml</code>:</p>
+<pre><code class="language-yaml">dependencies:
+  hcl:
+    github: maxfierke/hcl.cr
+    version: ~&gt; 0.2.1</code></pre>
+</li>
+<li>
+<p>Run <code>shards install</code></p>
+</li>
+</ol>
 <h2><a id="usage" class="anchor" href="#usage">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Usage</h2>
-
 <h3><a id="schema-based-parsing" class="anchor" href="#schema-based-parsing">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Schema-based parsing</h3>
-
 <p>For most use-cases, schema-based parsing will be the easiest to work with.
 <code>hcl.cr</code> provides an <code><a href="HCL/Serializable.html">HCL::Serializable</a></code> module, which can be used much like
 <code>JSON::Serializable</code> and <code>YAML::Serializable</code> from the Crystal standard library.</p>
-
 <p>The module allows you to define mappings for attributes, blocks, and labels on
 your own classes and structs, and provides convienent <code>self.from_hcl</code> and <code>to_hcl</code>
 methods.</p>
-
 <p>See documentation on <a href="src/hcl/serializable.cr"><code>HCL::Serializable</code></a> for more information.</p>
-
 <h3><a id="using-the-ast-directly" class="anchor" href="#using-the-ast-directly">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Using the AST directly</h3>
-
 <p>For more advanced use cases, you can use the <code><a href="HCL/Parser.html">HCL::Parser</a></code> class and work
 with the AST nodes directly. <code><a href="HCL/Builder.html">HCL::Builder</a></code> can also be used to build HCL ASTs
 using a DSL, and create arbitrary HCL documents.</p>
-
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;hcl&quot;</span>
 
 <span class="t">SRC_TEXT</span> <span class="o">=</span> <span class="s">&lt;&lt;-HEREDOC</span>
@@ -655,38 +644,62 @@ parser <span class="o">=</span> <span class="t">HCL</span><span class="t">::</sp
 document <span class="o">=</span> parser.parse! <span class="c"># Returns an HCL::AST::Document</span>
 value <span class="o">=</span> document.evaluate   <span class="c"># Returns the HCL structure as Crystal data types</span>
 string <span class="o">=</span> document.to_s <span class="c"># Returns string reconstruction of HCL configuration</span></code></pre>
-
 <h2><a id="todo" class="anchor" href="#todo">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>TODO</h2>
-
-<ul><li>[X] Add support for literals (numbers, strings, booleans, null)</li><li>[X] Add support for blocks</li><li>[X] Add support for identifer parsing</li><li>[X] Add support for lists</li><li>[X] Add support for maps/objects</li><li>[X] Add support for function parsing, including varadic arguments</li><li>[X] Add support for square-bracket attribute & index access on maps & lists</li><li>[X] Add support for arithmetic and logic operators</li><li>[X] Add support for conditional expressions</li><li>[X] Add support for top-level attributes</li><li>[X] Add support for identifier/variable evaluation</li><li>[X] Add support for function evaluation</li><li>[X] Add support for heredocs</li><li>[X] Add standard functions</li><li>[X] Add support for partial- and full-schema decoding and encoding of HCL documents</li><li>[X] Add support for splats</li><li>[X] Add support for parsing interpolations/templates</li><li>[X] Add support for evaluating interpolations/templates</li><li>[X] Add support for <code>for</code> expressions</li><li>[X] Add support for template directives</li><li>[ ] Spec compliance</li><li>[ ] Run against HCL2 test suite</li><li>[ ] More validations, better parse/eval errors</li></ul>
-
+<ul>
+<li>[X] Add support for literals (numbers, strings, booleans, null)</li>
+<li>[X] Add support for blocks</li>
+<li>[X] Add support for identifer parsing</li>
+<li>[X] Add support for lists</li>
+<li>[X] Add support for maps/objects</li>
+<li>[X] Add support for function parsing, including varadic arguments</li>
+<li>[X] Add support for square-bracket attribute &amp; index access on maps &amp; lists</li>
+<li>[X] Add support for arithmetic and logic operators</li>
+<li>[X] Add support for conditional expressions</li>
+<li>[X] Add support for top-level attributes</li>
+<li>[X] Add support for identifier/variable evaluation</li>
+<li>[X] Add support for function evaluation</li>
+<li>[X] Add support for heredocs</li>
+<li>[X] Add standard functions</li>
+<li>[X] Add support for partial- and full-schema decoding and encoding of HCL documents</li>
+<li>[X] Add support for splats</li>
+<li>[X] Add support for parsing interpolations/templates</li>
+<li>[X] Add support for evaluating interpolations/templates</li>
+<li>[X] Add support for <code>for</code> expressions</li>
+<li>[X] Add support for template directives</li>
+<li>[ ] Spec compliance</li>
+<li>[ ] Run against HCL2 test suite</li>
+<li>[ ] More validations, better parse/eval errors</li>
+</ul>
 <h2><a id="contributing" class="anchor" href="#contributing">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Contributing</h2>
-
-<ol><li>Fork it (&lt;https://github.com/maxfierke/hcl.cr/fork>)</li><li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li><li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li><li>Push to the branch (<code>git push origin my-new-feature</code>)</li><li>Create a new Pull Request</li></ol>
-
+<ol>
+<li>Fork it (<a href="https://github.com/maxfierke/hcl.cr/fork">https://github.com/maxfierke/hcl.cr/fork</a>)</li>
+<li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
+<li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li>
+<li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
+<li>Create a new Pull Request</li>
+</ol>
 <h2><a id="license" class="anchor" href="#license">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>License</h2>
-
 <p>Licensed under The MIT License. See <a href="LICENSE">LICENSE</a> for more information.</p>
-
 <h2><a id="contributors" class="anchor" href="#contributors">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Contributors</h2>
-
-<ul><li><a href="https://github.com/maxfierke">Max Fierke</a> - creator and maintainer</li></ul>
+<ul>
+<li><a href="https://github.com/maxfierke">Max Fierke</a> - creator and maintainer</li>
+</ul>
 </div>
 </body>
 </html>

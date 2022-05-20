@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.36.1">
-<meta name="crystal_docs.project_version" content="0.2.0">
+<meta name="generator" content="Crystal Docs 1.3.2">
+<meta name="crystal_docs.project_version" content="0.2.1">
 <meta name="crystal_docs.project_name" content="hcl">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="js/doc.js"></script>
 
   <meta name="repository-name" content="hcl">
-  <title>NamedTuple(**T) - hcl 0.2.0</title>
+  <title>NamedTuple(**T) - hcl 0.2.1</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.2.0
+        0.2.1
       </span>
     </div>
   </div>
@@ -576,23 +576,19 @@
 
   <p>A named tuple is a fixed-size, immutable, stack-allocated mapping
 of a fixed set of keys to values.</p>
-
 <p>You can think of a <code><a href="NamedTuple.html">NamedTuple</a></code> as an immutable <code><a href="Hash.html">Hash</a></code> whose keys (which
 are of type <code><a href="Symbol.html">Symbol</a></code>), and the types for each key, are known at compile time.</p>
-
 <p>A named tuple can be created with a named tuple literal:</p>
-
 <pre><code class="language-crystal">language <span class="o">=</span> {name: <span class="s">&quot;Crystal&quot;</span>, year: <span class="n">2011</span>} <span class="c"># NamedTuple(name: String, year: Int32)</span>
 
 language[<span class="n">:name</span>]  <span class="c"># =&gt; &quot;Crystal&quot;</span>
 language[<span class="n">:year</span>]  <span class="c"># =&gt; 2011</span>
 language[<span class="n">:other</span>] <span class="c"># compile time error</span></code></pre>
-
+<p>See <a href="https://crystal-lang.org/reference/syntax_and_semantics/literals/named_tuple.html"><code>NamedTuple</code> literals</a> in the language reference.</p>
 <p>The compiler knows what types are in each key, so when indexing a named tuple
 with a symbol literal the compiler will return the value for that key and
 with the expected type, like in the above snippet. Indexing with a symbol
 literal for which there's no key will give a compile-time error.</p>
-
 <p>Indexing with a symbol that is only known at runtime will return
 a value whose type is the union of all the types in the named tuple,
 and might raise <code>KeyError</code>.</p>
@@ -620,9 +616,7 @@ and might raise <code>KeyError</code>.</p>
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/to_hcl.cr#L27" target="_blank">
-        hcl/to_hcl.cr
-      </a>
+      hcl/to_hcl.cr
     
     <br/>
   
@@ -646,7 +640,7 @@ and might raise <code>KeyError</code>.</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#to_hcl(builder:HCL::Builder)-instance-method" class="signature"><strong>#to_hcl</strong>(builder : HCL::Builder)</a>
+        <a href="#to_hcl%28builder%3AHCL%3A%3ABuilder%29-instance-method" class="signature"><strong>#to_hcl</strong>(builder : HCL::Builder)</a>
         
       </li>
     
@@ -663,7 +657,7 @@ and might raise <code>KeyError</code>.</p>
   <h3>Instance methods inherited from struct <code><a href="Value.html">Value</a></code></h3>
   
   
-    <a href="Value.html#==(other:HCL::Any)-instance-method" class="tooltip">
+    <a href="Value.html#%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method" class="tooltip">
       <span>==(other : HCL::Any)</span>
     ==</a>
     
@@ -682,7 +676,7 @@ and might raise <code>KeyError</code>.</p>
   <h3>Instance methods inherited from class <code><a href="Object.html">Object</a></code></h3>
   
   
-    <a href="Object.html#===(other:HCL::Any)-instance-method" class="tooltip">
+    <a href="Object.html#%3D%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method" class="tooltip">
       <span>===(other : HCL::Any)</span>
     ===</a>
     
@@ -697,7 +691,7 @@ and might raise <code>KeyError</code>.</p>
   <h3>Class methods inherited from class <code><a href="Object.html">Object</a></code></h3>
   
   
-    <a href="Object.html#from_hcl(string_or_io:String%7CIO,ctx:HCL::ExpressionContext=HCL::ExpressionContext.default_context)-class-method" class="tooltip">
+    <a href="Object.html#from_hcl%28string_or_io%3AString%7CIO%2Cctx%3AHCL%3A%3AExpressionContext%3DHCL%3A%3AExpressionContext.default_context%29-class-method" class="tooltip">
       <span>from_hcl(string_or_io : String | IO, ctx : HCL::ExpressionContext = <span class="t">HCL</span><span class="t">::</span><span class="t">ExpressionContext</span>.default_context)</span>
     from_hcl</a>
     
@@ -726,13 +720,11 @@ and might raise <code>KeyError</code>.</p>
         
         def <strong>to_hcl</strong>(builder : <a href="HCL/Builder.html">HCL::Builder</a>)
 
-        <a class="method-permalink" href="#to_hcl(builder:HCL::Builder)-instance-method">#</a>
+        <a class="method-permalink" href="#to_hcl%28builder%3AHCL%3A%3ABuilder%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/to_hcl.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>

@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.36.1">
-<meta name="crystal_docs.project_version" content="0.2.0">
+<meta name="generator" content="Crystal Docs 1.3.2">
+<meta name="crystal_docs.project_version" content="0.2.1">
 <meta name="crystal_docs.project_name" content="hcl">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="js/doc.js"></script>
 
   <meta name="repository-name" content="hcl">
-  <title>Nil - hcl 0.2.0</title>
+  <title>Nil - hcl 0.2.1</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.2.0
+        0.2.1
       </span>
     </div>
   </div>
@@ -575,25 +575,19 @@
   </h2>
 
   <p>The <code><a href="Nil.html">Nil</a></code> type has only one possible value: <code>nil</code>.</p>
-
 <p><code>nil</code> is commonly used to represent the absence of a value.
 For example, <code>String#index</code> returns the position of the character or <code>nil</code> if it's not
 in the string:</p>
-
 <pre><code class="language-crystal">str <span class="o">=</span> <span class="s">&quot;Hello world&quot;</span>
 str.index <span class="s">&#39;e&#39;</span> <span class="c"># =&gt; 1</span>
 str.index <span class="s">&#39;a&#39;</span> <span class="c"># =&gt; nil</span></code></pre>
-
 <p>In the above example, trying to invoke a method on the returned value will
 give a compile time error unless both <code>Int32</code> and <code><a href="Nil.html">Nil</a></code> define that method:</p>
-
 <pre><code class="language-crystal">str <span class="o">=</span> <span class="s">&quot;Hello world&quot;</span>
 idx <span class="o">=</span> str.index <span class="s">&#39;e&#39;</span>
 idx <span class="o">+</span> <span class="n">1</span> <span class="c"># Error: undefined method &#39;+&#39; for Nil</span></code></pre>
-
 <p>The language and the standard library provide short, readable, easy ways to deal with <code>nil</code>,
 such as <code>Object#try</code> and <code>Object#not_nil!</code>:</p>
-
 <pre><code class="language-crystal">str <span class="o">=</span> <span class="s">&quot;Hello world&quot;</span>
 
 <span class="c"># The index of &#39;e&#39; in str or 0 if not found</span>
@@ -609,6 +603,7 @@ idx2 <span class="o">=</span> str.index(<span class="s">&#39;a&#39;</span>)
 <span class="c"># value is not nil: raises a runtime exception</span>
 <span class="c"># if our assumption doesn&#39;t hold.</span>
 idx3 <span class="o">=</span> str.index(<span class="s">&#39;o&#39;</span>).not_nil!</code></pre>
+<p>See <a href="https://crystal-lang.org/reference/syntax_and_semantics/literals/nil.html"><code>Nil</code> literal</a> in the language reference.</p>
 
 
 
@@ -633,9 +628,7 @@ idx3 <span class="o">=</span> str.index(<span class="s">&#39;o&#39;</span>).not_
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/to_hcl.cr#L37" target="_blank">
-        hcl/to_hcl.cr
-      </a>
+      hcl/to_hcl.cr
     
     <br/>
   
@@ -659,7 +652,7 @@ idx3 <span class="o">=</span> str.index(<span class="s">&#39;o&#39;</span>).not_
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#to_hcl(builder:HCL::Builder)-instance-method" class="signature"><strong>#to_hcl</strong>(builder : HCL::Builder)</a>
+        <a href="#to_hcl%28builder%3AHCL%3A%3ABuilder%29-instance-method" class="signature"><strong>#to_hcl</strong>(builder : HCL::Builder)</a>
         
       </li>
     
@@ -676,7 +669,7 @@ idx3 <span class="o">=</span> str.index(<span class="s">&#39;o&#39;</span>).not_
   <h3>Instance methods inherited from struct <code><a href="Value.html">Value</a></code></h3>
   
   
-    <a href="Value.html#==(other:HCL::Any)-instance-method" class="tooltip">
+    <a href="Value.html#%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method" class="tooltip">
       <span>==(other : HCL::Any)</span>
     ==</a>
     
@@ -695,7 +688,7 @@ idx3 <span class="o">=</span> str.index(<span class="s">&#39;o&#39;</span>).not_
   <h3>Instance methods inherited from class <code><a href="Object.html">Object</a></code></h3>
   
   
-    <a href="Object.html#===(other:HCL::Any)-instance-method" class="tooltip">
+    <a href="Object.html#%3D%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method" class="tooltip">
       <span>===(other : HCL::Any)</span>
     ===</a>
     
@@ -710,7 +703,7 @@ idx3 <span class="o">=</span> str.index(<span class="s">&#39;o&#39;</span>).not_
   <h3>Class methods inherited from class <code><a href="Object.html">Object</a></code></h3>
   
   
-    <a href="Object.html#from_hcl(string_or_io:String%7CIO,ctx:HCL::ExpressionContext=HCL::ExpressionContext.default_context)-class-method" class="tooltip">
+    <a href="Object.html#from_hcl%28string_or_io%3AString%7CIO%2Cctx%3AHCL%3A%3AExpressionContext%3DHCL%3A%3AExpressionContext.default_context%29-class-method" class="tooltip">
       <span>from_hcl(string_or_io : String | IO, ctx : HCL::ExpressionContext = <span class="t">HCL</span><span class="t">::</span><span class="t">ExpressionContext</span>.default_context)</span>
     from_hcl</a>
     
@@ -739,13 +732,11 @@ idx3 <span class="o">=</span> str.index(<span class="s">&#39;o&#39;</span>).not_
         
         def <strong>to_hcl</strong>(builder : <a href="HCL/Builder.html">HCL::Builder</a>)
 
-        <a class="method-permalink" href="#to_hcl(builder:HCL::Builder)-instance-method">#</a>
+        <a class="method-permalink" href="#to_hcl%28builder%3AHCL%3A%3ABuilder%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/to_hcl.cr#L38" target="_blank">View source</a>]
         
       </div>
     </div>

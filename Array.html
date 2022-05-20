@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.36.1">
-<meta name="crystal_docs.project_version" content="0.2.0">
+<meta name="generator" content="Crystal Docs 1.3.2">
+<meta name="crystal_docs.project_version" content="0.2.1">
 <meta name="crystal_docs.project_name" content="hcl">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="js/doc.js"></script>
 
   <meta name="repository-name" content="hcl">
-  <title>Array(T) - hcl 0.2.0</title>
+  <title>Array(T) - hcl 0.2.1</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.2.0
+        0.2.1
       </span>
     </div>
   </div>
@@ -575,38 +575,28 @@
   </h2>
 
   <p>An <code><a href="Array.html">Array</a></code> is an ordered, integer-indexed collection of objects of type T.</p>
-
 <p>Array indexing starts at 0. A negative index is assumed to be
 relative to the end of the array: -1 indicates the last element,
 -2 is the next to last element, and so on.</p>
-
 <p>An <code><a href="Array.html">Array</a></code> can be created using the usual <code>new</code> method (several are provided), or with an array literal:</p>
-
 <pre><code class="language-crystal"><span class="t">Array</span>(<span class="t">Int32</span>).<span class="k">new</span>  <span class="c"># =&gt; []</span>
 [<span class="n">1</span>, <span class="n">2</span>, <span class="n">3</span>]         <span class="c"># Array(Int32)</span>
 [<span class="n">1</span>, <span class="s">&quot;hello&quot;</span>, <span class="s">&#39;x&#39;</span>] <span class="c"># Array(Int32 | String | Char)</span></code></pre>
-
+<p>See <a href="https://crystal-lang.org/reference/syntax_and_semantics/literals/array.html"><code>Array</code> literals</a> in the language reference.</p>
 <p>An <code><a href="Array.html">Array</a></code> can have mixed types, meaning T will be a union of types, but these are determined
 when the array is created, either by specifying T or by using an array literal. In the latter
 case, T will be set to the union of the array literal elements' types.</p>
-
 <p>When creating an empty array you must always specify T:</p>
-
 <pre><code class="language-crystal"><span class="o">[]</span> <span class="k">of</span> <span class="t">Int32</span> <span class="c"># same as Array(Int32)</span>
 <span class="o">[]</span>          <span class="c"># syntax error</span></code></pre>
-
 <p>An <code><a href="Array.html">Array</a></code> is implemented using an internal buffer of some capacity
 and is reallocated when elements are pushed to it when more capacity
 is needed. This is normally known as a <a href="http://en.wikipedia.org/wiki/Dynamic_array">dynamic array</a>.</p>
-
 <p>You can use a special array literal syntax with other types too, as long as they define an argless
-<code>new</code> method and a <code><<</code> method. <code><a href="Set.html">Set</a></code> is one such type:</p>
-
+<code>new</code> method and a <code>&lt;&lt;</code> method. <code><a href="Set.html">Set</a></code> is one such type:</p>
 <pre><code class="language-crystal">set <span class="o">=</span> <span class="t">Set</span>{<span class="n">1</span>, <span class="n">2</span>, <span class="n">3</span>} <span class="c"># =&gt; Set{1, 2, 3}</span>
 set.<span class="k">class</span>          <span class="c"># =&gt; Set(Int32)</span></code></pre>
-
 <p>The above is the same as this:</p>
-
 <pre><code class="language-crystal">set <span class="o">=</span> <span class="t">Set</span>(<span class="k">typeof</span>(<span class="n">1</span>, <span class="n">2</span>, <span class="n">3</span>)).<span class="k">new</span>
 set <span class="o">&lt;&lt;</span> <span class="n">1</span>
 set <span class="o">&lt;&lt;</span> <span class="n">2</span>
@@ -628,7 +618,7 @@ set <span class="o">&lt;&lt;</span> <span class="n">3</span></code></pre>
     
       <li class="other-type">Comparable(<a href="Array.html">Array(T)</a>)</li>
     
-      <li class="other-type">Indexable(T)</li>
+      <li class="other-type">Indexable::Mutable(T)</li>
     
   </ul>
 
@@ -651,16 +641,12 @@ set <span class="o">&lt;&lt;</span> <span class="n">3</span></code></pre>
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L316" target="_blank">
-        hcl/any.cr
-      </a>
+      hcl/any.cr
     
     <br/>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/to_hcl.cr#L1" target="_blank">
-        hcl/to_hcl.cr
-      </a>
+      hcl/to_hcl.cr
     
     <br/>
   
@@ -684,12 +670,12 @@ set <span class="o">&lt;&lt;</span> <span class="n">3</span></code></pre>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#==(other:HCL::Any)-instance-method" class="signature"><strong>#==</strong>(other : HCL::Any)</a>
+        <a href="#%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method" class="signature"><strong>#==</strong>(other : HCL::Any)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#to_hcl(builder:HCL::Builder)-instance-method" class="signature"><strong>#to_hcl</strong>(builder : HCL::Builder)</a>
+        <a href="#to_hcl%28builder%3AHCL%3A%3ABuilder%29-instance-method" class="signature"><strong>#to_hcl</strong>(builder : HCL::Builder)</a>
         
       </li>
     
@@ -743,10 +729,20 @@ set <span class="o">&lt;&lt;</span> <span class="n">3</span></code></pre>
   
     
 
+
+    
+
+
+    
+
+
+  
+    
+
   <h3>Instance methods inherited from class <code><a href="Reference.html">Reference</a></code></h3>
   
   
-    <a href="Reference.html#==(other:HCL::Any)-instance-method" class="tooltip">
+    <a href="Reference.html#%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method" class="tooltip">
       <span>==(other : HCL::Any)</span>
     ==</a>
     
@@ -765,7 +761,7 @@ set <span class="o">&lt;&lt;</span> <span class="n">3</span></code></pre>
   <h3>Instance methods inherited from class <code><a href="Object.html">Object</a></code></h3>
   
   
-    <a href="Object.html#===(other:HCL::Any)-instance-method" class="tooltip">
+    <a href="Object.html#%3D%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method" class="tooltip">
       <span>===(other : HCL::Any)</span>
     ===</a>
     
@@ -780,7 +776,7 @@ set <span class="o">&lt;&lt;</span> <span class="n">3</span></code></pre>
   <h3>Class methods inherited from class <code><a href="Object.html">Object</a></code></h3>
   
   
-    <a href="Object.html#from_hcl(string_or_io:String%7CIO,ctx:HCL::ExpressionContext=HCL::ExpressionContext.default_context)-class-method" class="tooltip">
+    <a href="Object.html#from_hcl%28string_or_io%3AString%7CIO%2Cctx%3AHCL%3A%3AExpressionContext%3DHCL%3A%3AExpressionContext.default_context%29-class-method" class="tooltip">
       <span>from_hcl(string_or_io : String | IO, ctx : HCL::ExpressionContext = <span class="t">HCL</span><span class="t">::</span><span class="t">ExpressionContext</span>.default_context)</span>
     from_hcl</a>
     
@@ -809,13 +805,11 @@ set <span class="o">&lt;&lt;</span> <span class="n">3</span></code></pre>
         
         def <strong>==</strong>(other : <a href="HCL/Any.html">HCL::Any</a>)
 
-        <a class="method-permalink" href="#==(other:HCL::Any)-instance-method">#</a>
+        <a class="method-permalink" href="#%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L317" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -825,13 +819,11 @@ set <span class="o">&lt;&lt;</span> <span class="n">3</span></code></pre>
         
         def <strong>to_hcl</strong>(builder : <a href="HCL/Builder.html">HCL::Builder</a>)
 
-        <a class="method-permalink" href="#to_hcl(builder:HCL::Builder)-instance-method">#</a>
+        <a class="method-permalink" href="#to_hcl%28builder%3AHCL%3A%3ABuilder%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/to_hcl.cr#L2" target="_blank">View source</a>]
         
       </div>
     </div>

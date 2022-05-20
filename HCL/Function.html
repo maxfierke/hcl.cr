@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.36.1">
-<meta name="crystal_docs.project_version" content="0.2.0">
+<meta name="generator" content="Crystal Docs 1.3.2">
+<meta name="crystal_docs.project_version" content="0.2.1">
 <meta name="crystal_docs.project_name" content="hcl">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="hcl">
-  <title>HCL::Function - hcl 0.2.0</title>
+  <title>HCL::Function - hcl 0.2.1</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.2.0
+        0.2.1
       </span>
     </div>
   </div>
@@ -642,9 +642,7 @@
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/function.cr#L2" target="_blank">
-        hcl/function.cr
-      </a>
+      hcl/function.cr
     
     <br/>
   
@@ -683,7 +681,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new(name:String,arity:UInt32%7CRange(UInt32,UInt32),varadic=false)-class-method" class="signature"><strong>.new</strong>(name : String, arity : UInt32 | Range(UInt32, UInt32), varadic = <span class="n">false</span>)</a>
+        <a href="#new%28name%3AString%2Carity%3AUInt32%7CRange%28UInt32%2CUInt32%29%2Cvaradic%3Dfalse%29-class-method" class="signature"><strong>.new</strong>(name : String, arity : UInt32 | Range(UInt32, UInt32), varadic = <span class="n">false</span>)</a>
         
       </li>
     
@@ -704,32 +702,32 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#arity:Range(UInt32,UInt32)%7CUInt32-instance-method" class="signature"><strong>#arity</strong> : Range(UInt32, UInt32) | UInt32</a>
+        <a href="#arity%3ARange%28UInt32%2CUInt32%29%7CUInt32-instance-method" class="signature"><strong>#arity</strong> : Range(UInt32, UInt32) | UInt32</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#call(args:Array(Any)):Any-instance-method" class="signature"><strong>#call</strong>(args : Array(Any)) : Any</a>
+        <a href="#call%28args%3AArray%28Any%29%29%3AAny-instance-method" class="signature"><strong>#call</strong>(args : Array(Any)) : Any</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#matches_arity?(args_size:Range(UInt32,UInt32)):Bool-instance-method" class="signature"><strong>#matches_arity?</strong>(args_size : Range(UInt32, UInt32)) : Bool</a>
+        <a href="#matches_arity%3F%28args_size%3ARange%28UInt32%2CUInt32%29%29%3ABool-instance-method" class="signature"><strong>#matches_arity?</strong>(args_size : Range(UInt32, UInt32)) : Bool</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#matches_arity?(args_size):Bool-instance-method" class="signature"><strong>#matches_arity?</strong>(args_size) : Bool</a>
+        <a href="#matches_arity%3F%28args_size%29%3ABool-instance-method" class="signature"><strong>#matches_arity?</strong>(args_size) : Bool</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#name:String-instance-method" class="signature"><strong>#name</strong> : String</a>
+        <a href="#name%3AString-instance-method" class="signature"><strong>#name</strong> : String</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#varadic?:Bool-instance-method" class="signature"><strong>#varadic?</strong> : Bool</a>
+        <a href="#varadic%3F%3ABool-instance-method" class="signature"><strong>#varadic?</strong> : Bool</a>
         
       </li>
     
@@ -746,7 +744,7 @@
   <h3>Instance methods inherited from class <code><a href="../Reference.html">Reference</a></code></h3>
   
   
-    <a href="../Reference.html#==(other:HCL::Any)-instance-method" class="tooltip">
+    <a href="../Reference.html#%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method" class="tooltip">
       <span>==(other : HCL::Any)</span>
     ==</a>
     
@@ -765,7 +763,7 @@
   <h3>Instance methods inherited from class <code><a href="../Object.html">Object</a></code></h3>
   
   
-    <a href="../Object.html#===(other:HCL::Any)-instance-method" class="tooltip">
+    <a href="../Object.html#%3D%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method" class="tooltip">
       <span>===(other : HCL::Any)</span>
     ===</a>
     
@@ -780,7 +778,7 @@
   <h3>Class methods inherited from class <code><a href="../Object.html">Object</a></code></h3>
   
   
-    <a href="../Object.html#from_hcl(string_or_io:String%7CIO,ctx:HCL::ExpressionContext=HCL::ExpressionContext.default_context)-class-method" class="tooltip">
+    <a href="../Object.html#from_hcl%28string_or_io%3AString%7CIO%2Cctx%3AHCL%3A%3AExpressionContext%3DHCL%3A%3AExpressionContext.default_context%29-class-method" class="tooltip">
       <span>from_hcl(string_or_io : String | IO, ctx : HCL::ExpressionContext = <span class="t">HCL</span><span class="t">::</span><span class="t">ExpressionContext</span>.default_context)</span>
     from_hcl</a>
     
@@ -805,13 +803,11 @@
         
         def self.<strong>new</strong>(name : <a href="../String.html">String</a>, arity : UInt32 | Range(UInt32, UInt32), varadic = <span class="n">false</span>)
 
-        <a class="method-permalink" href="#new(name:String,arity:UInt32%7CRange(UInt32,UInt32),varadic=false)-class-method">#</a>
+        <a class="method-permalink" href="#new%28name%3AString%2Carity%3AUInt32%7CRange%28UInt32%2CUInt32%29%2Cvaradic%3Dfalse%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/function.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -835,13 +831,11 @@
         
         def <strong>arity</strong> : Range(UInt32, UInt32) | UInt32
 
-        <a class="method-permalink" href="#arity:Range(UInt32,UInt32)%7CUInt32-instance-method">#</a>
+        <a class="method-permalink" href="#arity%3ARange%28UInt32%2CUInt32%29%7CUInt32-instance-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/function.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -851,13 +845,11 @@
         abstract 
         def <strong>call</strong>(args : <a href="../Array.html">Array</a>(<a href="../HCL/Any.html">Any</a>)) : <a href="../HCL/Any.html">Any</a>
 
-        <a class="method-permalink" href="#call(args:Array(Any)):Any-instance-method">#</a>
+        <a class="method-permalink" href="#call%28args%3AArray%28Any%29%29%3AAny-instance-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/function.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -867,13 +859,11 @@
         
         def <strong>matches_arity?</strong>(args_size : Range(UInt32, UInt32)) : <a href="../Bool.html">Bool</a>
 
-        <a class="method-permalink" href="#matches_arity?(args_size:Range(UInt32,UInt32)):Bool-instance-method">#</a>
+        <a class="method-permalink" href="#matches_arity%3F%28args_size%3ARange%28UInt32%2CUInt32%29%29%3ABool-instance-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/function.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -883,13 +873,11 @@
         
         def <strong>matches_arity?</strong>(args_size) : <a href="../Bool.html">Bool</a>
 
-        <a class="method-permalink" href="#matches_arity?(args_size):Bool-instance-method">#</a>
+        <a class="method-permalink" href="#matches_arity%3F%28args_size%29%3ABool-instance-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/function.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -899,13 +887,11 @@
         
         def <strong>name</strong> : <a href="../String.html">String</a>
 
-        <a class="method-permalink" href="#name:String-instance-method">#</a>
+        <a class="method-permalink" href="#name%3AString-instance-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/function.cr#L13" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -915,13 +901,11 @@
         
         def <strong>varadic?</strong> : <a href="../Bool.html">Bool</a>
 
-        <a class="method-permalink" href="#varadic?:Bool-instance-method">#</a>
+        <a class="method-permalink" href="#varadic%3F%3ABool-instance-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/function.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>

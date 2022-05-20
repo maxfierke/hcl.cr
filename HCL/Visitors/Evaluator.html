@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.36.1">
-<meta name="crystal_docs.project_version" content="0.2.0">
+<meta name="generator" content="Crystal Docs 1.3.2">
+<meta name="crystal_docs.project_version" content="0.2.1">
 <meta name="crystal_docs.project_name" content="hcl">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="hcl">
-  <title>HCL::Visitors::Evaluator - hcl 0.2.0</title>
+  <title>HCL::Visitors::Evaluator - hcl 0.2.1</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.2.0
+        0.2.1
       </span>
     </div>
   </div>
@@ -588,9 +588,7 @@
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L3" target="_blank">
-        hcl/visitors/evaluator.cr
-      </a>
+      hcl/visitors/evaluator.cr
     
     <br/>
   
@@ -610,7 +608,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new(ctx:ExpressionContext)-class-method" class="signature"><strong>.new</strong>(ctx : ExpressionContext)</a>
+        <a href="#new%28ctx%3AExpressionContext%29-class-method" class="signature"><strong>.new</strong>(ctx : ExpressionContext)</a>
         
       </li>
     
@@ -631,97 +629,97 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#ctx:HCL::ExpressionContext-instance-method" class="signature"><strong>#ctx</strong> : HCL::ExpressionContext</a>
+        <a href="#ctx%3AHCL%3A%3AExpressionContext-instance-method" class="signature"><strong>#ctx</strong> : HCL::ExpressionContext</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::TemplateInterpolation)-instance-method" class="signature"><strong>#visit</strong>(node : AST::TemplateInterpolation)</a>
+        <a href="#visit%28node%3AAST%3A%3ABlock%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::Block)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::TemplateIf)-instance-method" class="signature"><strong>#visit</strong>(node : AST::TemplateIf)</a>
+        <a href="#visit%28node%3AAST%3A%3ABody%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::Body)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::TemplateForExpr)-instance-method" class="signature"><strong>#visit</strong>(node : AST::TemplateForExpr)</a>
+        <a href="#visit%28node%3AAST%3A%3ACallExpr%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::CallExpr)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::Template)-instance-method" class="signature"><strong>#visit</strong>(node : AST::Template)</a>
+        <a href="#visit%28node%3AAST%3A%3ACondExpr%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::CondExpr)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::OpExpr)-instance-method" class="signature"><strong>#visit</strong>(node : AST::OpExpr)</a>
+        <a href="#visit%28node%3AAST%3A%3AExpression%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::Expression)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::Number)-instance-method" class="signature"><strong>#visit</strong>(node : AST::Number)</a>
+        <a href="#visit%28node%3AAST%3A%3AForExpr%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::ForExpr)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::Map)-instance-method" class="signature"><strong>#visit</strong>(node : AST::Map)</a>
+        <a href="#visit%28node%3AAST%3A%3AHeredoc%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::Heredoc)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::Literal)-instance-method" class="signature"><strong>#visit</strong>(node : AST::Literal)</a>
+        <a href="#visit%28node%3AAST%3A%3AIdentifier%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::Identifier)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::List)-instance-method" class="signature"><strong>#visit</strong>(node : AST::List)</a>
+        <a href="#visit%28node%3AAST%3A%3AList%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::List)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::Identifier)-instance-method" class="signature"><strong>#visit</strong>(node : AST::Identifier)</a>
+        <a href="#visit%28node%3AAST%3A%3ALiteral%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::Literal)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::Heredoc)-instance-method" class="signature"><strong>#visit</strong>(node : AST::Heredoc)</a>
+        <a href="#visit%28node%3AAST%3A%3AMap%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::Map)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::ForExpr)-instance-method" class="signature"><strong>#visit</strong>(node : AST::ForExpr)</a>
+        <a href="#visit%28node%3AAST%3A%3ANumber%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::Number)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::Expression)-instance-method" class="signature"><strong>#visit</strong>(node : AST::Expression)</a>
+        <a href="#visit%28node%3AAST%3A%3AOpExpr%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::OpExpr)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::CondExpr)-instance-method" class="signature"><strong>#visit</strong>(node : AST::CondExpr)</a>
+        <a href="#visit%28node%3AAST%3A%3ATemplate%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::Template)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::CallExpr)-instance-method" class="signature"><strong>#visit</strong>(node : AST::CallExpr)</a>
+        <a href="#visit%28node%3AAST%3A%3ATemplateForExpr%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::TemplateForExpr)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::Body)-instance-method" class="signature"><strong>#visit</strong>(node : AST::Body)</a>
+        <a href="#visit%28node%3AAST%3A%3ATemplateIf%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::TemplateIf)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::Block)-instance-method" class="signature"><strong>#visit</strong>(node : AST::Block)</a>
+        <a href="#visit%28node%3AAST%3A%3ATemplateInterpolation%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::TemplateInterpolation)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#visit(node:AST::Node)-instance-method" class="signature"><strong>#visit</strong>(node : AST::Node)</a>
+        <a href="#visit%28node%3AAST%3A%3ANode%29-instance-method" class="signature"><strong>#visit</strong>(node : AST::Node)</a>
         
       </li>
     
@@ -738,7 +736,7 @@
   <h3>Instance methods inherited from class <code><a href="../../HCL/Visitor.html">HCL::Visitor</a></code></h3>
   
   
-    <a href="../../HCL/Visitor.html#visit(node:T)forallT-instance-method" class="tooltip">
+    <a href="../../HCL/Visitor.html#visit%28node%3AT%29forallT-instance-method" class="tooltip">
       <span>visit(node : T) forall T</span>
     visit</a>
     
@@ -757,7 +755,7 @@
   <h3>Instance methods inherited from class <code><a href="../../Reference.html">Reference</a></code></h3>
   
   
-    <a href="../../Reference.html#==(other:HCL::Any)-instance-method" class="tooltip">
+    <a href="../../Reference.html#%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method" class="tooltip">
       <span>==(other : HCL::Any)</span>
     ==</a>
     
@@ -776,7 +774,7 @@
   <h3>Instance methods inherited from class <code><a href="../../Object.html">Object</a></code></h3>
   
   
-    <a href="../../Object.html#===(other:HCL::Any)-instance-method" class="tooltip">
+    <a href="../../Object.html#%3D%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method" class="tooltip">
       <span>===(other : HCL::Any)</span>
     ===</a>
     
@@ -791,7 +789,7 @@
   <h3>Class methods inherited from class <code><a href="../../Object.html">Object</a></code></h3>
   
   
-    <a href="../../Object.html#from_hcl(string_or_io:String%7CIO,ctx:HCL::ExpressionContext=HCL::ExpressionContext.default_context)-class-method" class="tooltip">
+    <a href="../../Object.html#from_hcl%28string_or_io%3AString%7CIO%2Cctx%3AHCL%3A%3AExpressionContext%3DHCL%3A%3AExpressionContext.default_context%29-class-method" class="tooltip">
       <span>from_hcl(string_or_io : String | IO, ctx : HCL::ExpressionContext = <span class="t">HCL</span><span class="t">::</span><span class="t">ExpressionContext</span>.default_context)</span>
     from_hcl</a>
     
@@ -816,13 +814,11 @@
         
         def self.<strong>new</strong>(ctx : <a href="../../HCL/ExpressionContext.html">ExpressionContext</a>)
 
-        <a class="method-permalink" href="#new(ctx:ExpressionContext)-class-method">#</a>
+        <a class="method-permalink" href="#new%28ctx%3AExpressionContext%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -846,269 +842,11 @@
         
         def <strong>ctx</strong> : <a href="../../HCL/ExpressionContext.html">HCL::ExpressionContext</a>
 
-        <a class="method-permalink" href="#ctx:HCL::ExpressionContext-instance-method">#</a>
+        <a class="method-permalink" href="#ctx%3AHCL%3A%3AExpressionContext-instance-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L4" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="visit(node:AST::TemplateInterpolation)-instance-method">
-      <div class="signature">
-        
-        def <strong>visit</strong>(node : <a href="../../HCL/AST/TemplateInterpolation.html">AST::TemplateInterpolation</a>)
-
-        <a class="method-permalink" href="#visit(node:AST::TemplateInterpolation)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L353" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="visit(node:AST::TemplateIf)-instance-method">
-      <div class="signature">
-        
-        def <strong>visit</strong>(node : <a href="../../HCL/AST/TemplateIf.html">AST::TemplateIf</a>)
-
-        <a class="method-permalink" href="#visit(node:AST::TemplateIf)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L338" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="visit(node:AST::TemplateForExpr)-instance-method">
-      <div class="signature">
-        
-        def <strong>visit</strong>(node : <a href="../../HCL/AST/TemplateForExpr.html">AST::TemplateForExpr</a>)
-
-        <a class="method-permalink" href="#visit(node:AST::TemplateForExpr)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L304" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="visit(node:AST::Template)-instance-method">
-      <div class="signature">
-        
-        def <strong>visit</strong>(node : <a href="../../HCL/AST/Template.html">AST::Template</a>)
-
-        <a class="method-permalink" href="#visit(node:AST::Template)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L288" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="visit(node:AST::OpExpr)-instance-method">
-      <div class="signature">
-        
-        def <strong>visit</strong>(node : <a href="../../HCL/AST/OpExpr.html">AST::OpExpr</a>)
-
-        <a class="method-permalink" href="#visit(node:AST::OpExpr)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L213" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="visit(node:AST::Number)-instance-method">
-      <div class="signature">
-        
-        def <strong>visit</strong>(node : <a href="../../HCL/AST/Number.html">AST::Number</a>)
-
-        <a class="method-permalink" href="#visit(node:AST::Number)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L209" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="visit(node:AST::Map)-instance-method">
-      <div class="signature">
-        
-        def <strong>visit</strong>(node : <a href="../../HCL/AST/Map.html">AST::Map</a>)
-
-        <a class="method-permalink" href="#visit(node:AST::Map)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L199" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="visit(node:AST::Literal)-instance-method">
-      <div class="signature">
-        
-        def <strong>visit</strong>(node : <a href="../../HCL/AST/Literal.html">AST::Literal</a>)
-
-        <a class="method-permalink" href="#visit(node:AST::Literal)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L195" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="visit(node:AST::List)-instance-method">
-      <div class="signature">
-        
-        def <strong>visit</strong>(node : <a href="../../HCL/AST/List.html">AST::List</a>)
-
-        <a class="method-permalink" href="#visit(node:AST::List)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L187" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="visit(node:AST::Identifier)-instance-method">
-      <div class="signature">
-        
-        def <strong>visit</strong>(node : <a href="../../HCL/AST/Identifier.html">AST::Identifier</a>)
-
-        <a class="method-permalink" href="#visit(node:AST::Identifier)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L183" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="visit(node:AST::Heredoc)-instance-method">
-      <div class="signature">
-        
-        def <strong>visit</strong>(node : <a href="../../HCL/AST/Heredoc.html">AST::Heredoc</a>)
-
-        <a class="method-permalink" href="#visit(node:AST::Heredoc)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L179" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="visit(node:AST::ForExpr)-instance-method">
-      <div class="signature">
-        
-        def <strong>visit</strong>(node : <a href="../../HCL/AST/ForExpr.html">AST::ForExpr</a>)
-
-        <a class="method-permalink" href="#visit(node:AST::ForExpr)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L106" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="visit(node:AST::Expression)-instance-method">
-      <div class="signature">
-        
-        def <strong>visit</strong>(node : <a href="../../HCL/AST/Expression.html">AST::Expression</a>)
-
-        <a class="method-permalink" href="#visit(node:AST::Expression)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L59" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="visit(node:AST::CondExpr)-instance-method">
-      <div class="signature">
-        
-        def <strong>visit</strong>(node : <a href="../../HCL/AST/CondExpr.html">AST::CondExpr</a>)
-
-        <a class="method-permalink" href="#visit(node:AST::CondExpr)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L46" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="visit(node:AST::CallExpr)-instance-method">
-      <div class="signature">
-        
-        def <strong>visit</strong>(node : <a href="../../HCL/AST/CallExpr.html">AST::CallExpr</a>)
-
-        <a class="method-permalink" href="#visit(node:AST::CallExpr)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L30" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="visit(node:AST::Body)-instance-method">
-      <div class="signature">
-        
-        def <strong>visit</strong>(node : <a href="../../HCL/AST/Body.html">AST::Body</a>)
-
-        <a class="method-permalink" href="#visit(node:AST::Body)-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1118,13 +856,235 @@
         
         def <strong>visit</strong>(node : <a href="../../HCL/AST/Block.html">AST::Block</a>)
 
-        <a class="method-permalink" href="#visit(node:AST::Block)-instance-method">#</a>
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3ABlock%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L9" target="_blank">View source</a>]
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="visit(node:AST::Body)-instance-method">
+      <div class="signature">
+        
+        def <strong>visit</strong>(node : <a href="../../HCL/AST/Body.html">AST::Body</a>)
+
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3ABody%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="visit(node:AST::CallExpr)-instance-method">
+      <div class="signature">
+        
+        def <strong>visit</strong>(node : <a href="../../HCL/AST/CallExpr.html">AST::CallExpr</a>)
+
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3ACallExpr%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="visit(node:AST::CondExpr)-instance-method">
+      <div class="signature">
+        
+        def <strong>visit</strong>(node : <a href="../../HCL/AST/CondExpr.html">AST::CondExpr</a>)
+
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3ACondExpr%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="visit(node:AST::Expression)-instance-method">
+      <div class="signature">
+        
+        def <strong>visit</strong>(node : <a href="../../HCL/AST/Expression.html">AST::Expression</a>)
+
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3AExpression%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="visit(node:AST::ForExpr)-instance-method">
+      <div class="signature">
+        
+        def <strong>visit</strong>(node : <a href="../../HCL/AST/ForExpr.html">AST::ForExpr</a>)
+
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3AForExpr%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="visit(node:AST::Heredoc)-instance-method">
+      <div class="signature">
+        
+        def <strong>visit</strong>(node : <a href="../../HCL/AST/Heredoc.html">AST::Heredoc</a>)
+
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3AHeredoc%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="visit(node:AST::Identifier)-instance-method">
+      <div class="signature">
+        
+        def <strong>visit</strong>(node : <a href="../../HCL/AST/Identifier.html">AST::Identifier</a>)
+
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3AIdentifier%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="visit(node:AST::List)-instance-method">
+      <div class="signature">
+        
+        def <strong>visit</strong>(node : <a href="../../HCL/AST/List.html">AST::List</a>)
+
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3AList%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="visit(node:AST::Literal)-instance-method">
+      <div class="signature">
+        
+        def <strong>visit</strong>(node : <a href="../../HCL/AST/Literal.html">AST::Literal</a>)
+
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3ALiteral%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="visit(node:AST::Map)-instance-method">
+      <div class="signature">
+        
+        def <strong>visit</strong>(node : <a href="../../HCL/AST/Map.html">AST::Map</a>)
+
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3AMap%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="visit(node:AST::Number)-instance-method">
+      <div class="signature">
+        
+        def <strong>visit</strong>(node : <a href="../../HCL/AST/Number.html">AST::Number</a>)
+
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3ANumber%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="visit(node:AST::OpExpr)-instance-method">
+      <div class="signature">
+        
+        def <strong>visit</strong>(node : <a href="../../HCL/AST/OpExpr.html">AST::OpExpr</a>)
+
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3AOpExpr%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="visit(node:AST::Template)-instance-method">
+      <div class="signature">
+        
+        def <strong>visit</strong>(node : <a href="../../HCL/AST/Template.html">AST::Template</a>)
+
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3ATemplate%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="visit(node:AST::TemplateForExpr)-instance-method">
+      <div class="signature">
+        
+        def <strong>visit</strong>(node : <a href="../../HCL/AST/TemplateForExpr.html">AST::TemplateForExpr</a>)
+
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3ATemplateForExpr%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="visit(node:AST::TemplateIf)-instance-method">
+      <div class="signature">
+        
+        def <strong>visit</strong>(node : <a href="../../HCL/AST/TemplateIf.html">AST::TemplateIf</a>)
+
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3ATemplateIf%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="visit(node:AST::TemplateInterpolation)-instance-method">
+      <div class="signature">
+        
+        def <strong>visit</strong>(node : <a href="../../HCL/AST/TemplateInterpolation.html">AST::TemplateInterpolation</a>)
+
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3ATemplateInterpolation%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
         
       </div>
     </div>
@@ -1134,13 +1094,11 @@
         
         def <strong>visit</strong>(node : <a href="../../HCL/AST/Node.html">AST::Node</a>)
 
-        <a class="method-permalink" href="#visit(node:AST::Node)-instance-method">#</a>
+        <a class="method-permalink" href="#visit%28node%3AAST%3A%3ANode%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/visitors/evaluator.cr#L357" target="_blank">View source</a>]
         
       </div>
     </div>

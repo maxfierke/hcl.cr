@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.36.1">
-<meta name="crystal_docs.project_version" content="0.2.0">
+<meta name="generator" content="Crystal Docs 1.3.2">
+<meta name="crystal_docs.project_version" content="0.2.1">
 <meta name="crystal_docs.project_name" content="hcl">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="hcl">
-  <title>HCL::Builder - hcl 0.2.0</title>
+  <title>HCL::Builder - hcl 0.2.1</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.2.0
+        0.2.1
       </span>
     </div>
   </div>
@@ -575,10 +575,8 @@
   </h2>
 
   <p>An HCL builder helps build a valid HCL abstract syntax tree.</p>
-
 <p>An <code><a href="../HCL/BuildError.html">HCL::BuildError</a></code> will be raised on any attempts to create an AST
 that would be invalid (e.g. setting an attribute's value to a block)</p>
-
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;hcl&quot;</span>
 
 string <span class="o">=</span> <span class="t">HCL</span>.build <span class="k">do</span> <span class="o">|</span>hcl<span class="o">|</span>
@@ -620,9 +618,7 @@ string <span class="c"># =&gt; &quot;aws_instance \&quot;c4.xlarge\&quot; {\n  s
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L26" target="_blank">
-        hcl/builder.cr
-      </a>
+      hcl/builder.cr
     
     <br/>
   
@@ -642,7 +638,7 @@ string <span class="c"># =&gt; &quot;aws_instance \&quot;c4.xlarge\&quot; {\n  s
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new(node:AST::Node)-class-method" class="signature"><strong>.new</strong>(node : AST::Node)</a>
+        <a href="#new%28node%3AAST%3A%3ANode%29-class-method" class="signature"><strong>.new</strong>(node : AST::Node)</a>
         
           <div class="summary"><p>Instantiate's a new <code><a href="../HCL/Builder.html">HCL::Builder</a></code> with the given root node.</p></div>
         
@@ -663,7 +659,7 @@ string <span class="c"># =&gt; &quot;aws_instance \&quot;c4.xlarge\&quot; {\n  s
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#build(node:AST::Node?=AST::Document.new,&)-class-method" class="signature"><strong>.build</strong>(node : AST::Node? = <span class="t">AST</span><span class="t">::</span><span class="t">Document</span>.<span class="k">new</span>, &)</a>
+        <a href="#build%28node%3AAST%3A%3ANode%3F%3DAST%3A%3ADocument.new%2C%26%29-class-method" class="signature"><strong>.build</strong>(node : AST::Node? = <span class="t">AST</span><span class="t">::</span><span class="t">Document</span>.<span class="k">new</span>, &)</a>
         
           <div class="summary"><p>Yields an <code><a href="../HCL/Builder.html">HCL::Builder</a></code> instance for the given root node, which defaults to <code><a href="../HCL/AST/Document.html">HCL::AST::Document</a></code>.</p></div>
         
@@ -684,105 +680,105 @@ string <span class="c"># =&gt; &quot;aws_instance \&quot;c4.xlarge\&quot; {\n  s
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#%3C%3C(value:AST::Node)-instance-method" class="signature"><strong>#<<</strong>(value : AST::Node)</a>
+        <a href="#%3C%3C%28value%3AAST%3A%3ANode%29-instance-method" class="signature"><strong>#<<</strong>(value : AST::Node)</a>
         
           <div class="summary"><p>Appends an <code><a href="../HCL/AST/Node.html">HCL::AST::Node</a></code> to the underlying list node.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#%3C%3C(value)-instance-method" class="signature"><strong>#<<</strong>(value)</a>
+        <a href="#%3C%3C%28value%29-instance-method" class="signature"><strong>#<<</strong>(value)</a>
         
           <div class="summary"><p>Appends a value to the the underlying list node.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#attribute(name,&)-instance-method" class="signature"><strong>#attribute</strong>(name, &)</a>
+        <a href="#attribute%28name%2C%26%29-instance-method" class="signature"><strong>#attribute</strong>(name, &)</a>
         
           <div class="summary"><p>Adds an attribute to the open HCL body or map/object with the value of the passed in block.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#block(name,*args,&)-instance-method" class="signature"><strong>#block</strong>(name, *args, &)</a>
+        <a href="#block%28name%2C%2Aargs%2C%26%29-instance-method" class="signature"><strong>#block</strong>(name, *args, &)</a>
         
           <div class="summary"><p>Yields a new <code><a href="../HCL/Builder.html">HCL::Builder</a></code> for building a block.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#identifier(value)-instance-method" class="signature"><strong>#identifier</strong>(value)</a>
+        <a href="#identifier%28value%29-instance-method" class="signature"><strong>#identifier</strong>(value)</a>
         
           <div class="summary"><p>Returns a new <code><a href="../HCL/AST/Identifier.html">AST::Identifier</a></code> node for the given value.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#label(value:Symbol%7CString)-instance-method" class="signature"><strong>#label</strong>(value : Symbol | String)</a>
+        <a href="#label%28value%3ASymbol%7CString%29-instance-method" class="signature"><strong>#label</strong>(value : Symbol | String)</a>
         
           <div class="summary"><p>Appends a new <code><a href="../HCL/AST/BlockLabel.html">AST::BlockLabel</a></code> node with the given value to the block's labels collection.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#list(&)-instance-method" class="signature"><strong>#list</strong>(&)</a>
+        <a href="#list%28%26%29-instance-method" class="signature"><strong>#list</strong>(&)</a>
         
           <div class="summary"><p>Yields a new <code><a href="../HCL/Builder.html">HCL::Builder</a></code> for building a list.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#literal(value:Bool)-instance-method" class="signature"><strong>#literal</strong>(value : Bool)</a>
+        <a href="#literal%28value%3ABool%29-instance-method" class="signature"><strong>#literal</strong>(value : Bool)</a>
         
           <div class="summary"><p>Returns a new <code><a href="../HCL/AST/Literal.html">AST::Literal</a></code> node for the given boolean value.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#literal(value)-instance-method" class="signature"><strong>#literal</strong>(value)</a>
+        <a href="#literal%28value%29-instance-method" class="signature"><strong>#literal</strong>(value)</a>
         
           <div class="summary"><p>Returns a new <code><a href="../HCL/AST/Literal.html">AST::Literal</a></code> node for the given value.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#map(&)-instance-method" class="signature"><strong>#map</strong>(&)</a>
+        <a href="#map%28%26%29-instance-method" class="signature"><strong>#map</strong>(&)</a>
         
           <div class="summary"><p>Yields a new <code><a href="../HCL/Builder.html">HCL::Builder</a></code> for building a map/object.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#node:HCL::AST::Node-instance-method" class="signature"><strong>#node</strong> : HCL::AST::Node</a>
+        <a href="#node%3AHCL%3A%3AAST%3A%3ANode-instance-method" class="signature"><strong>#node</strong> : HCL::AST::Node</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#number(value)-instance-method" class="signature"><strong>#number</strong>(value)</a>
+        <a href="#number%28value%29-instance-method" class="signature"><strong>#number</strong>(value)</a>
         
           <div class="summary"><p>Returns a new <code><a href="../HCL/AST/Number.html">AST::Number</a></code> node with the given value</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#to_hcl(_builder:HCL::Builder)-instance-method" class="signature"><strong>#to_hcl</strong>(_builder : HCL::Builder)</a>
+        <a href="#to_hcl%28_builder%3AHCL%3A%3ABuilder%29-instance-method" class="signature"><strong>#to_hcl</strong>(_builder : HCL::Builder)</a>
         
           <div class="summary"><p>Returns the <code><a href="../HCL/AST/Node.html">HCL::AST::Node</a></code> for the builder.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#to_hcl(io:IO)-instance-method" class="signature"><strong>#to_hcl</strong>(io : IO)</a>
+        <a href="#to_hcl%28io%3AIO%29-instance-method" class="signature"><strong>#to_hcl</strong>(io : IO)</a>
         
           <div class="summary"><p>Writes a string representation of the HCL node to the given IO.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#to_s(io:IO)-instance-method" class="signature"><strong>#to_s</strong>(io : IO)</a>
+        <a href="#to_s%28io%3AIO%29-instance-method" class="signature"><strong>#to_s</strong>(io : IO)</a>
         
-          <div class="summary"><p>Alias for <code><a href="../HCL/Builder.html#to_hcl(_builder:HCL::Builder)-instance-method">#to_hcl(io : IO)</a></code>.</p></div>
+          <div class="summary"><p>Alias for <code><a href="../HCL/Builder.html#to_hcl%28_builder%3AHCL%3A%3ABuilder%29-instance-method">#to_hcl(io : IO)</a></code>.</p></div>
         
       </li>
     
@@ -799,7 +795,7 @@ string <span class="c"># =&gt; &quot;aws_instance \&quot;c4.xlarge\&quot; {\n  s
   <h3>Instance methods inherited from class <code><a href="../Reference.html">Reference</a></code></h3>
   
   
-    <a href="../Reference.html#==(other:HCL::Any)-instance-method" class="tooltip">
+    <a href="../Reference.html#%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method" class="tooltip">
       <span>==(other : HCL::Any)</span>
     ==</a>
     
@@ -818,7 +814,7 @@ string <span class="c"># =&gt; &quot;aws_instance \&quot;c4.xlarge\&quot; {\n  s
   <h3>Instance methods inherited from class <code><a href="../Object.html">Object</a></code></h3>
   
   
-    <a href="../Object.html#===(other:HCL::Any)-instance-method" class="tooltip">
+    <a href="../Object.html#%3D%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method" class="tooltip">
       <span>===(other : HCL::Any)</span>
     ===</a>
     
@@ -833,7 +829,7 @@ string <span class="c"># =&gt; &quot;aws_instance \&quot;c4.xlarge\&quot; {\n  s
   <h3>Class methods inherited from class <code><a href="../Object.html">Object</a></code></h3>
   
   
-    <a href="../Object.html#from_hcl(string_or_io:String%7CIO,ctx:HCL::ExpressionContext=HCL::ExpressionContext.default_context)-class-method" class="tooltip">
+    <a href="../Object.html#from_hcl%28string_or_io%3AString%7CIO%2Cctx%3AHCL%3A%3AExpressionContext%3DHCL%3A%3AExpressionContext.default_context%29-class-method" class="tooltip">
       <span>from_hcl(string_or_io : String | IO, ctx : HCL::ExpressionContext = <span class="t">HCL</span><span class="t">::</span><span class="t">ExpressionContext</span>.default_context)</span>
     from_hcl</a>
     
@@ -858,7 +854,7 @@ string <span class="c"># =&gt; &quot;aws_instance \&quot;c4.xlarge\&quot; {\n  s
         
         def self.<strong>new</strong>(node : <a href="../HCL/AST/Node.html">AST::Node</a>)
 
-        <a class="method-permalink" href="#new(node:AST::Node)-class-method">#</a>
+        <a class="method-permalink" href="#new%28node%3AAST%3A%3ANode%29-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -869,8 +865,6 @@ generally does not need to be invoked directly.</p>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L39" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -887,12 +881,12 @@ generally does not need to be invoked directly.</p>
     Class Method Detail
   </h2>
   
-    <div class="entry-detail" id="build(node:AST::Node?=AST::Document.new,&)-class-method">
+    <div class="entry-detail" id="build(node:AST::Node?=AST::Document.new,&amp;)-class-method">
       <div class="signature">
         
         def self.<strong>build</strong>(node : <a href="../HCL/AST/Node.html">AST::Node</a>? = <span class="t">AST</span><span class="t">::</span><span class="t">Document</span>.<span class="k">new</span>, &)
 
-        <a class="method-permalink" href="#build(node:AST::Node?=AST::Document.new,&)-class-method">#</a>
+        <a class="method-permalink" href="#build%28node%3AAST%3A%3ANode%3F%3DAST%3A%3ADocument.new%2C%26%29-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -903,8 +897,6 @@ generally does not need to be invoked directly.</p>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -921,12 +913,12 @@ generally does not need to be invoked directly.</p>
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="<<(value:AST::Node)-instance-method">
+    <div class="entry-detail" id="&lt;&lt;(value:AST::Node)-instance-method">
       <div class="signature">
         
         def <strong><<</strong>(value : <a href="../HCL/AST/Node.html">AST::Node</a>)
 
-        <a class="method-permalink" href="#%3C%3C(value:AST::Node)-instance-method">#</a>
+        <a class="method-permalink" href="#%3C%3C%28value%3AAST%3A%3ANode%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -938,25 +930,22 @@ for a list or if the node is not usable within a list.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L59" target="_blank">View source</a>]
-        
       </div>
     </div>
   
-    <div class="entry-detail" id="<<(value)-instance-method">
+    <div class="entry-detail" id="&lt;&lt;(value)-instance-method">
       <div class="signature">
         
         def <strong><<</strong>(value)
 
-        <a class="method-permalink" href="#%3C%3C(value)-instance-method">#</a>
+        <a class="method-permalink" href="#%3C%3C%28value%29-instance-method">#</a>
       </div>
       
         <div class="doc">
           
           <p>Appends a value to the the underlying list node. Value most be convertable
 to HCL, either through base types supported by the library or a
-<code><a href="../HCL/Builder.html#to_hcl(_builder:HCL::Builder)-instance-method">#to_hcl(builder : HCL::Builder)</a></code> method on the object.</p>
-
+<code><a href="../HCL/Builder.html#to_hcl%28_builder%3AHCL%3A%3ABuilder%29-instance-method">#to_hcl(builder : HCL::Builder)</a></code> method on the object.</p>
 <p>Raises if the builder is not for a list or if the node is not usable
 within a list.</p>
         </div>
@@ -964,17 +953,15 @@ within a list.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L74" target="_blank">View source</a>]
-        
       </div>
     </div>
   
-    <div class="entry-detail" id="attribute(name,&)-instance-method">
+    <div class="entry-detail" id="attribute(name,&amp;)-instance-method">
       <div class="signature">
         
         def <strong>attribute</strong>(name, &)
 
-        <a class="method-permalink" href="#attribute(name,&)-instance-method">#</a>
+        <a class="method-permalink" href="#attribute%28name%2C%26%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -982,39 +969,34 @@ within a list.</p>
           <p>Adds an attribute to the open HCL body or map/object with the value of the
 passed in block. Value must by an AST node or an object convertable to HCL,
 either through base types supported by the library or a
-<code><a href="../HCL/Builder.html#to_hcl(_builder:HCL::Builder)-instance-method">#to_hcl(builder : HCL::Builder)</a></code> method on the object.</p>
+<code><a href="../HCL/Builder.html#to_hcl%28_builder%3AHCL%3A%3ABuilder%29-instance-method">#to_hcl(builder : HCL::Builder)</a></code> method on the object.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L82" target="_blank">View source</a>]
-        
       </div>
     </div>
   
-    <div class="entry-detail" id="block(name,*args,&)-instance-method">
+    <div class="entry-detail" id="block(name,*args,&amp;)-instance-method">
       <div class="signature">
         
         def <strong>block</strong>(name, *args, &)
 
-        <a class="method-permalink" href="#block(name,*args,&)-instance-method">#</a>
+        <a class="method-permalink" href="#block%28name%2C%2Aargs%2C%26%29-instance-method">#</a>
       </div>
       
         <div class="doc">
           
           <p>Yields a new <code><a href="../HCL/Builder.html">HCL::Builder</a></code> for building a block. Adds the block to the
 open HCL body. <code>name</code> is the first parameter, but subsequent parameters are
-used as label values on the block. <code><a href="../HCL/Builder.html#label(value:Symbol%7CString)-instance-method">#label</a></code> may also be used within the
+used as label values on the block. <code><a href="../HCL/Builder.html#label%28value%3ASymbol%7CString%29-instance-method">#label</a></code> may also be used within the
 block to set labels.</p>
-
 <p>Raises if used within a non-body node (i.e. not a document or block)</p>
         </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L101" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1024,7 +1006,7 @@ block to set labels.</p>
         
         def <strong>identifier</strong>(value)
 
-        <a class="method-permalink" href="#identifier(value)-instance-method">#</a>
+        <a class="method-permalink" href="#identifier%28value%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1035,8 +1017,6 @@ block to set labels.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L118" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1045,31 +1025,28 @@ block to set labels.</p>
         
         def <strong>label</strong>(value : <a href="../Symbol.html">Symbol</a> | <a href="../String.html">String</a>)
 
-        <a class="method-permalink" href="#label(value:Symbol%7CString)-instance-method">#</a>
+        <a class="method-permalink" href="#label%28value%3ASymbol%7CString%29-instance-method">#</a>
       </div>
       
         <div class="doc">
           
           <p>Appends a new <code><a href="../HCL/AST/BlockLabel.html">AST::BlockLabel</a></code> node with the given value to the block's
 labels collection.</p>
-
 <p>Raises if active node is not a block.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L126" target="_blank">View source</a>]
-        
       </div>
     </div>
   
-    <div class="entry-detail" id="list(&)-instance-method">
+    <div class="entry-detail" id="list(&amp;)-instance-method">
       <div class="signature">
         
         def <strong>list</strong>(&)
 
-        <a class="method-permalink" href="#list(&)-instance-method">#</a>
+        <a class="method-permalink" href="#list%28%26%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1080,8 +1057,6 @@ labels collection.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L144" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1090,7 +1065,7 @@ labels collection.</p>
         
         def <strong>literal</strong>(value : <a href="../Bool.html">Bool</a>)
 
-        <a class="method-permalink" href="#literal(value:Bool)-instance-method">#</a>
+        <a class="method-permalink" href="#literal%28value%3ABool%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1101,8 +1076,6 @@ labels collection.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L151" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1111,7 +1084,7 @@ labels collection.</p>
         
         def <strong>literal</strong>(value)
 
-        <a class="method-permalink" href="#literal(value)-instance-method">#</a>
+        <a class="method-permalink" href="#literal%28value%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1122,17 +1095,15 @@ labels collection.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L156" target="_blank">View source</a>]
-        
       </div>
     </div>
   
-    <div class="entry-detail" id="map(&)-instance-method">
+    <div class="entry-detail" id="map(&amp;)-instance-method">
       <div class="signature">
         
         def <strong>map</strong>(&)
 
-        <a class="method-permalink" href="#map(&)-instance-method">#</a>
+        <a class="method-permalink" href="#map%28%26%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1143,8 +1114,6 @@ labels collection.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L161" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1153,13 +1122,11 @@ labels collection.</p>
         
         def <strong>node</strong> : <a href="../HCL/AST/Node.html">HCL::AST::Node</a>
 
-        <a class="method-permalink" href="#node:HCL::AST::Node-instance-method">#</a>
+        <a class="method-permalink" href="#node%3AHCL%3A%3AAST%3A%3ANode-instance-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1169,20 +1136,17 @@ labels collection.</p>
         
         def <strong>number</strong>(value)
 
-        <a class="method-permalink" href="#number(value)-instance-method">#</a>
+        <a class="method-permalink" href="#number%28value%29-instance-method">#</a>
       </div>
       
         <div class="doc">
           
           <p>Returns a new <code><a href="../HCL/AST/Number.html">AST::Number</a></code> node with the given value</p>
-
 <p>Raises if value cannot be used or converted to a supported number format</p>
         </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L170" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1192,7 +1156,7 @@ labels collection.</p>
         
         def <strong>to_hcl</strong>(_builder : <a href="../HCL/Builder.html">HCL::Builder</a>)
 
-        <a class="method-permalink" href="#to_hcl(_builder:HCL::Builder)-instance-method">#</a>
+        <a class="method-permalink" href="#to_hcl%28_builder%3AHCL%3A%3ABuilder%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1203,8 +1167,6 @@ labels collection.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L43" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1213,7 +1175,7 @@ labels collection.</p>
         
         def <strong>to_hcl</strong>(io : IO)
 
-        <a class="method-permalink" href="#to_hcl(io:IO)-instance-method">#</a>
+        <a class="method-permalink" href="#to_hcl%28io%3AIO%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1224,8 +1186,6 @@ labels collection.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L48" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1234,18 +1194,16 @@ labels collection.</p>
         
         def <strong>to_s</strong>(io : IO)
 
-        <a class="method-permalink" href="#to_s(io:IO)-instance-method">#</a>
+        <a class="method-permalink" href="#to_s%28io%3AIO%29-instance-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Alias for <code><a href="../HCL/Builder.html#to_hcl(_builder:HCL::Builder)-instance-method">#to_hcl(io : IO)</a></code>.</p>
+          <p>Alias for <code><a href="../HCL/Builder.html#to_hcl%28_builder%3AHCL%3A%3ABuilder%29-instance-method">#to_hcl(io : IO)</a></code>.</p>
         </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/builder.cr#L53" target="_blank">View source</a>]
         
       </div>
     </div>

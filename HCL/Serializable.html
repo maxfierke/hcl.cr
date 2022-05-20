@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.36.1">
-<meta name="crystal_docs.project_version" content="0.2.0">
+<meta name="generator" content="Crystal Docs 1.3.2">
+<meta name="crystal_docs.project_version" content="0.2.1">
 <meta name="crystal_docs.project_name" content="hcl">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="hcl">
-  <title>HCL::Serializable - hcl 0.2.0</title>
+  <title>HCL::Serializable - hcl 0.2.1</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.2.0
+        0.2.1
       </span>
     </div>
   </div>
@@ -573,22 +573,20 @@
   </h2>
 
   <p>The <code><a href="../HCL/Serializable.html">HCL::Serializable</a></code> module automatically generates methods for HCL serialization and deserialization when included.</p>
-
 <h3><a id="example" class="anchor" href="#example">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Example</h3>
-
-<pre><code class="language-crystal">require "hcl"
+<pre><code class="language-crystal">require &quot;hcl&quot;
 
 class Location
   include HCL::Serializable
 
-  @[HCL::Attribute(key: "lat")]
+  @[HCL::Attribute(key: &quot;lat&quot;)]
   property latitude : Float64
 
-  @[HCL::Attribute(key: "lng")]
+  @[HCL::Attribute(key: &quot;lng&quot;)]
   property longitude : Float64
 end
 
@@ -602,8 +600,8 @@ class House
   property location : Location?
 end
 
-hcl_house = <<-HCL
-  address = "Crystal Road 1234"
+hcl_house = &lt;&lt;-HCL
+  address = &quot;Crystal Road 1234&quot;
   location {
     lat = 12.3
     lng = 34.5
@@ -611,36 +609,31 @@ hcl_house = <<-HCL
 
 HCL
 house = House.from_hcl(hcl_house)
-house.address  # => "Crystal Road 1234"
-house.location # => #<Location:0x10cd93d80 @latitude=12.3, @longitude=34.5>
-house.to_hcl  # => "
-  address = \"Crystal Road 1234\"
+house.address  # =&gt; &quot;Crystal Road 1234&quot;
+house.location # =&gt; #&lt;Location:0x10cd93d80 @latitude=12.3, @longitude=34.5&gt;
+house.to_hcl  # =&gt; &quot;
+  address = \&quot;Crystal Road 1234\&quot;
 
   location {
     lat = 12.3
     lng = 34.5
   }
-"</code></pre>
-
+&quot;</code></pre>
 <h3><a id="usage" class="anchor" href="#usage">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Usage</h3>
-
 <p>Including <code><a href="../HCL/Serializable.html">HCL::Serializable</a></code> will create <code><a href="../HCL/Serializable.html#to_hcl-instance-method">#to_hcl</a></code> and <code>self.from_hcl</code> methods on the current class,
 and a constructor which takes an <code><a href="../HCL/AST/Body.html">HCL::AST::Body</a></code> and an <code><a href="../HCL/ExpressionContext.html">HCL::ExpressionContext</a></code>.
 By default, these methods serialize into an HCL document containing the value of every tagged instance
 variable, the keys being the instance variable name. Most primitives and collections supported as
 instance variable values (string, integer, array, hash, etc.), along with objects which define
-<code><a href="../HCL/Serializable.html#to_hcl(builder:HCL::Builder)-instance-method">#to_hcl(builder : HCL::Builder)</a></code>.</p>
-
+<code><a href="../HCL/Serializable.html#to_hcl%28builder%3AHCL%3A%3ABuilder%29-instance-method">#to_hcl(builder : HCL::Builder)</a></code>.</p>
 <p>Union types are supported for attributes and blocks, including unions with <code><a href="../Nil.html">Nil</a></code>.
 If multiple types in a union parse correctly, it is undefined which one will be chosen.</p>
-
 <p>To denote an individual instance variable to be parsed and serialized, the annotation <code><a href="../HCL/Attribute.html">HCL::Attribute</a></code>
 must be placed on the instance variable. Annotating property, getter and setter macros is also allowed.</p>
-
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;hcl&quot;</span>
 
 <span class="k">class</span> <span class="t">A</span>
@@ -649,13 +642,12 @@ must be placed on the instance variable. Annotating property, getter and setter 
   @[<span class="t">HCL</span><span class="t">::</span><span class="t">Attribute</span>(key: <span class="s">&quot;my_key&quot;</span>, emit_null: <span class="n">true</span>)]
   getter a : <span class="t">Int32</span>?
 <span class="k">end</span></code></pre>
-
 <p><code><a href="../HCL/Attribute.html">HCL::Attribute</a></code> properties:</p>
-
-<ul><li><strong>key</strong>: the value of the key in the HCL document or block (by default the name of the instance variable)</li><li><strong>emit_null</strong>: if <code>true</code>, emits a <code>null</code> value for nilable property (by default nulls are not emitted)</li></ul>
-
+<ul>
+<li><strong>key</strong>: the value of the key in the HCL document or block (by default the name of the instance variable)</li>
+<li><strong>emit_null</strong>: if <code>true</code>, emits a <code>null</code> value for nilable property (by default nulls are not emitted)</li>
+</ul>
 <p>Deserialization also respects default values of variables:</p>
-
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;hcl&quot;</span>
 
 <span class="k">struct</span> <span class="t">A</span>
@@ -669,13 +661,11 @@ must be placed on the instance variable. Annotating property, getter and setter 
 <span class="k">end</span>
 
 <span class="t">A</span>.from_hcl(<span class="s">&quot;a = 1\n&quot;</span>) <span class="c"># =&gt; A(@a=1, @b=1.0)</span></code></pre>
-
 <h3><a id="extensions-hclserializablestrict-and-hclserializableunmapped." class="anchor" href="#extensions-hclserializablestrict-and-hclserializableunmapped.">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Extensions: <code><a href="../HCL/Serializable/Strict.html">HCL::Serializable::Strict</a></code> and <code><a href="../HCL/Serializable/Unmapped.html">HCL::Serializable::Unmapped</a></code>.</h3>
-
 <p>If the <code><a href="../HCL/Serializable/Strict.html">HCL::Serializable::Strict</a></code> module is included, unknown properties in the HCL
 document will raise a parse exception. By default the unknown properties
 are silently ignored.
@@ -687,7 +677,6 @@ the key is the label index. On serialization, any keys inside
 will be serialized and appended to the current HCL block or document.
 The deserialied values are AST nodes in order to allow for later evaluation,
 perhaps with a different expression context than the original document.</p>
-
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;hcl&quot;</span>
 
 <span class="k">struct</span> <span class="t">A</span>
@@ -700,17 +689,15 @@ perhaps with a different expression context than the original document.</p>
 
 a <span class="o">=</span> <span class="t">A</span>.from_hcl(<span class="s">&quot;a = 1\nb = 2\n&quot;</span>) <span class="c"># =&gt; A(@hcl_unmapped_attributes={&quot;b&quot; =&gt; HCL::AST::Number.new(2_i64)}, @a=1)</span>
 a.to_hcl                         <span class="c"># =&gt; &quot;a = 1\nb = 2\n&quot;</span></code></pre>
-
 <h3><a id="class-annotation-hclserializableoptions" class="anchor" href="#class-annotation-hclserializableoptions">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Class annotation <code><a href="../HCL/Serializable/Options.html">HCL::Serializable::Options</a></code></h3>
-
 <p>supported properties:</p>
-
-<ul><li><strong>emit_nulls</strong>: if <code>true</code>, emits a <code>null</code> value for all nilable properties (by default nulls are not emitted)</li></ul>
-
+<ul>
+<li><strong>emit_nulls</strong>: if <code>true</code>, emits a <code>null</code> value for all nilable properties (by default nulls are not emitted)</li>
+</ul>
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;hcl&quot;</span>
 
 @[<span class="t">HCL</span><span class="t">::</span><span class="t">Serializable</span><span class="t">::</span><span class="t">Options</span>(emit_nulls: <span class="n">true</span>)]
@@ -720,7 +707,6 @@ a.to_hcl                         <span class="c"># =&gt; &quot;a = 1\nb = 2\n&qu
   @[<span class="t">HCL</span><span class="t">::</span><span class="t">Serializable</span>]
   @a : <span class="t">Int32</span>?
 <span class="k">end</span></code></pre>
-
 <p>This module is derived heavily from <a href="https://github.com/crystal-lang/crystal/blob/41bd18fbea4aec50aad33aa3beb7a0bf30544186/src/json/serialization.cr">JSON::Serializable</a></p>
 
 
@@ -746,9 +732,7 @@ a.to_hcl                         <span class="c"># =&gt; &quot;a = 1\nb = 2\n&qu
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/serializable.cr#L166" target="_blank">
-        hcl/serializable.cr
-      </a>
+      hcl/serializable.cr
     
     <br/>
   
@@ -768,7 +752,7 @@ a.to_hcl                         <span class="c"># =&gt; &quot;a = 1\nb = 2\n&qu
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new(*,__node_from_hcl:HCL::AST::Body,__ctx_from_hcl:HCL::ExpressionContext)-class-method" class="signature"><strong>.new</strong>(*, __node_from_hcl : HCL::AST::Body, __ctx_from_hcl : HCL::ExpressionContext)</a>
+        <a href="#new%28%2A%2C__node_from_hcl%3AHCL%3A%3AAST%3A%3ABody%2C__ctx_from_hcl%3AHCL%3A%3AExpressionContext%29-class-method" class="signature"><strong>.new</strong>(*, __node_from_hcl : HCL::AST::Body, __ctx_from_hcl : HCL::ExpressionContext)</a>
         
       </li>
     
@@ -789,14 +773,14 @@ a.to_hcl                         <span class="c"># =&gt; &quot;a = 1\nb = 2\n&qu
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#to_hcl(io:IO,node:AST::Node?=AST::Document.new)-instance-method" class="signature"><strong>#to_hcl</strong>(io : IO, node : AST::Node? = <span class="t">AST</span><span class="t">::</span><span class="t">Document</span>.<span class="k">new</span>)</a>
+        <a href="#to_hcl%28io%3AIO%2Cnode%3AAST%3A%3ANode%3F%3DAST%3A%3ADocument.new%29-instance-method" class="signature"><strong>#to_hcl</strong>(io : IO, node : AST::Node? = <span class="t">AST</span><span class="t">::</span><span class="t">Document</span>.<span class="k">new</span>)</a>
         
           <div class="summary"><p>Serializes HCL and writes it to the given IO as a string.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#to_hcl(builder:HCL::Builder)-instance-method" class="signature"><strong>#to_hcl</strong>(builder : HCL::Builder)</a>
+        <a href="#to_hcl%28builder%3AHCL%3A%3ABuilder%29-instance-method" class="signature"><strong>#to_hcl</strong>(builder : HCL::Builder)</a>
         
           <div class="summary"><p>Appends passed in <code><a href="../HCL/Builder.html">HCL::Builder</a></code> with the HCL structure of the class/struct.</p></div>
         
@@ -834,13 +818,11 @@ a.to_hcl                         <span class="c"># =&gt; &quot;a = 1\nb = 2\n&qu
         
         def self.<strong>new</strong>(*, __node_from_hcl : <a href="../HCL/AST/Body.html">HCL::AST::Body</a>, __ctx_from_hcl : <a href="../HCL/ExpressionContext.html">HCL::ExpressionContext</a>)
 
-        <a class="method-permalink" href="#new(*,__node_from_hcl:HCL::AST::Body,__ctx_from_hcl:HCL::ExpressionContext)-class-method">#</a>
+        <a class="method-permalink" href="#new%28%2A%2C__node_from_hcl%3AHCL%3A%3AAST%3A%3ABody%2C__ctx_from_hcl%3AHCL%3A%3AExpressionContext%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/serializable.cr#L195" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -864,7 +846,7 @@ a.to_hcl                         <span class="c"># =&gt; &quot;a = 1\nb = 2\n&qu
         
         def <strong>to_hcl</strong>(io : IO, node : <a href="../HCL/AST/Node.html">AST::Node</a>? = <span class="t">AST</span><span class="t">::</span><span class="t">Document</span>.<span class="k">new</span>)
 
-        <a class="method-permalink" href="#to_hcl(io:IO,node:AST::Node?=AST::Document.new)-instance-method">#</a>
+        <a class="method-permalink" href="#to_hcl%28io%3AIO%2Cnode%3AAST%3A%3ANode%3F%3DAST%3A%3ADocument.new%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -876,8 +858,6 @@ building can be specified by <code>node</code> argument. Defaults to <code><a hr
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/serializable.cr#L448" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -886,20 +866,17 @@ building can be specified by <code>node</code> argument. Defaults to <code><a hr
         
         def <strong>to_hcl</strong>(builder : <a href="../HCL/Builder.html">HCL::Builder</a>)
 
-        <a class="method-permalink" href="#to_hcl(builder:HCL::Builder)-instance-method">#</a>
+        <a class="method-permalink" href="#to_hcl%28builder%3AHCL%3A%3ABuilder%29-instance-method">#</a>
       </div>
       
         <div class="doc">
           
           <p>Appends passed in <code><a href="../HCL/Builder.html">HCL::Builder</a></code> with the HCL structure of the class/struct.</p>
-
 <p>Returns the passed in <code><a href="../HCL/Builder.html">HCL::Builder</a></code></p>
         </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/serializable.cr#L455" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -919,8 +896,6 @@ building can be specified by <code>node</code> argument. Defaults to <code><a hr
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/serializable.cr#L532" target="_blank">View source</a>]
         
       </div>
     </div>

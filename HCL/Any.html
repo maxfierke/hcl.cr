@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 0.36.1">
-<meta name="crystal_docs.project_version" content="0.2.0">
+<meta name="generator" content="Crystal Docs 1.3.2">
+<meta name="crystal_docs.project_version" content="0.2.1">
 <meta name="crystal_docs.project_name" content="hcl">
 
 
@@ -13,7 +13,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="hcl">
-  <title>HCL::Any - hcl 0.2.0</title>
+  <title>HCL::Any - hcl 0.2.1</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -39,7 +39,7 @@
       </h1>
 
       <span class="project-version">
-        0.2.0
+        0.2.1
       </span>
     </div>
   </div>
@@ -588,9 +588,7 @@
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L2" target="_blank">
-        hcl/any.cr
-      </a>
+      hcl/any.cr
     
     <br/>
   
@@ -610,24 +608,24 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new(hsh:Hash(String,RawType))-class-method" class="signature"><strong>.new</strong>(hsh : Hash(String, RawType))</a>
+        <a href="#new%28hsh%3AHash%28String%2CRawType%29%29-class-method" class="signature"><strong>.new</strong>(hsh : Hash(String, RawType))</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#new(array:Array(RawType))-class-method" class="signature"><strong>.new</strong>(array : Array(RawType))</a>
+        <a href="#new%28array%3AArray%28RawType%29%29-class-method" class="signature"><strong>.new</strong>(array : Array(RawType))</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#new(pull:JSON::PullParser)-class-method" class="signature"><strong>.new</strong>(pull : JSON::PullParser)</a>
+        <a href="#new%28pull%3AJSON%3A%3APullParser%29-class-method" class="signature"><strong>.new</strong>(pull : JSON::PullParser)</a>
         
           <div class="summary"><p>Reads a <code><a href="../HCL/Any.html">HCL::Any</a></code> value from the given pull parser.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#new(raw)-class-method" class="signature"><strong>.new</strong>(raw)</a>
+        <a href="#new%28raw%29-class-method" class="signature"><strong>.new</strong>(raw)</a>
         
       </li>
     
@@ -648,133 +646,133 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#==(other)-instance-method" class="signature"><strong>#==</strong>(other)</a>
-        
-          <div class="summary"><p>Returns <code>true</code> if the raw object is equal to <em>other</em>.</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#==(other:Any)-instance-method" class="signature"><strong>#==</strong>(other : Any)</a>
+        <a href="#%3D%3D%28other%3AAny%29-instance-method" class="signature"><strong>#==</strong>(other : Any)</a>
         
           <div class="summary"><p>Returns <code>true</code> if both <code>self</code> and <em>other</em>'s raw object are equal.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#[](index:Int):HCL::Any-instance-method" class="signature"><strong>#[]</strong>(index : Int) : HCL::Any</a>
+        <a href="#%3D%3D%28other%29-instance-method" class="signature"><strong>#==</strong>(other)</a>
+        
+          <div class="summary"><p>Returns <code>true</code> if the raw object is equal to <em>other</em>.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#%5B%5D%28index%3AInt%29%3AHCL%3A%3AAny-instance-method" class="signature"><strong>#[]</strong>(index : Int) : HCL::Any</a>
         
           <div class="summary"><p>Assumes the underlying value is an <code><a href="../Array.html">Array</a></code> and returns the element at the given index.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#[](key:String):HCL::Any-instance-method" class="signature"><strong>#[]</strong>(key : String) : HCL::Any</a>
+        <a href="#%5B%5D%28key%3AString%29%3AHCL%3A%3AAny-instance-method" class="signature"><strong>#[]</strong>(key : String) : HCL::Any</a>
         
           <div class="summary"><p>Assumes the underlying value is a <code><a href="../Hash.html">Hash</a></code> and returns the element with the given key.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#[]?(index:Int):HCL::Any?-instance-method" class="signature"><strong>#[]?</strong>(index : Int) : HCL::Any?</a>
+        <a href="#%5B%5D%3F%28index%3AInt%29%3AHCL%3A%3AAny%3F-instance-method" class="signature"><strong>#[]?</strong>(index : Int) : HCL::Any?</a>
         
           <div class="summary"><p>Assumes the underlying value is an <code><a href="../Array.html">Array</a></code> and returns the element at the given index, or <code>nil</code> if out of bounds.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#[]?(key:String):HCL::Any?-instance-method" class="signature"><strong>#[]?</strong>(key : String) : HCL::Any?</a>
+        <a href="#%5B%5D%3F%28key%3AString%29%3AHCL%3A%3AAny%3F-instance-method" class="signature"><strong>#[]?</strong>(key : String) : HCL::Any?</a>
         
           <div class="summary"><p>Assumes the underlying value is a <code><a href="../Hash.html">Hash</a></code> and returns the element with the given key, or <code>nil</code> if the key is not present.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#as_a:Array(Any)-instance-method" class="signature"><strong>#as_a</strong> : Array(Any)</a>
+        <a href="#as_a%3AArray%28Any%29-instance-method" class="signature"><strong>#as_a</strong> : Array(Any)</a>
         
           <div class="summary"><p>Checks that the underlying value is <code><a href="../Array.html">Array</a></code>, and returns its value.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#as_a?:Array(Any)?-instance-method" class="signature"><strong>#as_a?</strong> : Array(Any)?</a>
+        <a href="#as_a%3F%3AArray%28Any%29%3F-instance-method" class="signature"><strong>#as_a?</strong> : Array(Any)?</a>
         
           <div class="summary"><p>Checks that the underlying value is <code><a href="../Array.html">Array</a></code>, and returns its value.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#as_bool:Bool-instance-method" class="signature"><strong>#as_bool</strong> : Bool</a>
+        <a href="#as_bool%3ABool-instance-method" class="signature"><strong>#as_bool</strong> : Bool</a>
         
           <div class="summary"><p>Checks that the underlying value is <code><a href="../Bool.html">Bool</a></code>, and returns its value.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#as_bool?:Bool?-instance-method" class="signature"><strong>#as_bool?</strong> : Bool?</a>
+        <a href="#as_bool%3F%3ABool%3F-instance-method" class="signature"><strong>#as_bool?</strong> : Bool?</a>
         
           <div class="summary"><p>Checks that the underlying value is <code><a href="../Bool.html">Bool</a></code>, and returns its value.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#as_f:Float64-instance-method" class="signature"><strong>#as_f</strong> : Float64</a>
+        <a href="#as_f%3AFloat64-instance-method" class="signature"><strong>#as_f</strong> : Float64</a>
         
           <div class="summary"><p>Checks that the underlying value is <code>Float</code>, and returns its value as an <code>Float64</code>.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#as_f?:Float64?-instance-method" class="signature"><strong>#as_f?</strong> : Float64?</a>
+        <a href="#as_f%3F%3AFloat64%3F-instance-method" class="signature"><strong>#as_f?</strong> : Float64?</a>
         
           <div class="summary"><p>Checks that the underlying value is <code>Float</code>, and returns its value as an <code>Float64</code>.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#as_h:Hash(String,Any)-instance-method" class="signature"><strong>#as_h</strong> : Hash(String, Any)</a>
+        <a href="#as_h%3AHash%28String%2CAny%29-instance-method" class="signature"><strong>#as_h</strong> : Hash(String, Any)</a>
         
           <div class="summary"><p>Checks that the underlying value is <code><a href="../Hash.html">Hash</a></code>, and returns its value.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#as_h?:Hash(String,Any)?-instance-method" class="signature"><strong>#as_h?</strong> : Hash(String, Any)?</a>
+        <a href="#as_h%3F%3AHash%28String%2CAny%29%3F-instance-method" class="signature"><strong>#as_h?</strong> : Hash(String, Any)?</a>
         
           <div class="summary"><p>Checks that the underlying value is <code><a href="../Hash.html">Hash</a></code>, and returns its value.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#as_i:Int64-instance-method" class="signature"><strong>#as_i</strong> : Int64</a>
+        <a href="#as_i%3AInt64-instance-method" class="signature"><strong>#as_i</strong> : Int64</a>
         
           <div class="summary"><p>Checks that the underlying value is <code>Int</code>, and returns its value as an <code>Int64</code>.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#as_i?:Int64?-instance-method" class="signature"><strong>#as_i?</strong> : Int64?</a>
+        <a href="#as_i%3F%3AInt64%3F-instance-method" class="signature"><strong>#as_i?</strong> : Int64?</a>
         
           <div class="summary"><p>Checks that the underlying value is <code>Int</code>, and returns its value as an <code>Int64</code>.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#as_nil:Nil-instance-method" class="signature"><strong>#as_nil</strong> : Nil</a>
+        <a href="#as_nil%3ANil-instance-method" class="signature"><strong>#as_nil</strong> : Nil</a>
         
           <div class="summary"><p>Checks that the underlying value is <code><a href="../Nil.html">Nil</a></code>, and returns <code>nil</code>.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#as_s:String-instance-method" class="signature"><strong>#as_s</strong> : String</a>
+        <a href="#as_s%3AString-instance-method" class="signature"><strong>#as_s</strong> : String</a>
         
           <div class="summary"><p>Checks that the underlying value is <code><a href="../String.html">String</a></code>, and returns its value.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#as_s?:String?-instance-method" class="signature"><strong>#as_s?</strong> : String?</a>
+        <a href="#as_s%3F%3AString%3F-instance-method" class="signature"><strong>#as_s?</strong> : String?</a>
         
           <div class="summary"><p>Checks that the underlying value is <code><a href="../String.html">String</a></code>, and returns its value.</p></div>
         
@@ -783,19 +781,19 @@
       <li class="entry-summary">
         <a href="#clone-instance-method" class="signature"><strong>#clone</strong></a>
         
-          <div class="summary"><p>Returns a new HCL::Any instance with the <code><a href="../HCL/Any.html#raw:Array(HCL::Any)%7CBool%7CFloat64%7CHash(String,HCL::Any)%7CInt64%7CString%7CNil-instance-method">#raw</a></code> value <code><a href="../HCL/Any.html#clone-instance-method">#clone</a></code>ed.</p></div>
+          <div class="summary"><p>Returns a new HCL::Any instance with the <code><a href="../HCL/Any.html#raw%3AArray%28HCL%3A%3AAny%29%7CBool%7CFloat64%7CHash%28String%2CHCL%3A%3AAny%29%7CInt64%7CString%7CNil-instance-method">#raw</a></code> value <code><a href="../HCL/Any.html#clone-instance-method">#clone</a></code>ed.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#dig(key:String%7CInt,*subkeys)-instance-method" class="signature"><strong>#dig</strong>(key : String | Int, *subkeys)</a>
+        <a href="#dig%28key%3AString%7CInt%2C%2Asubkeys%29-instance-method" class="signature"><strong>#dig</strong>(key : String | Int, *subkeys)</a>
         
           <div class="summary"><p>Traverses the depth of a structure and returns the value, otherwise raises.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#dig?(key:String%7CInt,*subkeys)-instance-method" class="signature"><strong>#dig?</strong>(key : String | Int, *subkeys)</a>
+        <a href="#dig%3F%28key%3AString%7CInt%2C%2Asubkeys%29-instance-method" class="signature"><strong>#dig?</strong>(key : String | Int, *subkeys)</a>
         
           <div class="summary"><p>Traverses the depth of a structure and returns the value.</p></div>
         
@@ -804,36 +802,36 @@
       <li class="entry-summary">
         <a href="#dup-instance-method" class="signature"><strong>#dup</strong></a>
         
-          <div class="summary"><p>Returns a new HCL::Any instance with the <code><a href="../HCL/Any.html#raw:Array(HCL::Any)%7CBool%7CFloat64%7CHash(String,HCL::Any)%7CInt64%7CString%7CNil-instance-method">#raw</a></code> value <code><a href="../HCL/Any.html#dup-instance-method">#dup</a></code>ed.</p></div>
+          <div class="summary"><p>Returns a new HCL::Any instance with the <code><a href="../HCL/Any.html#raw%3AArray%28HCL%3A%3AAny%29%7CBool%7CFloat64%7CHash%28String%2CHCL%3A%3AAny%29%7CInt64%7CString%7CNil-instance-method">#raw</a></code> value <code><a href="../HCL/Any.html#dup-instance-method">#dup</a></code>ed.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#hash(hasher)-instance-method" class="signature"><strong>#hash</strong>(hasher)</a>
+        <a href="#hash%28hasher%29-instance-method" class="signature"><strong>#hash</strong>(hasher)</a>
         
           <div class="summary"><p>See <code>Object#hash(hasher)</code></p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#raw:Array(HCL::Any)%7CBool%7CFloat64%7CHash(String,HCL::Any)%7CInt64%7CString%7CNil-instance-method" class="signature"><strong>#raw</strong> : Array(HCL::Any) | Bool | Float64 | Hash(String, HCL::Any) | Int64 | String | Nil</a>
+        <a href="#raw%3AArray%28HCL%3A%3AAny%29%7CBool%7CFloat64%7CHash%28String%2CHCL%3A%3AAny%29%7CInt64%7CString%7CNil-instance-method" class="signature"><strong>#raw</strong> : Array(HCL::Any) | Bool | Float64 | Hash(String, HCL::Any) | Int64 | String | Nil</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#size:Int-instance-method" class="signature"><strong>#size</strong> : Int</a>
+        <a href="#size%3AInt-instance-method" class="signature"><strong>#size</strong> : Int</a>
         
           <div class="summary"><p>Assumes the underlying value is an <code><a href="../Array.html">Array</a></code> or <code><a href="../Hash.html">Hash</a></code> and returns its size.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#to_hcl(builder:HCL::Builder)-instance-method" class="signature"><strong>#to_hcl</strong>(builder : HCL::Builder)</a>
+        <a href="#to_hcl%28builder%3AHCL%3A%3ABuilder%29-instance-method" class="signature"><strong>#to_hcl</strong>(builder : HCL::Builder)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#unwrap:RawType-instance-method" class="signature"><strong>#unwrap</strong> : RawType</a>
+        <a href="#unwrap%3ARawType-instance-method" class="signature"><strong>#unwrap</strong> : RawType</a>
         
       </li>
     
@@ -860,7 +858,7 @@
   <h3>Instance methods inherited from struct <code><a href="../Value.html">Value</a></code></h3>
   
   
-    <a href="../Value.html#==(other:HCL::Any)-instance-method" class="tooltip">
+    <a href="../Value.html#%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method" class="tooltip">
       <span>==(other : HCL::Any)</span>
     ==</a>
     
@@ -879,7 +877,7 @@
   <h3>Instance methods inherited from class <code><a href="../Object.html">Object</a></code></h3>
   
   
-    <a href="../Object.html#===(other:HCL::Any)-instance-method" class="tooltip">
+    <a href="../Object.html#%3D%3D%3D%28other%3AHCL%3A%3AAny%29-instance-method" class="tooltip">
       <span>===(other : HCL::Any)</span>
     ===</a>
     
@@ -894,7 +892,7 @@
   <h3>Class methods inherited from class <code><a href="../Object.html">Object</a></code></h3>
   
   
-    <a href="../Object.html#from_hcl(string_or_io:String%7CIO,ctx:HCL::ExpressionContext=HCL::ExpressionContext.default_context)-class-method" class="tooltip">
+    <a href="../Object.html#from_hcl%28string_or_io%3AString%7CIO%2Cctx%3AHCL%3A%3AExpressionContext%3DHCL%3A%3AExpressionContext.default_context%29-class-method" class="tooltip">
       <span>from_hcl(string_or_io : String | IO, ctx : HCL::ExpressionContext = <span class="t">HCL</span><span class="t">::</span><span class="t">ExpressionContext</span>.default_context)</span>
     from_hcl</a>
     
@@ -919,13 +917,11 @@
         
         def self.<strong>new</strong>(hsh : <a href="../Hash.html">Hash</a>(<a href="../String.html">String</a>, <a href="../HCL/Any/RawType.html">RawType</a>))
 
-        <a class="method-permalink" href="#new(hsh:Hash(String,RawType))-class-method">#</a>
+        <a class="method-permalink" href="#new%28hsh%3AHash%28String%2CRawType%29%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -935,13 +931,11 @@
         
         def self.<strong>new</strong>(array : <a href="../Array.html">Array</a>(<a href="../HCL/Any/RawType.html">RawType</a>))
 
-        <a class="method-permalink" href="#new(array:Array(RawType))-class-method">#</a>
+        <a class="method-permalink" href="#new%28array%3AArray%28RawType%29%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L26" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -951,20 +945,17 @@
         
         def self.<strong>new</strong>(pull : JSON::PullParser)
 
-        <a class="method-permalink" href="#new(pull:JSON::PullParser)-class-method">#</a>
+        <a class="method-permalink" href="#new%28pull%3AJSON%3A%3APullParser%29-class-method">#</a>
       </div>
       
         <div class="doc">
           
           <p>Reads a <code><a href="../HCL/Any.html">HCL::Any</a></code> value from the given pull parser.</p>
-
 <p>Based on https://github.com/crystal-lang/crystal/blob/6952aacb37682558d1a976b4ebf1b1456d9f8b84/src/json/any.cr#L23</p>
         </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L220" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -974,13 +965,11 @@
         
         def self.<strong>new</strong>(raw)
 
-        <a class="method-permalink" href="#new(raw)-class-method">#</a>
+        <a class="method-permalink" href="#new%28raw%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L30" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -999,33 +988,12 @@
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="==(other)-instance-method">
-      <div class="signature">
-        
-        def <strong>==</strong>(other)
-
-        <a class="method-permalink" href="#==(other)-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns <code>true</code> if the raw object is equal to <em>other</em>.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L279" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
     <div class="entry-detail" id="==(other:Any)-instance-method">
       <div class="signature">
         
         def <strong>==</strong>(other : <a href="../HCL/Any.html">Any</a>)
 
-        <a class="method-permalink" href="#==(other:Any)-instance-method">#</a>
+        <a class="method-permalink" href="#%3D%3D%28other%3AAny%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1036,7 +1004,24 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L274" target="_blank">View source</a>]
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="==(other)-instance-method">
+      <div class="signature">
+        
+        def <strong>==</strong>(other)
+
+        <a class="method-permalink" href="#%3D%3D%28other%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns <code>true</code> if the raw object is equal to <em>other</em>.</p>
+        </div>
+      
+      <br/>
+      <div>
         
       </div>
     </div>
@@ -1046,7 +1031,7 @@
         
         def <strong>[]</strong>(index : Int) : <a href="../HCL/Any.html">HCL::Any</a>
 
-        <a class="method-permalink" href="#[](index:Int):HCL::Any-instance-method">#</a>
+        <a class="method-permalink" href="#%5B%5D%28index%3AInt%29%3AHCL%3A%3AAny-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1059,8 +1044,6 @@ Raises if the underlying value is not an <code><a href="../Array.html">Array</a>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L63" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1069,7 +1052,7 @@ Raises if the underlying value is not an <code><a href="../Array.html">Array</a>
         
         def <strong>[]</strong>(key : <a href="../String.html">String</a>) : <a href="../HCL/Any.html">HCL::Any</a>
 
-        <a class="method-permalink" href="#[](key:String):HCL::Any-instance-method">#</a>
+        <a class="method-permalink" href="#%5B%5D%28key%3AString%29%3AHCL%3A%3AAny-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1082,8 +1065,6 @@ Raises if the underlying value is not a <code><a href="../Hash.html">Hash</a></c
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L87" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1092,7 +1073,7 @@ Raises if the underlying value is not a <code><a href="../Hash.html">Hash</a></c
         
         def <strong>[]?</strong>(index : Int) : <a href="../HCL/Any.html">HCL::Any</a>?
 
-        <a class="method-permalink" href="#[]?(index:Int):HCL::Any?-instance-method">#</a>
+        <a class="method-permalink" href="#%5B%5D%3F%28index%3AInt%29%3AHCL%3A%3AAny%3F-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1105,8 +1086,6 @@ Raises if the underlying value is not an <code><a href="../Array.html">Array</a>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L75" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1115,7 +1094,7 @@ Raises if the underlying value is not an <code><a href="../Array.html">Array</a>
         
         def <strong>[]?</strong>(key : <a href="../String.html">String</a>) : <a href="../HCL/Any.html">HCL::Any</a>?
 
-        <a class="method-permalink" href="#[]?(key:String):HCL::Any?-instance-method">#</a>
+        <a class="method-permalink" href="#%5B%5D%3F%28key%3AString%29%3AHCL%3A%3AAny%3F-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1128,8 +1107,6 @@ Raises if the underlying value is not a <code><a href="../Hash.html">Hash</a></c
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L99" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1138,7 +1115,7 @@ Raises if the underlying value is not a <code><a href="../Hash.html">Hash</a></c
         
         def <strong>as_a</strong> : <a href="../Array.html">Array</a>(<a href="../HCL/Any.html">Any</a>)
 
-        <a class="method-permalink" href="#as_a:Array(Any)-instance-method">#</a>
+        <a class="method-permalink" href="#as_a%3AArray%28Any%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1149,8 +1126,6 @@ Raises otherwise.</p>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L195" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1160,7 +1135,7 @@ Raises otherwise.</p>
         
         def <strong>as_a?</strong> : <a href="../Array.html">Array</a>(<a href="../HCL/Any.html">Any</a>)?
 
-        <a class="method-permalink" href="#as_a?:Array(Any)?-instance-method">#</a>
+        <a class="method-permalink" href="#as_a%3F%3AArray%28Any%29%3F-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1172,8 +1147,6 @@ Returns <code>nil</code> otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L201" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1182,7 +1155,7 @@ Returns <code>nil</code> otherwise.</p>
         
         def <strong>as_bool</strong> : <a href="../Bool.html">Bool</a>
 
-        <a class="method-permalink" href="#as_bool:Bool-instance-method">#</a>
+        <a class="method-permalink" href="#as_bool%3ABool-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1193,8 +1166,6 @@ Raises otherwise.</p>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L147" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1204,7 +1175,7 @@ Raises otherwise.</p>
         
         def <strong>as_bool?</strong> : <a href="../Bool.html">Bool</a>?
 
-        <a class="method-permalink" href="#as_bool?:Bool?-instance-method">#</a>
+        <a class="method-permalink" href="#as_bool%3F%3ABool%3F-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1216,8 +1187,6 @@ Returns <code>nil</code> otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L153" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1226,7 +1195,7 @@ Returns <code>nil</code> otherwise.</p>
         
         def <strong>as_f</strong> : Float64
 
-        <a class="method-permalink" href="#as_f:Float64-instance-method">#</a>
+        <a class="method-permalink" href="#as_f%3AFloat64-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1237,8 +1206,6 @@ Raises otherwise.</p>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L171" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1248,7 +1215,7 @@ Raises otherwise.</p>
         
         def <strong>as_f?</strong> : Float64?
 
-        <a class="method-permalink" href="#as_f?:Float64?-instance-method">#</a>
+        <a class="method-permalink" href="#as_f%3F%3AFloat64%3F-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1260,8 +1227,6 @@ Returns <code>nil</code> otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L177" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1270,7 +1235,7 @@ Returns <code>nil</code> otherwise.</p>
         
         def <strong>as_h</strong> : <a href="../Hash.html">Hash</a>(<a href="../String.html">String</a>, <a href="../HCL/Any.html">Any</a>)
 
-        <a class="method-permalink" href="#as_h:Hash(String,Any)-instance-method">#</a>
+        <a class="method-permalink" href="#as_h%3AHash%28String%2CAny%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1281,8 +1246,6 @@ Raises otherwise.</p>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L207" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1292,7 +1255,7 @@ Raises otherwise.</p>
         
         def <strong>as_h?</strong> : <a href="../Hash.html">Hash</a>(<a href="../String.html">String</a>, <a href="../HCL/Any.html">Any</a>)?
 
-        <a class="method-permalink" href="#as_h?:Hash(String,Any)?-instance-method">#</a>
+        <a class="method-permalink" href="#as_h%3F%3AHash%28String%2CAny%29%3F-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1304,8 +1267,6 @@ Returns <code>nil</code> otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L213" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1314,7 +1275,7 @@ Returns <code>nil</code> otherwise.</p>
         
         def <strong>as_i</strong> : Int64
 
-        <a class="method-permalink" href="#as_i:Int64-instance-method">#</a>
+        <a class="method-permalink" href="#as_i%3AInt64-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1326,8 +1287,6 @@ Raises otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L159" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1336,7 +1295,7 @@ Raises otherwise.</p>
         
         def <strong>as_i?</strong> : Int64?
 
-        <a class="method-permalink" href="#as_i?:Int64?-instance-method">#</a>
+        <a class="method-permalink" href="#as_i%3F%3AInt64%3F-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1348,8 +1307,6 @@ Returns <code>nil</code> otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L165" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1358,7 +1315,7 @@ Returns <code>nil</code> otherwise.</p>
         
         def <strong>as_nil</strong> : <a href="../Nil.html">Nil</a>
 
-        <a class="method-permalink" href="#as_nil:Nil-instance-method">#</a>
+        <a class="method-permalink" href="#as_nil%3ANil-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1370,8 +1327,6 @@ Raises otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L141" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1380,7 +1335,7 @@ Raises otherwise.</p>
         
         def <strong>as_s</strong> : <a href="../String.html">String</a>
 
-        <a class="method-permalink" href="#as_s:String-instance-method">#</a>
+        <a class="method-permalink" href="#as_s%3AString-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1392,8 +1347,6 @@ Raises otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L183" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1402,7 +1355,7 @@ Raises otherwise.</p>
         
         def <strong>as_s?</strong> : <a href="../String.html">String</a>?
 
-        <a class="method-permalink" href="#as_s?:String?-instance-method">#</a>
+        <a class="method-permalink" href="#as_s%3F%3AString%3F-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1413,8 +1366,6 @@ Returns <code>nil</code> otherwise.</p>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L189" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1429,13 +1380,11 @@ Returns <code>nil</code> otherwise.</p>
       
         <div class="doc">
           
-          <p>Returns a new HCL::Any instance with the <code><a href="../HCL/Any.html#raw:Array(HCL::Any)%7CBool%7CFloat64%7CHash(String,HCL::Any)%7CInt64%7CString%7CNil-instance-method">#raw</a></code> value <code><a href="../HCL/Any.html#clone-instance-method">#clone</a></code>ed.</p>
+          <p>Returns a new HCL::Any instance with the <code><a href="../HCL/Any.html#raw%3AArray%28HCL%3A%3AAny%29%7CBool%7CFloat64%7CHash%28String%2CHCL%3A%3AAny%29%7CInt64%7CString%7CNil-instance-method">#raw</a></code> value <code><a href="../HCL/Any.html#clone-instance-method">#clone</a></code>ed.</p>
         </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L292" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1445,7 +1394,7 @@ Returns <code>nil</code> otherwise.</p>
         
         def <strong>dig</strong>(key : <a href="../String.html">String</a> | Int, *subkeys)
 
-        <a class="method-permalink" href="#dig(key:String%7CInt,*subkeys)-instance-method">#</a>
+        <a class="method-permalink" href="#dig%28key%3AString%7CInt%2C%2Asubkeys%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1456,8 +1405,6 @@ Returns <code>nil</code> otherwise.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L127" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1466,7 +1413,7 @@ Returns <code>nil</code> otherwise.</p>
         
         def <strong>dig?</strong>(key : <a href="../String.html">String</a> | Int, *subkeys)
 
-        <a class="method-permalink" href="#dig?(key:String%7CInt,*subkeys)-instance-method">#</a>
+        <a class="method-permalink" href="#dig%3F%28key%3AString%7CInt%2C%2Asubkeys%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1477,8 +1424,6 @@ Returns <code>nil</code> if not found.</p>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L110" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1493,13 +1438,11 @@ Returns <code>nil</code> if not found.</p>
       
         <div class="doc">
           
-          <p>Returns a new HCL::Any instance with the <code><a href="../HCL/Any.html#raw:Array(HCL::Any)%7CBool%7CFloat64%7CHash(String,HCL::Any)%7CInt64%7CString%7CNil-instance-method">#raw</a></code> value <code><a href="../HCL/Any.html#dup-instance-method">#dup</a></code>ed.</p>
+          <p>Returns a new HCL::Any instance with the <code><a href="../HCL/Any.html#raw%3AArray%28HCL%3A%3AAny%29%7CBool%7CFloat64%7CHash%28String%2CHCL%3A%3AAny%29%7CInt64%7CString%7CNil-instance-method">#raw</a></code> value <code><a href="../HCL/Any.html#dup-instance-method">#dup</a></code>ed.</p>
         </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L287" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1509,7 +1452,7 @@ Returns <code>nil</code> if not found.</p>
         
         def <strong>hash</strong>(hasher)
 
-        <a class="method-permalink" href="#hash(hasher)-instance-method">#</a>
+        <a class="method-permalink" href="#hash%28hasher%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1520,8 +1463,6 @@ Returns <code>nil</code> if not found.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L284" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1530,13 +1471,11 @@ Returns <code>nil</code> if not found.</p>
         
         def <strong>raw</strong> : <a href="../Array.html">Array</a>(<a href="../HCL/Any.html">HCL::Any</a>) | <a href="../Bool.html">Bool</a> | Float64 | <a href="../Hash.html">Hash</a>(<a href="../String.html">String</a>, <a href="../HCL/Any.html">HCL::Any</a>) | Int64 | <a href="../String.html">String</a> | <a href="../Nil.html">Nil</a>
 
-        <a class="method-permalink" href="#raw:Array(HCL::Any)%7CBool%7CFloat64%7CHash(String,HCL::Any)%7CInt64%7CString%7CNil-instance-method">#</a>
+        <a class="method-permalink" href="#raw%3AArray%28HCL%3A%3AAny%29%7CBool%7CFloat64%7CHash%28String%2CHCL%3A%3AAny%29%7CInt64%7CString%7CNil-instance-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1546,7 +1485,7 @@ Returns <code>nil</code> if not found.</p>
         
         def <strong>size</strong> : Int
 
-        <a class="method-permalink" href="#size:Int-instance-method">#</a>
+        <a class="method-permalink" href="#size%3AInt-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -1558,8 +1497,6 @@ Raises if the underlying value is not an <code><a href="../Array.html">Array</a>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L49" target="_blank">View source</a>]
-        
       </div>
     </div>
   
@@ -1568,13 +1505,11 @@ Raises if the underlying value is not an <code><a href="../Array.html">Array</a>
         
         def <strong>to_hcl</strong>(builder : <a href="../HCL/Builder.html">HCL::Builder</a>)
 
-        <a class="method-permalink" href="#to_hcl(builder:HCL::Builder)-instance-method">#</a>
+        <a class="method-permalink" href="#to_hcl%28builder%3AHCL%3A%3ABuilder%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L249" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1584,13 +1519,11 @@ Raises if the underlying value is not an <code><a href="../Array.html">Array</a>
         
         def <strong>unwrap</strong> : <a href="../HCL/Any/RawType.html">RawType</a>
 
-        <a class="method-permalink" href="#unwrap:RawType-instance-method">#</a>
+        <a class="method-permalink" href="#unwrap%3ARawType-instance-method">#</a>
       </div>
       
       <br/>
       <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/v0.2.0/src/hcl/any.cr#L33" target="_blank">View source</a>]
         
       </div>
     </div>
