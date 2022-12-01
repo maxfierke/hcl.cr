@@ -27,6 +27,10 @@ parse-trace: bin/hcl_parse_test
 deps:
 	$(SHARDS_BIN) check || $(SHARDS_BIN) install
 
+.PHONY: format
+format:
+	$(CRYSTAL_BIN) tool format
+
 .PHONY: clean
 clean:
 	rm -rf ./bin/*
