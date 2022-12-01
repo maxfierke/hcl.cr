@@ -23,7 +23,7 @@ describe HCL::Parser do
 
       expect_raises(
         HCL::ParseException,
-        /^unexpected token at byte offset 23:\n\s+"whats the deal im walkin here"\n\s+\^$/
+        /^unexpected token at byte offset 23:\n\s+"whats the deal im walkin here"\n\s+\^/
       ) do
         parser.parse!
       end

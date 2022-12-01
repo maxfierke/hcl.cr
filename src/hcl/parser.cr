@@ -1,6 +1,7 @@
 module HCL
   class Parser
-    @source : String
+    @filename = "???"
+    @source = ""
     @source_offset = 0
     @document : AST::Document?
     @parse_trace_io : IO?
@@ -11,8 +12,13 @@ module HCL
       new(*args, **kwargs).parse!
     end
 
-    def initialize(source : String | IO, offset = 0, io : IO? = nil)
-      @source = source.is_a?(IO) ? source.gets_to_end : source
+    def initialize(source : IO, offset = 0, io : IO? = nil)
+      @filename = source.filename
+      super(source.gets_to_end, offset, io: io)
+    end
+
+    def initialize(source : String, offset = 0, io : IO? = nil)
+      @source = source
       @source_offset = offset
       @parse_trace_io = io
     end
@@ -28,7 +34,7 @@ module HCL
         peg_iter = Pegmatite::TokenIterator.new(peg_tokens)
         build_document(peg_iter, @source)
       rescue e : Pegmatite::Pattern::MatchError
-        raise ParseException.new(e.message)
+        raise ParseException.new(e.message, source: source, match_error: e)
       end
     end
 
@@ -39,7 +45,8 @@ module HCL
 
     private def assert_token_kind!(kind : Symbol, expected_kind)
       raise ParseException.new(
-        "Expected #{expected_kind}, but got #{kind}."
+        "Expected #{expected_kind}, but got #{kind}.",
+        source: source
       ) unless kind == expected_kind
     end
 

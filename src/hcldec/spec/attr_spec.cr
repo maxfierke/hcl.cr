@@ -18,7 +18,9 @@ module HCLDec
 
     def validate!
       if name.empty?
-        raise "Missing name in attribute spec: The name attribute is required, to specify the attribute name that is expected in an input HCL file."
+        raise SpecViolation.new(
+          "Missing name in attribute spec: The name attribute is required, to specify the attribute name that is expected in an input HCL file."
+        )
       end
     end
   end

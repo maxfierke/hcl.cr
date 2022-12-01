@@ -39,6 +39,10 @@ module HCLDec
           puts @version
           exit 0
         end
+        parser.on("--diags FORMAT", "Unimplemented") { }
+        parser.on("--var-refs", "Unimplemented") { }
+        parser.on("--with-type", "Unimplemented") { }
+        parser.on("--keep-nulls", "Unimplemented") { }
         parser.invalid_option do |flag|
           STDERR.puts "ERROR: #{flag} is not a valid option."
           STDERR.puts parser
@@ -62,6 +66,8 @@ module HCLDec
       puts HCL.parse(ARGF.gets_to_end).to_json(
         ctx: HCL::ExpressionContext.default_context
       )
+    rescue e : HCLDec::SpecViolation
+      puts e.to_json
     end
 
     private def load_spec_file(spec_path)
