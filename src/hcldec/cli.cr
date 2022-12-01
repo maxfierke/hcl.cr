@@ -66,6 +66,9 @@ module HCLDec
       puts HCL.parse(ARGF.gets_to_end).to_json(
         ctx: HCL::ExpressionContext.default_context
       )
+    rescue e : HCL::ParseException
+      STDERR.puts e.to_json
+      puts e.to_json
     rescue e : HCLDec::SpecViolation
       puts e.to_json
     end
