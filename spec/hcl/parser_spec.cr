@@ -125,6 +125,28 @@ describe HCL::Parser do
       })
     end
 
+    it "can parse multi-byte unicode" do
+      hcl_string = <<-HCL
+        name = "hot dog generator"
+        description = "Я хотів би хот-дог"
+
+        dependencies = {
+          left-pad = "1.2.0"
+        }
+
+      HCL
+
+      parser = HCL::Parser.new(hcl_string)
+      doc = parser.parse!
+      doc.evaluate.should eq({
+        "name"         => "hot dog generator",
+        "description"  => "Я хотів би хот-дог",
+        "dependencies" => {
+          "left-pad" => "1.2.0",
+        },
+      })
+    end
+
     it "can parse operators" do
       hcl_string = <<-HCL
         provider "foo" {
