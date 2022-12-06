@@ -6,23 +6,29 @@ module HCL
       def initialize(@ctx : ExpressionContext)
       end
 
-      def visit(node : AST::CallExpr)
-        case ctx.mode
-        when ExpressionContext::Mode::LITERAL
-          Any.new(node.to_s)
-        else
-          super(node)
+      {% for klass in [
+                        AST::CallExpr,
+                        AST::CondExpr,
+                        AST::ForExpr,
+                        AST::GetAttrExpr,
+                        AST::Identifier,
+                        AST::IndexExpr,
+                        AST::OpExpr,
+                        AST::SplatExpr,
+                        AST::TemplateForExpr,
+                        AST::TemplateIf,
+                        AST::TemplateInterpolation,
+                        AST::Template,
+                      ] %}
+        def visit(node : {{ klass.id }})
+          case ctx.mode
+          when ExpressionContext::Mode::LITERAL
+            Any.new(node.to_s)
+          else
+            super(node)
+          end
         end
-      end
-
-      def visit(node : AST::CondExpr)
-        case ctx.mode
-        when ExpressionContext::Mode::LITERAL
-          Any.new(node.to_s)
-        else
-          super(node)
-        end
-      end
+      {% end %}
 
       def visit(node : AST::Expression)
         children = node.children
@@ -48,24 +54,6 @@ module HCL
         end
       end
 
-      def visit(node : AST::ForExpr)
-        case ctx.mode
-        when ExpressionContext::Mode::LITERAL
-          Any.new(node.to_s)
-        else
-          super(node)
-        end
-      end
-
-      def visit(node : AST::GetAttrExpr)
-        case ctx.mode
-        when ExpressionContext::Mode::LITERAL
-          Any.new(node.to_s)
-        else
-          super(node)
-        end
-      end
-
       def visit(node : AST::Heredoc)
         content = node.content
         indent_size = node.indent_size
@@ -87,78 +75,6 @@ module HCL
         end
 
         Any.new(json_heredoc.to_s)
-      end
-
-      def visit(node : AST::Identifier)
-        case ctx.mode
-        when ExpressionContext::Mode::LITERAL
-          Any.new(node.to_s)
-        else
-          super(node)
-        end
-      end
-
-      def visit(node : AST::IndexExpr)
-        case ctx.mode
-        when ExpressionContext::Mode::LITERAL
-          Any.new(node.to_s)
-        else
-          super(node)
-        end
-      end
-
-      def visit(node : AST::OpExpr)
-        case ctx.mode
-        when ExpressionContext::Mode::LITERAL
-          Any.new(node.to_s)
-        else
-          super(node)
-        end
-      end
-
-      def visit(node : AST::SplatExpr)
-        case ctx.mode
-        when ExpressionContext::Mode::LITERAL
-          Any.new(node.to_s)
-        else
-          super(node)
-        end
-      end
-
-      def visit(node : AST::TemplateForExpr)
-        case ctx.mode
-        when ExpressionContext::Mode::LITERAL
-          Any.new(node.to_s)
-        else
-          super(node)
-        end
-      end
-
-      def visit(node : AST::TemplateIf)
-        case ctx.mode
-        when ExpressionContext::Mode::LITERAL
-          Any.new(node.to_s)
-        else
-          super(node)
-        end
-      end
-
-      def visit(node : AST::TemplateInterpolation)
-        case ctx.mode
-        when ExpressionContext::Mode::LITERAL
-          Any.new(node.to_s)
-        else
-          super(node)
-        end
-      end
-
-      def visit(node : AST::Template)
-        case ctx.mode
-        when ExpressionContext::Mode::LITERAL
-          Any.new(node.to_s)
-        else
-          super(node)
-        end
       end
     end
   end
