@@ -235,19 +235,19 @@ module HCL
           right_op_val = right_operand.accept(self).raw
           result = case op
                    when AST::OpExpr::ADDITION
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_math_op_types!(op, left_op_val, right_op_val)
                      left_op_val + right_op_val
                    when AST::OpExpr::SUBTRACTION
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_math_op_types!(op, left_op_val, right_op_val)
                      left_op_val - right_op_val
                    when AST::OpExpr::MULTIPLY
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_math_op_types!(op, left_op_val, right_op_val)
                      left_op_val * right_op_val
                    when AST::OpExpr::DIVIDE
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_math_op_types!(op, left_op_val, right_op_val)
                      left_op_val / right_op_val
                    when AST::OpExpr::MOD
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_math_op_types!(op, left_op_val, right_op_val)
                      if left_op_val.is_a?(Float64) && right_op_val.is_a?(Float64)
                        left_op_val % right_op_val
                      elsif left_op_val.is_a?(Int64) && right_op_val.is_a?(Int64)
@@ -256,22 +256,22 @@ module HCL
                        raise "Parser bug: Cannot perform modulo operation on different types"
                      end
                    when AST::OpExpr::EQ
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_eq_types!(op, left_op_val, right_op_val)
                      left_op_val == right_op_val
                    when AST::OpExpr::NEQ
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_eq_types!(op, left_op_val, right_op_val)
                      left_op_val != right_op_val
                    when AST::OpExpr::LT
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_comp_types!(op, left_op_val, right_op_val)
                      left_op_val < right_op_val
                    when AST::OpExpr::GT
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_comp_types!(op, left_op_val, right_op_val)
                      left_op_val > right_op_val
                    when AST::OpExpr::LTE
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_comp_types!(op, left_op_val, right_op_val)
                      left_op_val <= right_op_val
                    when AST::OpExpr::GTE
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_comp_types!(op, left_op_val, right_op_val)
                      left_op_val >= right_op_val
                    when AST::OpExpr::AND
                      left_op_val && right_op_val
@@ -358,14 +358,33 @@ module HCL
         raise "Unreachable"
       end
 
-      private def assert_op_types!(op, left_op_val, right_op_val)
-        raise "Parser bug: Cannot perform #{op} operation on array" if left_op_val.responds_to?(:[])
-        raise "Parser bug: Cannot perform #{op} operation on array" if right_op_val.responds_to?(:[])
+      private def assert_math_op_types!(op, left_op_val, right_op_val)
+        raise "Parser bug: Cannot perform #{op} operation on array" if left_op_val.is_a?(Array)
+        raise "Parser bug: Cannot perform #{op} operation on array" if right_op_val.is_a?(Array)
         raise "Parser bug: Cannot perform #{op} operation on boolean" if left_op_val.is_a?(Bool)
         raise "Parser bug: Cannot perform #{op} operation on boolean" if right_op_val.is_a?(Bool)
+        raise "Parser bug: Cannot perform #{op} operation on hash" if left_op_val.is_a?(Hash)
+        raise "Parser bug: Cannot perform #{op} operation on hash" if right_op_val.is_a?(Hash)
+        raise "Parser bug: Cannot perform #{op} operation on string" if left_op_val.is_a?(String)
+        raise "Parser bug: Cannot perform #{op} operation on string" if right_op_val.is_a?(String)
         raise "Parser bug: Cannot perform #{op} operation on nil" if left_op_val.nil?
         raise "Parser bug: Cannot perform #{op} operation on nil" if right_op_val.nil?
         {left_op_val, right_op_val}
+      end
+
+      private def assert_eq_types!(op, left_op_val, right_op_val)
+        raise "Parser bug: Cannot perform #{op} operation on array" if left_op_val.is_a?(Array)
+        raise "Parser bug: Cannot perform #{op} operation on array" if right_op_val.is_a?(Array)
+        raise "Parser bug: Cannot perform #{op} operation on hash" if left_op_val.is_a?(Hash)
+        raise "Parser bug: Cannot perform #{op} operation on hash" if right_op_val.is_a?(Hash)
+        {left_op_val, right_op_val}
+      end
+
+      private def assert_comp_types!(op, left_op_val, right_op_val)
+        raise "Parser bug: Cannot perform #{op} comparision on bool" if left_op_val.is_a?(Bool) || right_op_val.is_a?(Bool)
+        raise "Parser bug: Cannot perform #{op} comparision on string" if left_op_val.is_a?(String) || right_op_val.is_a?(String)
+        raise "Parser bug: Cannot perform #{op} comparision on null" if left_op_val.nil? || right_op_val.nil?
+        assert_eq_types!(op, left_op_val, right_op_val)
       end
 
       protected def deep_merge_blocks!(dict, other_dict)

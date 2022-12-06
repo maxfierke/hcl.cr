@@ -166,6 +166,8 @@ describe HCL::Parser do
           eq = 0 == 0
           neq = 12 != 12
           double_not = !(!false)
+          type_mismatch_number = "${1}" == 1
+          type_mismatch_bool   = "${true}" == true
         }
 
       HCL
@@ -175,22 +177,24 @@ describe HCL::Parser do
       doc.evaluate.should eq({
         "provider" => {
           "foo" => {
-            "foo"        => 0.1_f64 * 0.5_f64,
-            "bar"        => 9_i64,
-            "baz"        => 1_i64,
-            "biz"        => 6_i64,
-            "boingo"     => 3_f64,
-            "flim"       => 9.0_f64 / 4.0_f64,
-            "flam"       => true,
-            "bim"        => true,
-            "bam"        => nil,
-            "gt"         => true,
-            "gte"        => true,
-            "lt"         => true,
-            "lte"        => false,
-            "eq"         => true,
-            "neq"        => false,
-            "double_not" => false,
+            "foo"                  => 0.1_f64 * 0.5_f64,
+            "bar"                  => 9_i64,
+            "baz"                  => 1_i64,
+            "biz"                  => 6_i64,
+            "boingo"               => 3_f64,
+            "flim"                 => 9.0_f64 / 4.0_f64,
+            "flam"                 => true,
+            "bim"                  => true,
+            "bam"                  => nil,
+            "gt"                   => true,
+            "gte"                  => true,
+            "lt"                   => true,
+            "lte"                  => false,
+            "eq"                   => true,
+            "neq"                  => false,
+            "double_not"           => false,
+            "type_mismatch_number" => true,
+            "type_mismatch_bool"   => true,
           },
         },
       })

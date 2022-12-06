@@ -283,14 +283,14 @@ module HCL
         left_operand = iter.next_as_child_of(main)
         left_operand_node = build_node(left_operand, iter, source)
         right_operand_node = nil
-      elsif kind == :identifier || kind == :number || kind == :literal
+      elsif kind == :identifier || kind == :number || kind == :literal || kind == :template
         left_operand = iter.next_as_child_of(main)
         left_operand_node = build_node(left_operand, iter, source)
         operator = iter.next_as_child_of(main)
         right_operand = iter.next_as_child_of(main)
         right_operand_node = build_node(right_operand, iter, source)
       else
-        raise "BUG: Expected operator, number, or literal, but got #{kind}"
+        raise "BUG: Expected operator, number, literal, or template, but got #{kind}"
       end
 
       AST::OpExpr.new(
