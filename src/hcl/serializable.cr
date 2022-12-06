@@ -290,9 +290,13 @@ module HCL
                     )
                   {% end %}
                 else
-                  raise ::HCL::ParseException.new(
+                  {% if value[:type] == HCL::Any %}
+                    ::HCL::Any.new(node_val)
+                  {% else %}
+                    raise ::HCL::ParseException.new(
                       "HCL deserialized #{node_val.class} but it was not expected. Expected {{value[:type]}}."
                     )
+                  {% end %}
                 end
               end.as({{value[:type]}})
           {% end %}
