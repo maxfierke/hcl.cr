@@ -63,9 +63,15 @@ module HCLDec
       spec = load_spec_file(spec_path)
       spec.validate!
 
-      puts HCL.parse(ARGF.gets_to_end).to_json(
-        ctx: HCL::ExpressionContext.default_context
-      )
+      hcl_doc = HCL.parse(ARGF.gets_to_end)
+
+      if lit = spec.literal
+        puts lit.value.to_json
+      else
+        puts hcl_doc.to_json(
+          ctx: HCL::ExpressionContext.default_context
+        )
+      end
     rescue e : HCL::ParseException
       STDERR.puts e.to_json
       exit 1
