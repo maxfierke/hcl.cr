@@ -1,12 +1,13 @@
 CRYSTAL ?= $(shell which crystal)
 SHARDS  ?= $(shell which shards)
 GOPATH  ?= $(HOME)/go
-SPECSUITE       ?= $(GOPATH)/bin/hclspecsuite
-SPECSUITE_TESTS ?=
-PREFIX      ?= /usr/local
-RELEASE     ?=
-STATIC      ?=
-SOURCES      = src/*.cr src/hcl/*.cr src/hcl/**/*.cr src/hcldec/*.cr src/hcldec/**/*.cr
+PREFIX  ?= /usr/local
+RELEASE ?=
+STATIC  ?=
+SOURCES  = src/*.cr src/hcl/*.cr src/hcl/**/*.cr src/hcldec/*.cr src/hcldec/**/*.cr
+SPECSUITE         ?= $(GOPATH)/bin/hclspecsuite
+SPECSUITE_TESTS   ?=
+SPECSUITE_VERSION ?= v2.15.0
 
 override CRFLAGS += --error-on-warnings $(if $(RELEASE),--release ,--debug --error-trace )$(if $(STATIC),--static )$(if $(LDFLAGS),--link-flags="$(LDFLAGS)" )
 
@@ -28,7 +29,7 @@ parse-trace: bin/hcl_parse_test
 .PHONY: specsuite
 specsuite: bin/hcldec
 	@if [ ! -f "$(SPECSUITE)" ]; then \
-		go install github.com/hashicorp/hcl/v2/cmd/hclspecsuite; \
+		go install github.com/hashicorp/hcl/v2/cmd/hclspecsuite@$(SPECSUITE_VERSION); \
 	fi;
 	@if [ ! -z "$(SPECSUITE_TESTS)" ] && [ -d "$(SPECSUITE_TESTS)" ]; then \
 		$(SPECSUITE) $(SPECSUITE_TESTS) bin/hcldec; \
