@@ -68,9 +68,10 @@ module HCLDec
       )
     rescue e : HCL::ParseException
       STDERR.puts e.to_json
-      puts e.to_json
+      exit 1
     rescue e : HCLDec::SpecViolation
-      puts e.to_json
+      STDERR.puts e.to_json
+      exit 1
     end
 
     private def load_spec_file(spec_path)
