@@ -10,10 +10,30 @@ jobs:
       image: crystallang/crystal:1.0.0
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
     - name: Install dependencies
       run: shards install
-    - name: Run tests
-      run: make spec
     - name: Validate formatting
       run: crystal tool format --check
+    - name: Run tests
+      run: make spec
+    - name: Install specsuite dependencies
+      env:
+        GOVERSION: "1.19.4"
+      run: |
+        set -eu -o pipefail
+        wget "https://go.dev/dl/go$GOVERSION.linux-amd64.tar.gz"
+        rm -rf /usr/local/go && tar -C /usr/local -xzf "go$GOVERSION.linux-amd64.tar.gz"
+        mkdir -p "$HOME/go"
+        echo "export PATH=$PATH:/usr/local/go/bin" >> $GITHUB_ENV
+        echo "export GOPATH=$HOME/go" >> $GITHUB_ENV
+    - name: Download specsuite tests
+      uses: actions/checkout@v3
+      with:
+        repository: hashicorp/hcl
+        ref: v2.15.0
+        path: go-hcl
+    - name: Run specsuite
+      env:
+        SPECSUITE_TESTS: go-hcl/specsuite/tests
+      run: make specsuite
