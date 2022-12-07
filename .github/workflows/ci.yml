@@ -21,7 +21,6 @@ jobs:
       env:
         GOVERSION: "1.19.4"
       run: |
-        set -eu -o pipefail
         wget "https://go.dev/dl/go$GOVERSION.linux-amd64.tar.gz"
         rm -rf /usr/local/go && tar -C /usr/local -xzf "go$GOVERSION.linux-amd64.tar.gz"
         mkdir -p "$HOME/go"
