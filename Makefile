@@ -27,7 +27,7 @@ parse-trace: bin/hcl_parse_test
 
 .PHONY: specsuite
 specsuite: bin/hcldec
-	@if [ ! -f "$(SPECSUITE)"]; then \
+	@if [ ! -f "$(SPECSUITE)" ]; then \
 		go install github.com/hashicorp/hcl/v2/cmd/hclspecsuite; \
 	fi;
 	@if [ ! -z "$(SPECSUITE_TESTS)" ] && [ -d "$(SPECSUITE_TESTS)" ]; then \
