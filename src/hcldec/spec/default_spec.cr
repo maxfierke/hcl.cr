@@ -4,7 +4,7 @@ module HCLDec
 
     def blocks(ctx : HCL::ExpressionContext)
       hcl_unmapped_blocks.map do |block|
-        Spec.new(body, ctx)
+        Spec.new_spec_from_block_node(block, ctx)
       end
     end
 
