@@ -26,6 +26,12 @@ describe HCL::Any do
       HCL::Any.new(true).as_f?.should be_nil
     end
 
+    it "gets big decimal" do
+      HCL::Any.new(BigDecimal.new("3.14159265358979323846264338327950288419716939937510582097494459")).as_big_d.should eq(BigDecimal.new("3.14159265358979323846264338327950288419716939937510582097494459"))
+      HCL::Any.new(BigDecimal.new("3.14159265358979323846264338327950288419716939937510582097494459")).as_big_d?.should eq(BigDecimal.new("3.14159265358979323846264338327950288419716939937510582097494459"))
+      HCL::Any.new(true).as_big_d?.should be_nil
+    end
+
     it "gets string" do
       HCL::Any.new("hello").as_s.should eq("hello")
       HCL::Any.new("hello").as_s?.should eq("hello")
@@ -57,6 +63,7 @@ describe HCL::Any do
     end
 
     it "gets number" do
+      HCL::Any.new(BigDecimal.new("3.14159265358979323846264338327950288419716939937510582097494459")).hcl_type.should eq("number")
       HCL::Any.new(123456789123456_i64).hcl_type.should eq("number")
       HCL::Any.new(123.45_f64).hcl_type.should eq("number")
     end

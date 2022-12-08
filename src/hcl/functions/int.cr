@@ -11,7 +11,7 @@ module HCL
 
       def call(args : Array(Any)) : Any
         number_arg = args[0]
-        number = number_arg.as_i? || number_arg.as_f?
+        number = number_arg.as_i? || number_arg.as_f? || number_arg.as_big_d?
 
         if !number
           raise ArgumentTypeError.new(

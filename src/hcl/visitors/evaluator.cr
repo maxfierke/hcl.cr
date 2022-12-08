@@ -236,16 +236,32 @@ module HCL
           result = case op
                    when AST::OpExpr::ADDITION
                      left_op_val, right_op_val = assert_math_op_types!(op, left_op_val, right_op_val)
-                     left_op_val + right_op_val
+                     if left_op_val.is_a?(BigDecimal) || right_op_val.is_a?(BigDecimal)
+                       left_op_val.to_big_d + right_op_val.to_big_d
+                     else
+                       left_op_val + right_op_val
+                     end
                    when AST::OpExpr::SUBTRACTION
                      left_op_val, right_op_val = assert_math_op_types!(op, left_op_val, right_op_val)
-                     left_op_val - right_op_val
+                     if left_op_val.is_a?(BigDecimal) || right_op_val.is_a?(BigDecimal)
+                       left_op_val.to_big_d - right_op_val.to_big_d
+                     else
+                       left_op_val - right_op_val
+                     end
                    when AST::OpExpr::MULTIPLY
                      left_op_val, right_op_val = assert_math_op_types!(op, left_op_val, right_op_val)
-                     left_op_val * right_op_val
+                     if left_op_val.is_a?(BigDecimal) || right_op_val.is_a?(BigDecimal)
+                       left_op_val.to_big_d * right_op_val.to_big_d
+                     else
+                       left_op_val * right_op_val
+                     end
                    when AST::OpExpr::DIVIDE
                      left_op_val, right_op_val = assert_math_op_types!(op, left_op_val, right_op_val)
-                     left_op_val / right_op_val
+                     if left_op_val.is_a?(BigDecimal) || right_op_val.is_a?(BigDecimal)
+                       left_op_val.to_big_d / right_op_val.to_big_d
+                     else
+                       left_op_val / right_op_val
+                     end
                    when AST::OpExpr::MOD
                      left_op_val, right_op_val = assert_math_op_types!(op, left_op_val, right_op_val)
                      if left_op_val.is_a?(Float64) && right_op_val.is_a?(Float64)

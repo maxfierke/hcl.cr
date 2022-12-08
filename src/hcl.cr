@@ -1,3 +1,4 @@
+require "big"
 require "option_parser"
 require "pegmatite"
 require "json"

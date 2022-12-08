@@ -5,6 +5,7 @@ module HCL
                  String |
                  Int64 |
                  Float64 |
+                 BigDecimal |
                  Hash(String, Any) |
                  Array(Any)
     alias RawType = Nil |
@@ -12,6 +13,7 @@ module HCL
                     String |
                     Int64 |
                     Float64 |
+                    BigDecimal |
                     Hash(String, RawType) |
                     Array(RawType)
 
@@ -178,6 +180,18 @@ module HCL
       @raw.as?(Float64)
     end
 
+    # Checks that the underlying value is `BigDecimal`, and returns its value as an `BigDecimal`.
+    # Raises otherwise.
+    def as_big_d : BigDecimal
+      @raw.as(BigDecimal)
+    end
+
+    # Checks that the underlying value is `BigDecimal`, and returns its value as an `BigDecimal`.
+    # Returns `nil` otherwise.
+    def as_big_d? : BigDecimal?
+      @raw.as?(BigDecimal)
+    end
+
     # Checks that the underlying value is `String`, and returns its value.
     # Raises otherwise.
     def as_s : String
@@ -256,7 +270,13 @@ module HCL
 
     # :nodoc:
     def to_json(builder : JSON::Builder)
-      raw.to_json(builder)
+      r = raw
+      if r.is_a?(BigDecimal)
+        # BigDecimal doesn't implement #to_json(builder : JSON::Builder) :(
+        builder.raw(r.to_s)
+      else
+        r.to_json(builder)
+      end
     end
 
     # :nodoc:
@@ -315,7 +335,7 @@ module HCL
         "bool"
       when String
         "string"
-      when Int64, Float64
+      when Int64, Float64, BigDecimal
         "number"
       when Hash
         type_map = obj.map { |key, value| [key, get_hcl_type(value)] }.to_h
