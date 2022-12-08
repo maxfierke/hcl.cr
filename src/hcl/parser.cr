@@ -303,7 +303,7 @@ module HCL
     end
 
     private def build_string(main, iter, source) : AST::Literal
-      AST::Literal.new(token: main, source: token_source(main))
+      AST::Literal.new(token: main, source: token_source(main), literal_type: AST::LiteralType::String)
     end
 
     private def build_template(main, iter, source) : AST::Template
@@ -474,6 +474,12 @@ module HCL
             elsif kind == :string
               label_node = build_string(token, iter, source)
               block_labels << label_node
+            else
+              raise ParseException.new(
+                "BUG: Found '#{kind}' but only string literals or identifiers are supported as block labels.",
+                source: source,
+                token: token
+              )
             end
           end
         else

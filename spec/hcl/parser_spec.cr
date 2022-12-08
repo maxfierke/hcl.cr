@@ -397,6 +397,29 @@ describe HCL::Parser do
       })
     end
 
+    it "can parse blocks with labels that would otherwise be coerced to non-strings" do
+      hcl_string = <<-HEREDOC
+        some_block "null" "true" "false" {
+          hello = "woo"
+        }
+
+      HEREDOC
+
+      parser = HCL::Parser.new(hcl_string)
+      doc = parser.parse!
+      doc.evaluate.should eq({
+        "some_block" => {
+          "null" => {
+            "true" => {
+              "false" => {
+                "hello" => "woo",
+              },
+            },
+          },
+        },
+      })
+    end
+
     it "can parse property & index access" do
       hcl_string = <<-HEREDOC
         resource "aws_instance" "web" {
