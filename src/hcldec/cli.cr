@@ -77,12 +77,14 @@ module HCLDec
 
       hcl_doc = HCL.parse(ARGF.gets_to_end)
 
-      if lit = spec.literal
-        puts lit.value.to_json
+      if var_refs
+        puts Array(NoReturn).new.to_json
       else
-        puts hcl_doc.to_json(
-          ctx: HCL::ExpressionContext.default_context
-        )
+        JsonWriter.new(
+          hcl_doc,
+          spec,
+          HCL::ExpressionContext.default_context
+        ).to_json(output_io)
       end
     rescue e : HCL::ParseException
       STDERR.puts e.to_json
