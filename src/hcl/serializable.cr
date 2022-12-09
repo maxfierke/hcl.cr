@@ -600,7 +600,7 @@ module HCL
     # Modifies behavior of `HCL::Serializable` such that unknown attributes and
     # blocks in the HCL document will be stored in respective
     # `Hash(String, HCL::AST::Node)`. For classes/structs representing blocks,
-    # any unmapped labels will be stored in a `Hash(Int32, HCL::AST::Node)`, where
+    # any unmapped labels will be stored in a `Hash(Int32, HCL::AST::BlockLabel)`, where
     # the key is the label index. On serialization, any keys inside
     # `hcl_unmapped_attributes`, `hcl_unmapped_blocks`, and `hcl_unmapped_labels`
     # will be serialized and appended to the current HCL block or document.
@@ -618,7 +618,7 @@ module HCL
       # Unmapped label nodes. Key is the index of the label. Value is the AST
       # node. This will only be populated for classes/structs represented as
       # blocks in another class/struct implementing `HCL::Serializable`.
-      property hcl_unmapped_labels = Hash(Int32, ::HCL::AST::Node).new
+      property hcl_unmapped_labels = Hash(Int32, ::HCL::AST::BlockLabel).new
 
       protected def on_unknown_hcl_attribute(node, key, ctx)
         hcl_unmapped_attributes[key] = node.attributes[key]
@@ -640,7 +640,7 @@ module HCL
             .sort_by { |label_tuple| label_tuple[0] }
             .map { |label_tuple| label_tuple[1] }
             .each do |label|
-              builder_node.labels << label.as(::HCL::AST::BlockLabel)
+              builder_node.labels << label
             end
         end
 
