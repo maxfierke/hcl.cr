@@ -1,8 +1,12 @@
 module HCLDec
   class CLI
     property output_io : IO = STDOUT
+    property diags_format = "json"
+    property keep_nulls = false
     property spec_path = ""
+    property var_refs = false
     property vars : JSON::Any? = nil
+    property with_type = false
 
     # TODO: Build time
     @version = "0.0.1"
@@ -39,10 +43,18 @@ module HCLDec
           puts @version
           exit 0
         end
-        parser.on("--diags FORMAT", "Unimplemented") { }
-        parser.on("--var-refs", "Unimplemented") { }
-        parser.on("--with-type", "Unimplemented") { }
-        parser.on("--keep-nulls", "Unimplemented") { }
+        parser.on("--diags FORMAT", "Format any returned diagnostics in the given format; currently only \"json\" is accepted") do |format|
+          self.diags_format = format
+        end
+        parser.on("--var-refs", "Rather than decoding input, produce a JSON description of the variables referenced by it") do
+          self.var_refs = true
+        end
+        parser.on("--with-type", "Include an additional object level at the top describing the HCL-oriented type of the result value") do
+          self.with_type = true
+        end
+        parser.on("--keep-nulls", "Retain object properties that have null as their value (they are removed by default)") do
+          self.keep_nulls = true
+        end
         parser.invalid_option do |flag|
           STDERR.puts "ERROR: #{flag} is not a valid option."
           STDERR.puts parser
