@@ -26,6 +26,12 @@ describe HCL::Any do
       HCL::Any.new(true).as_f?.should be_nil
     end
 
+    it "gets big decimal" do
+      HCL::Any.new(BigDecimal.new("3.14159265358979323846264338327950288419716939937510582097494459")).as_big_d.should eq(BigDecimal.new("3.14159265358979323846264338327950288419716939937510582097494459"))
+      HCL::Any.new(BigDecimal.new("3.14159265358979323846264338327950288419716939937510582097494459")).as_big_d?.should eq(BigDecimal.new("3.14159265358979323846264338327950288419716939937510582097494459"))
+      HCL::Any.new(true).as_big_d?.should be_nil
+    end
+
     it "gets string" do
       HCL::Any.new("hello").as_s.should eq("hello")
       HCL::Any.new("hello").as_s?.should eq("hello")
@@ -42,6 +48,53 @@ describe HCL::Any do
       HCL::Any.new({"foo" => "bar"}).as_h.should eq({"foo" => "bar"})
       HCL::Any.new({"foo" => "bar"}).as_h?.should eq({"foo" => "bar"})
       HCL::Any.new(true).as_h?.should be_nil
+    end
+  end
+
+  describe "#hcl_type" do
+    it "gets any" do
+      # TODO: This isn't quite right, according to the spec
+      HCL::Any.new(nil).hcl_type.should eq("any")
+    end
+
+    it "gets bool" do
+      HCL::Any.new(true).hcl_type.should eq("bool")
+      HCL::Any.new(false).hcl_type.should eq("bool")
+    end
+
+    it "gets number" do
+      HCL::Any.new(BigDecimal.new("3.14159265358979323846264338327950288419716939937510582097494459")).hcl_type.should eq("number")
+      HCL::Any.new(123456789123456_i64).hcl_type.should eq("number")
+      HCL::Any.new(123.45_f64).hcl_type.should eq("number")
+    end
+
+    it "gets string" do
+      HCL::Any.new("hello").hcl_type.should eq("string")
+    end
+
+    it "gets list(element_type)" do
+      HCL::Any.new([1_i64, 2_i64, 3_i64]).hcl_type.should eq("list(number)")
+      HCL::Any.new(["hello", "world"]).hcl_type.should eq("list(string)")
+      HCL::Any.new([] of HCL::Any).hcl_type.should eq("list(any)")
+    end
+
+    it "gets tuple([element_type, element_type, ...])" do
+      HCL::Any.new([1_i64, "hello", 3_i64]).hcl_type.should eq("tuple([number, string, number])")
+      HCL::Any.new(["hello", "world", true]).hcl_type.should eq("tuple([string, string, bool])")
+    end
+
+    it "gets object({name1 = element_type, name2 = element_type, ...})" do
+      HCL::Any.new({
+        "foo"      => "bar",
+        "baz"      => 2_i64,
+        "bazoingo" => true,
+      }).hcl_type.should eq("object({ foo = string, baz = number, bazoingo = bool })")
+    end
+
+    it "gets map(element_type)" do
+      HCL::Any.new({"foo" => "bar"}).hcl_type.should eq("map(string)")
+      HCL::Any.new({"foo" => HCL::Any.new(1_i64)}).hcl_type.should eq("map(number)")
+      HCL::Any.new({"foo" => true}).hcl_type.should eq("map(bool)")
     end
   end
 

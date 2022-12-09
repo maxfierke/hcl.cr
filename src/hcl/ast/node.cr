@@ -15,6 +15,11 @@ module HCL
         visitor.visit(self)
       end
 
+      def as_json(ctx : ExpressionContext)
+        visitor = Visitors::JsonEvaluator.new(ctx)
+        self.accept(visitor)
+      end
+
       def evaluate(ctx : ExpressionContext)
         visitor = Visitors::Evaluator.new(ctx)
         self.accept(visitor)
@@ -22,6 +27,22 @@ module HCL
 
       def inspect(io)
         to_s(io)
+      end
+
+      def to_json(json : JSON::Builder, ctx : ExpressionContext)
+        as_json(ctx).to_json(json)
+      end
+
+      def to_json(io : IO, ctx : ExpressionContext? = ExpressionContext.default_context)
+        JSON.build(io) do |json|
+          to_json(json, ctx)
+        end
+      end
+
+      def to_json(ctx : ExpressionContext? = ExpressionContext.default_context)
+        JSON.build do |json|
+          to_json(json, ctx)
+        end
       end
 
       def to_s(io : IO)

@@ -16,7 +16,7 @@ module HCL
           )
         else
           min_val = args.map { |arg|
-            arg.as_i? || arg.as_f? || raise ArgumentTypeError.new(
+            arg.as_i? || arg.as_f? || arg.as_big_d? || raise ArgumentTypeError.new(
               "min(numbers...): Argument type mismatch. Expected array of only numbers."
             )
           }.min
