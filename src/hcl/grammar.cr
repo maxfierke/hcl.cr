@@ -11,7 +11,7 @@ module HCL
 
     comment_char = range(' ', 0x10FFFF_u32)
     comment = (
-      char('#') >> (~newline >> comment_char).repeat >> newline
+      char('#') >> (~newline >> comment_char).repeat
     ).named(:comment, false)
     multi_comment_char = ~str("*/") >> (comment_char | newline)
     multi_comment = (
