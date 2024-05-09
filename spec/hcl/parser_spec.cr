@@ -329,7 +329,7 @@ describe HCL::Parser do
           ami               = "ami-12345"
           count             = 2
           source_dest_check = false
-          another_boolean = "true"
+          another_boolean = "true" # this is a string because... reasons
           something_i_want_default = null
 
           connection {
