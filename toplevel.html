@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 1.3.2">
-<meta name="crystal_docs.project_version" content="0.2.1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.11.2">
+<meta name="crystal_docs.project_version" content="master">
 <meta name="crystal_docs.project_name" content="hcl">
 
 
@@ -13,7 +14,7 @@
 <script type="text/javascript" src="js/doc.js"></script>
 
   <meta name="repository-name" content="hcl">
-  <title>Top Level Namespace - hcl 0.2.1</title>
+  <title>Top Level Namespace - hcl master</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "";
   </script>
@@ -22,9 +23,14 @@
 
 <svg class="hidden">
   <symbol id="octicon-link" viewBox="0 0 16 16">
-    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
   </symbol>
 </svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
 <div class="sidebar">
   <div class="sidebar-header">
     <div class="search-box">
@@ -39,7 +45,7 @@
       </h1>
 
       <span class="project-version">
-        0.2.1
+        master
       </span>
     </div>
   </div>
@@ -601,7 +607,7 @@
   <dl>
     
       <dt class="entry-const" id="SRC_TEXT">
-        <strong>SRC_TEXT</strong> = <code><span class="s">&quot;document_attr = \&quot;i am here at the top\&quot;\n\n# An AMI\nvariable \&quot;ami\&quot; {\n  description = \&quot;the AMI to use\&quot;\n}\n\n/* A multi\n  line comment. */\nresource \&quot;aws_instance\&quot; \&quot;web\&quot; {\n  ami               = \&quot;${var.ami}\&quot;\n  count             = 2\n  source_dest_check = false\n  another_boolean = \&quot;true\&quot;\n  something_i_want_default = null\n\n  connection {\n    user = \&quot;root\&quot;\n    port = 100 + 2\n  }\n}\n\n# One-line block\ndata \&quot;a_single_datum\&quot; { foo = \&quot;bar\&quot; }\n\n# escaping strings\nvariable \&quot;token\&quot; {\n  my_secure_password = \&quot;something \\\&quot;with a quote\&quot;\n}\n\n\n# heredocs\nvariable \&quot;prose\&quot; {\n  value = &lt;&lt;-PROSE\n    there once\n    was a story\n  PROSE\n\n  nested = {\n    heredoc = &lt;&lt;-NESTED\n      i am nested\n      and a heredoc\n    NESTED\n  }\n}\n\nvariable \&quot;list_of_things\&quot; {\n  value = [for v in [\&quot;a\&quot;, \&quot;b\&quot;]: v]\n}\n\nblock {\n  cond = \&quot;%{ if true ~} hello %{~ endif }\&quot;\n  for_expr = \&quot;%{ for i, v in [true, 1, \&quot;hello\&quot;] }${i}: ${v}\\n%{ endfor }\&quot;\n}\n&quot;</span></code>
+        <strong>SRC_TEXT</strong> = <code><span class="s">&quot;document_attr = \&quot;i am here at the top\&quot;\n\n# An AMI\nvariable \&quot;ami\&quot; {\n  description = \&quot;the AMI to use\&quot;\n}\n\n/* A multi\n  line comment. */\nresource \&quot;aws_instance\&quot; \&quot;web\&quot; {\n  ami               = \&quot;${var.ami}\&quot;\n  count             = 2\n  source_dest_check = false\n  another_boolean = \&quot;true\&quot;\n  something_i_want_default = null\n\n  connection {\n    user = \&quot;root\&quot;\n    port = 100 + 2\n  }\n}\n\n# One-line block\ndata \&quot;a_single_datum\&quot; { foo = \&quot;bar\&quot; }\n\n# escaping strings\nvariable \&quot;token\&quot; {\n  my_secure_password = \&quot;something \\\&quot;with a quote\&quot;\n}\n\n\n# heredocs\nvariable \&quot;prose\&quot; {\n  value = &lt;&lt;-PROSE\n    there once\n    was a story\n  PROSE\n\n  nested = {\n    heredoc = &lt;&lt;-NESTED\n      i am nested\n      and a heredoc\n    NESTED\n  }\n}\n\nvariable \&quot;list_of_things\&quot; {\n  value = [for v in [\&quot;a\&quot;, \&quot;b\&quot;]: v]\n}\n\nblock {\n  cond = \&quot;%{ if true ~} hello %{~ endif }\&quot;\n  for_expr = \&quot;%{ for i, v in [true, 1, \&quot;hello\&quot;] }${i}: ${v}\\n%{ endfor }\&quot;\n  some_property = [] # i am commenting about it\n  another_prop = true\n}\n&quot;</span></code>
       </dt>
       
     

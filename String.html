@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="generator" content="Crystal Docs 1.3.2">
-<meta name="crystal_docs.project_version" content="0.2.1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.11.2">
+<meta name="crystal_docs.project_version" content="master">
 <meta name="crystal_docs.project_name" content="hcl">
 
 
@@ -13,7 +14,7 @@
 <script type="text/javascript" src="js/doc.js"></script>
 
   <meta name="repository-name" content="hcl">
-  <title>String - hcl 0.2.1</title>
+  <title>String - hcl master</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "";
   </script>
@@ -22,9 +23,14 @@
 
 <svg class="hidden">
   <symbol id="octicon-link" viewBox="0 0 16 16">
-    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
   </symbol>
 </svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
 <div class="sidebar">
   <div class="sidebar-header">
     <div class="search-box">
@@ -39,7 +45,7 @@
       </h1>
 
       <span class="project-version">
-        0.2.1
+        master
       </span>
     </div>
   </div>
@@ -630,14 +636,14 @@ b <span class="o">=</span> <span class="n">2</span>
     <use href="#octicon-link"/>
   </svg>
 </a>Non UTF-8 valid strings</h3>
-<p>String might end up being conformed of bytes which are an invalid
+<p>A string might end up being composed of bytes which form an invalid
 byte sequence according to UTF-8. This can happen if the string is created
 via one of the constructors that accept bytes, or when getting a string
-from <code>String.build</code> or <code>IO::Memory</code>. No exception will be raised, but
-invalid byte sequences, when asked as chars, will use the unicode replacement
-char (value 0xFFFD). For example:</p>
+from <code>String.build</code> or <code>IO::Memory</code>. No exception will be raised, but every
+byte that doesn't start a valid UTF-8 byte sequence is interpreted as though
+it encodes the Unicode replacement character (U+FFFD) by itself. For example:</p>
 <pre><code class="language-crystal"><span class="c"># here 255 is not a valid byte value in the UTF-8 encoding</span>
-string <span class="o">=</span> <span class="t">String</span>.<span class="k">new</span>(<span class="t">Bytes</span>[<span class="n">255</span>, <span class="n">97</span>])
+string <span class="o">=</span> <span class="t">String</span>.new(<span class="t">Bytes</span>[<span class="n">255</span>, <span class="n">97</span>])
 string.valid_encoding? <span class="c"># =&gt; false</span>
 
 <span class="c"># The first char here is the unicode replacement char</span>
@@ -658,6 +664,12 @@ is that the world is full of content that isn't properly encoded,
 and having a program raise an exception or stop because of this
 is not good. It's better if programs are more resilient, but
 show a replacement character when there's an error in incoming data.</p>
+<p>Note that this interpretation only applies to methods inside Crystal; calling
+<code>#to_slice</code> or <code>#to_unsafe</code>, e.g. when passing a string to a C library, will
+expose the invalid UTF-8 byte sequences. In particular, <code>Regex</code>'s underlying
+engine may reject strings that are not valid UTF-8, or it may invoke undefined
+behavior on invalid strings. If this is undesired, <code>#scrub</code> could be used to
+remove the offending byte sequences first.</p>
 
 
 
@@ -696,10 +708,14 @@ show a replacement character when there's an error in incoming data.</p>
   </h2>
   
     
-      hcl/to_hcl.cr
+      <a href="https://github.com/maxfierke/hcl.cr/blob/67b18f371002c9d10933c77adae9f2279cd65201/src/hcl/to_hcl.cr#L59" target="_blank">
+        hcl/to_hcl.cr
+      </a>
     
     <br/>
   
+
+
 
 
 
@@ -728,10 +744,11 @@ show a replacement character when there's an error in incoming data.</p>
 
 
 
-
-
 <div class="methods-inherited">
   
+    
+
+
     
 
 
@@ -752,6 +769,9 @@ show a replacement character when there's an error in incoming data.</p>
     ==</a>
     
   
+
+
+    
 
 
     
@@ -788,8 +808,13 @@ show a replacement character when there's an error in incoming data.</p>
   
 
 
+    
+
+
   
 </div>
+
+
 
 
 
@@ -816,11 +841,11 @@ show a replacement character when there's an error in incoming data.</p>
       <br/>
       <div>
         
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/67b18f371002c9d10933c77adae9f2279cd65201/src/hcl/to_hcl.cr#L60" target="_blank">View source</a>]
+        
       </div>
     </div>
   
-
-
 
 
 </div>
