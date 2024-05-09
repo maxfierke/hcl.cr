@@ -9,7 +9,6 @@ module HCL
       def initialize(children : Array(Node), **kwargs)
         super(**kwargs)
         @children = children
-
         unless source.empty?
           @quoted = source[0] == '"' && source[source.size - 1] == '"'
         end

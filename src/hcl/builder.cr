@@ -54,6 +54,22 @@ module HCL
       to_hcl(io)
     end
 
+    def to_json(json : JSON::Builder, ctx : ExpressionContext? = ExpressionContext.default_context)
+      node.to_json(json, ctx)
+    end
+
+    def to_json(io : IO, ctx : ExpressionContext? = ExpressionContext.default_context)
+      JSON.build(io) do |json|
+        to_json(json, ctx)
+      end
+    end
+
+    def to_json(ctx : ExpressionContext? = ExpressionContext.default_context)
+      JSON.build do |json|
+        to_json(json, ctx)
+      end
+    end
+
     # Appends an `HCL::AST::Node` to the underlying list node. Raises if the builder is not
     # for a list or if the node is not usable within a list.
     def <<(value : AST::Node)

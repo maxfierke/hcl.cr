@@ -1,7 +1,7 @@
 module HCL
   module AST
     class Number < Node
-      alias Value = Float64 | Int64
+      alias Value = BigDecimal | Float64 | Int64
 
       @value : Value
 
@@ -10,11 +10,20 @@ module HCL
       def initialize(source : String, token : Pegmatite::Token? = nil)
         super(source: source.strip('"'), token: token)
 
-        @value = if @source.includes?('.')
-                   @source.to_f64
-                 else
-                   @source.to_i64
-                 end
+        @value =
+          if @source.includes?('.')
+            if @source.gsub(/[^\d]+/, "").size > Float64::DIGITS
+              @source.to_big_d
+            else
+              @source.to_f64
+            end
+          else
+            if @source.size >= 19
+              @source.to_big_d
+            else
+              @source.to_i64
+            end
+          end
       end
 
       def initialize(number : Value, **kwargs)

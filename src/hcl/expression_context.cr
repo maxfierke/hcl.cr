@@ -24,11 +24,17 @@ module HCL
       Functions::Upper,
     ]
 
-    @parent : ExpressionContext?
-    @functions : Hash(String, Function)
-    @variables : Hash(String, Any)
+    enum Mode
+      LITERAL
+      FULL
+    end
 
-    getter :parent, :functions, :variables
+    @parent : ExpressionContext?
+    @functions : Hash(String, Function) = Hash(String, Function).new
+    @variables : Hash(String, Any) = Hash(String, Any).new
+
+    property mode : Mode = Mode::FULL
+    getter :parent, :functions, :mode, :variables
 
     def self.default_context
       ctx = new(nil)
@@ -41,10 +47,9 @@ module HCL
       ctx
     end
 
-    def initialize(parent : ExpressionContext? = nil)
+    def initialize(parent : ExpressionContext? = nil, mode : Mode? = Mode::FULL)
       @parent = parent
-      @functions = Hash(String, Function).new
-      @variables = Hash(String, Any).new
+      @mode = (parent ? parent.mode : nil) || mode
     end
 
     def call_func(name, args)
@@ -69,6 +74,14 @@ module HCL
       end
 
       func.call(args)
+    end
+
+    def full_eval?
+      mode == Mode::FULL
+    end
+
+    def literal_only?
+      mode == Mode::LITERAL
     end
 
     def lookup_var(name)

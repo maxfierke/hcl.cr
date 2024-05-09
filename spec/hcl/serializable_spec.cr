@@ -106,6 +106,19 @@ class NativeTypesDocument
   property union_list : Array(String | Int64)
 end
 
+class DynamicTypesDocument
+  include HCL::Serializable
+
+  @[HCL::Attribute]
+  property what_could_it_be : HCL::Any
+
+  @[HCL::Attribute]
+  property dictionary : Hash(String, HCL::Any)
+
+  @[HCL::Attribute]
+  property grab_bag : Array(HCL::Any)
+end
+
 hcl_house = <<-HCL
   address = "Crystal Road 1234"
   location {
@@ -175,6 +188,27 @@ describe "HCL::Serializable" do
     })
     parsed.strings.should eq(["yarn", "twine", "nylon"])
     parsed.union_list.should eq(["the answer is", 42])
+  end
+
+  it "allows parsing an HCL file mapped to a dynamic HCL type" do
+    parsed = DynamicTypesDocument.from_hcl(<<-HCL)
+    what_could_it_be = "anything!!"
+    dictionary = {
+      hello = "world",
+      goodbye = "moon"
+    }
+
+    grab_bag = [123, "blue", true]
+    union_list = ["the answer is", 42, true]
+
+    HCL
+
+    parsed.what_could_it_be.should eq(HCL::Any.new("anything!!"))
+    parsed.dictionary.should eq({
+      "hello"   => HCL::Any.new("world"),
+      "goodbye" => HCL::Any.new("moon"),
+    })
+    parsed.grab_bag.should eq([HCL::Any.new(123_i64), HCL::Any.new("blue"), HCL::Any.new(true)])
   end
 
   it "allows rendering an HCL file from a schema" do
