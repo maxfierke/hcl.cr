@@ -2,18 +2,20 @@ module HCL
   class Parser
     @source : String
     @source_offset = 0
+    @source_path : String?
     @document : AST::Document?
     @parse_trace_io : IO?
 
-    getter :document, :source
+    getter :document, :source, :source_path
 
     def self.parse!(*args, **kwargs)
       new(*args, **kwargs).parse!
     end
 
-    def initialize(source : String | IO, offset = 0, io : IO? = nil)
+    def initialize(source : String | IO, offset = 0, io : IO? = nil, path : String? = nil)
       @source = source.is_a?(IO) ? source.gets_to_end : source
       @source_offset = offset
+      @source_path = source.responds_to?(:path) ? source.path : path
       @parse_trace_io = io
     end
 
@@ -28,18 +30,17 @@ module HCL
         peg_iter = Pegmatite::TokenIterator.new(peg_tokens)
         build_document(peg_iter, @source)
       rescue e : Pegmatite::Pattern::MatchError
-        raise ParseException.new(e.message)
+        raise ParseException.new(e.message, source: source, offset: e.offset, path: source_path)
       end
     end
 
     private def assert_token_kind!(token : Pegmatite::Token, expected_kind)
       kind, _, _ = token
-      assert_token_kind!(kind, expected_kind)
-    end
-
-    private def assert_token_kind!(kind : Symbol, expected_kind)
       raise ParseException.new(
-        "Expected #{expected_kind}, but got #{kind}."
+        "Expected #{expected_kind}, but got #{kind}.",
+        source: source,
+        path: source_path,
+        token: token,
       ) unless kind == expected_kind
     end
 
@@ -67,6 +68,7 @@ module HCL
           raise ParseException.new(
             "Found '#{kind}' but expected an attribute assignment or block.",
             source: source,
+            path: source_path,
             token: token
           )
         end
@@ -420,21 +422,22 @@ module HCL
     end
 
     private def extract_identifier(main, iter, source)
-      kind, start, finish = main
-      assert_token_kind!(kind, :identifier)
+      assert_token_kind!(main, :identifier)
+
+      _, start, finish = main
 
       source[start...finish]
     end
 
     private def build_map(main, iter, source) : AST::Map
-      kind, start, finish = main
-      assert_token_kind!(kind, :object)
+      assert_token_kind!(main, :object)
+
+      _, start, finish = main
 
       values = {} of String => AST::Node
 
       iter.while_next_is_child_of(main) do |token|
-        kind, _, _ = token
-        assert_token_kind!(kind, :attribute)
+        assert_token_kind!(token, :attribute)
 
         # Gather children as pairs of key/values into the object.
         key = build_node(iter.next_as_child_of(token), iter, source).to_s
@@ -480,6 +483,7 @@ module HCL
             raise ParseException.new(
               "Found '#{kind}' but expected an attribute assignment or block.",
               source: source,
+              path: source_path,
               token: token
             )
           else
@@ -495,6 +499,7 @@ module HCL
           raise ParseException.new(
             "'#{kind}' is not supported within blocks.",
             source: source,
+            path: source_path,
             token: token
           )
         end
@@ -530,6 +535,7 @@ module HCL
           raise ParseException.new(
             "Cannot specify additional arguments after a varadic argument (...)",
             source: source,
+            path: source_path,
             token: child
           ) if varadic
           args << build_node(child, iter, source)

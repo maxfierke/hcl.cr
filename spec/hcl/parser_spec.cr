@@ -12,7 +12,7 @@ end
 
 describe HCL::Parser do
   describe "#parse" do
-    it "surfaces the Pegmatite error when encountering bad syntax" do
+    it "surfaces parsing errors w/ line numbers when encountering bad syntax" do
       hcl_string = <<-HEREDOC
         variable "ami" {
           "whats the deal im walkin here"
@@ -23,7 +23,41 @@ describe HCL::Parser do
 
       expect_raises(
         HCL::ParseException,
-        /^unexpected token at byte offset 23:\n\s+"whats the deal im walkin here"\n\s+\^$/
+        /^Unable to parse HCL document. Encountered unexpected token at byte offset 23:\n\s+"whats the deal im walkin here"\n\s+\^ \(line 2\)$/
+      ) do
+        parser.parse!
+      end
+    end
+
+    it "surfaces parsing errors w/ line numbers and path if provided" do
+      hcl_string = <<-HEREDOC
+        variable "ami" {
+          "whats the deal im walkin here"
+
+      HEREDOC
+
+      parser = HCL::Parser.new(hcl_string, path: "/some/path/file.hcl")
+
+      expect_raises(
+        HCL::ParseException,
+        /^Unable to parse HCL document. Encountered unexpected token at byte offset 23:\n\s+"whats the deal im walkin here"\n\s+\^ \(\/some\/path\/file\.hcl:2\)$/
+      ) do
+        parser.parse!
+      end
+    end
+
+    it "surfaces helpful error if you forget to add a newline at the end" do
+      hcl_string = <<-HEREDOC
+        variable "ami" {
+          description = "the AMI to use"
+        }
+      HEREDOC
+
+      parser = HCL::Parser.new(hcl_string)
+
+      expect_raises(
+        HCL::ParseException,
+        /^Unable to parse HCL document. Encountered unexpected token at byte offset 57:\n\s+}\n\s+\^ \(line 3\)\nDid you forget to add a new line at the end\?$/
       ) do
         parser.parse!
       end
