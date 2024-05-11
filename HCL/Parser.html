@@ -594,7 +594,7 @@
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/67b18f371002c9d10933c77adae9f2279cd65201/src/hcl/parser.cr#L2" target="_blank">
+      <a href="https://github.com/maxfierke/hcl.cr/blob/4f1b5240ed8043189ddea134198d8512d58048b2/src/hcl/parser.cr#L2" target="_blank">
         hcl/parser.cr
       </a>
     
@@ -616,7 +616,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28source%3AString%7CIO%2Coffset%3AInt32%3D0%2Cio%3AIO%7CNil%3Dnil%29-class-method" class="signature"><strong>.new</strong>(source : String | IO, offset : Int32 = <span class="n">0</span>, io : IO | Nil = <span class="n">nil</span>)</a>
+        <a href="#new%28source%3AString%7CIO%2Coffset%3AInt32%3D0%2Cio%3AIO%7CNil%3Dnil%2Cpath%3AString%7CNil%3Dnil%29-class-method" class="signature"><strong>.new</strong>(source : String | IO, offset : Int32 = <span class="n">0</span>, io : IO | Nil = <span class="n">nil</span>, path : String | Nil = <span class="n">nil</span>)</a>
         
       </li>
     
@@ -667,6 +667,11 @@
     
       <li class="entry-summary">
         <a href="#source%3AString-instance-method" class="signature"><strong>#source</strong> : String</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#source_path%3AString%3F-instance-method" class="signature"><strong>#source_path</strong> : String?</a>
         
       </li>
     
@@ -741,18 +746,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(source:String|IO,offset:Int32=0,io:IO|Nil=nil)-class-method">
+    <div class="entry-detail" id="new(source:String|IO,offset:Int32=0,io:IO|Nil=nil,path:String|Nil=nil)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(source : <a href="../String.html">String</a> | IO, offset : Int32 = <span class="n">0</span>, io : IO | <a href="../Nil.html">Nil</a> = <span class="n">nil</span>)
+        def self.<strong>new</strong>(source : <a href="../String.html">String</a> | IO, offset : Int32 = <span class="n">0</span>, io : IO | <a href="../Nil.html">Nil</a> = <span class="n">nil</span>, path : <a href="../String.html">String</a> | <a href="../Nil.html">Nil</a> = <span class="n">nil</span>)
 
-        <a class="method-permalink" href="#new%28source%3AString%7CIO%2Coffset%3AInt32%3D0%2Cio%3AIO%7CNil%3Dnil%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28source%3AString%7CIO%2Coffset%3AInt32%3D0%2Cio%3AIO%7CNil%3Dnil%2Cpath%3AString%7CNil%3Dnil%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/67b18f371002c9d10933c77adae9f2279cd65201/src/hcl/parser.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4f1b5240ed8043189ddea134198d8512d58048b2/src/hcl/parser.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -780,7 +785,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/67b18f371002c9d10933c77adae9f2279cd65201/src/hcl/parser.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4f1b5240ed8043189ddea134198d8512d58048b2/src/hcl/parser.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -810,7 +815,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/67b18f371002c9d10933c77adae9f2279cd65201/src/hcl/parser.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4f1b5240ed8043189ddea134198d8512d58048b2/src/hcl/parser.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -826,7 +831,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/67b18f371002c9d10933c77adae9f2279cd65201/src/hcl/parser.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4f1b5240ed8043189ddea134198d8512d58048b2/src/hcl/parser.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -842,7 +847,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/67b18f371002c9d10933c77adae9f2279cd65201/src/hcl/parser.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4f1b5240ed8043189ddea134198d8512d58048b2/src/hcl/parser.cr#L9" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="source_path:String?-instance-method">
+      <div class="signature">
+        
+        def <strong>source_path</strong> : <a href="../String.html">String</a>?
+
+        <a class="method-permalink" href="#source_path%3AString%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4f1b5240ed8043189ddea134198d8512d58048b2/src/hcl/parser.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>

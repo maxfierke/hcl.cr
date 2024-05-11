@@ -605,7 +605,7 @@
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/67b18f371002c9d10933c77adae9f2279cd65201/src/hcl/exceptions.cr#L3" target="_blank">
+      <a href="https://github.com/maxfierke/hcl.cr/blob/4f1b5240ed8043189ddea134198d8512d58048b2/src/hcl/exceptions.cr#L3" target="_blank">
         hcl/exceptions.cr
       </a>
     
@@ -627,7 +627,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28message%2Csource%3AString%7CNil%3Dnil%2Ctoken%3APegmatite%3A%3AToken%7CNil%3Dnil%29-class-method" class="signature"><strong>.new</strong>(message, source : String | Nil = <span class="n">nil</span>, token : Pegmatite::Token | Nil = <span class="n">nil</span>)</a>
+        <a href="#new%28message%2Csource%3AString%7CNil%3Dnil%2Ctoken%3APegmatite%3A%3AToken%7CNil%3Dnil%2Coffset%3AInt32%7CNil%3Dnil%2Cpath%3AString%7CNil%3Dnil%29-class-method" class="signature"><strong>.new</strong>(message, source : String | Nil = <span class="n">nil</span>, token : Pegmatite::Token | Nil = <span class="n">nil</span>, offset : Int32 | Nil = <span class="n">nil</span>, path : String | Nil = <span class="n">nil</span>)</a>
         
       </li>
     
@@ -638,6 +638,28 @@
 
 
 
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#line_number%3AInt32%3F-instance-method" class="signature"><strong>#line_number</strong> : Int32?</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#path%3APath%3F-instance-method" class="signature"><strong>#path</strong> : Path?</a>
+        
+      </li>
+    
+  </ul>
 
 
 
@@ -721,18 +743,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(message,source:String|Nil=nil,token:Pegmatite::Token|Nil=nil)-class-method">
+    <div class="entry-detail" id="new(message,source:String|Nil=nil,token:Pegmatite::Token|Nil=nil,offset:Int32|Nil=nil,path:String|Nil=nil)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(message, source : <a href="../String.html">String</a> | <a href="../Nil.html">Nil</a> = <span class="n">nil</span>, token : Pegmatite::Token | <a href="../Nil.html">Nil</a> = <span class="n">nil</span>)
+        def self.<strong>new</strong>(message, source : <a href="../String.html">String</a> | <a href="../Nil.html">Nil</a> = <span class="n">nil</span>, token : Pegmatite::Token | <a href="../Nil.html">Nil</a> = <span class="n">nil</span>, offset : Int32 | <a href="../Nil.html">Nil</a> = <span class="n">nil</span>, path : <a href="../String.html">String</a> | <a href="../Nil.html">Nil</a> = <span class="n">nil</span>)
 
-        <a class="method-permalink" href="#new%28message%2Csource%3AString%7CNil%3Dnil%2Ctoken%3APegmatite%3A%3AToken%7CNil%3Dnil%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28message%2Csource%3AString%7CNil%3Dnil%2Ctoken%3APegmatite%3A%3AToken%7CNil%3Dnil%2Coffset%3AInt32%7CNil%3Dnil%2Cpath%3AString%7CNil%3Dnil%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/67b18f371002c9d10933c77adae9f2279cd65201/src/hcl/exceptions.cr#L4" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4f1b5240ed8043189ddea134198d8512d58048b2/src/hcl/exceptions.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -743,6 +765,48 @@
 
 
 
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="line_number:Int32?-instance-method">
+      <div class="signature">
+        
+        def <strong>line_number</strong> : Int32?
+
+        <a class="method-permalink" href="#line_number%3AInt32%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4f1b5240ed8043189ddea134198d8512d58048b2/src/hcl/exceptions.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="path:Path?-instance-method">
+      <div class="signature">
+        
+        def <strong>path</strong> : Path?
+
+        <a class="method-permalink" href="#path%3APath%3F-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/4f1b5240ed8043189ddea134198d8512d58048b2/src/hcl/exceptions.cr#L7" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
 
 
 </div>
