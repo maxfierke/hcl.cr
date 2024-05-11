@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2024-05-11
+
+### Enhancements
+
+- Add `line_number` and `path` to `HCL::ParseException` and include in message
+- Include suggestion if parse error is from document missing the final newline
+  after the last attribute or block
+
 ## [0.2.1] - 2022-05-19
 
 ### Enhancements
@@ -20,6 +28,7 @@ Initial tagged release
 
 - Dropped support for Crystal < 1.0.0
 
-[Unreleased]: https://github.com/maxfierke/hcl.cr/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/maxfierke/hcl.cr/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/maxfierke/hcl.cr/releases/tag/v0.2.2
 [0.2.1]: https://github.com/maxfierke/hcl.cr/releases/tag/v0.2.1
 [0.2.0]: https://github.com/maxfierke/hcl.cr/releases/tag/v0.2.0

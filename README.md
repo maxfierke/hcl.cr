@@ -24,7 +24,7 @@ work as they should. Please report any issues [here](https://github.com/maxfierk
    dependencies:
      hcl:
        github: maxfierke/hcl.cr
-       version: ~> 0.2.1
+       version: ~> 0.2.2
    ```
 
 2. Run `shards install`
