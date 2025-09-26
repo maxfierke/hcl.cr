@@ -28,7 +28,7 @@ module HCL
 
     # Yields an `HCL::Builder` instance for the given root node, which defaults to
     # `HCL::AST::Document`. Returns the `HCL::Builder` instance.
-    def self.build(node : AST::Node? = AST::Document.new)
+    def self.build(node : AST::Node? = AST::Document.new, &)
       new(node).tap do |builder|
         yield builder
       end

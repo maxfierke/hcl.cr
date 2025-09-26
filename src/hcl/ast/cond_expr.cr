@@ -7,7 +7,7 @@ module HCL
         predicate : Expression,
         true_expr : Expression,
         false_expr : Expression,
-        **kwargs
+        **kwargs,
       )
         super(**kwargs)
         @predicate = predicate
