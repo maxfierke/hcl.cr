@@ -13,6 +13,8 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: crystal-lang/install-crystal@v1
+      with:
+        crystal: 1.17
     - name: Install dependencies
       run: shards install
     - name: Generate docs
