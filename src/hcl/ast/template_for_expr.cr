@@ -13,7 +13,7 @@ module HCL
         value_name : Identifier,
         tpl_expr : Template,
         key_name : Identifier? = nil,
-        **kwargs
+        **kwargs,
       )
         super(**kwargs)
         @coll_expr = coll_expr

@@ -10,7 +10,7 @@ module HCL
         labels : Array(BlockLabel) = Array(BlockLabel).new,
         attributes : Hash(String, Node) = Hash(String, Node).new,
         blocks : Array(Block) = Array(Block).new,
-        **kwargs
+        **kwargs,
       )
         super(attributes, blocks, **kwargs)
 

@@ -331,7 +331,7 @@ module HCL
           case block_node.id
           {% for name, value in blocks %}
             when {{value[:key]}}
-            {% unless value[:type] < Array %}
+            {% unless value[:type] < Array || value[:type] < Hash %}
               if %found{name}
                 raise ::HCL::ParseException.new(
                   "Only one '{{value[:key].id}}' block is allowed. Another was defined earlier."
@@ -345,6 +345,22 @@ module HCL
               %var{name} ||= {{value[:type]}}.new
               {% item_type = value[:type].type_vars.first %}
               %var{name} << {{item_type}}.new(block_node, __ctx_from_hcl)
+            {% elsif value[:type] <= Hash && !value[:type].type_vars.empty? %}
+              {% if value[:type].type_vars.first <= String %}
+                {% item_type = value[:type].type_vars[1] %}
+                if block_node.labels.size != 1
+                  raise ::HCL::ParseException.new(
+                    "Expected '{{value[:key].id}}' block to have one label."
+                  )
+                end
+                %var{name} ||= {{value[:type]}}.new
+                %key{name} = block_node.labels.first.evaluate(__ctx_from_hcl).raw.as(String)
+                %var{name}[%key{name}] = {{item_type}}.new(block_node, __ctx_from_hcl)
+              {% else %}
+                raise ::HCL::ParseException.new(
+                  "Expected '{{value[:key].id}}' block to be a Hash(String, {{value[:type].type_vars[1].id}})."
+                )
+              {% end %}
             {% else %}
               {% for t in value[:type].union_types %}
               {% unless t == Nil %}
@@ -352,7 +368,7 @@ module HCL
                 %var{name} = {{t}}.new(block_node, __ctx_from_hcl) rescue nil
               end
               {% end %}
-            {% end %}
+              {% end %}
             {% end %}
           {% end %}
           else
@@ -502,6 +518,12 @@ module HCL
                 block.to_hcl(block_builder)
               end
             end
+          elsif %var{name}.is_a?(Hash)
+            %var{name}.each do |key, block|
+              builder.block({{value[:key]}}) do |block_builder|
+                block.to_hcl(block_builder)
+              end
+            end
           elsif !%var{name}.nil?
             builder.block({{value[:key]}}) do |block_builder|
               %var{name}.to_hcl(block_builder)
@@ -551,7 +573,7 @@ module HCL
     end
 
     # Modifies behavior of `HCL::Serializable` such that unknown properties in
-    # the HCLdocument will raise a parse exception. By default the unknown properties
+    # the HCL document will raise a parse exception. By default the unknown properties
     # are silently ignored.
     module Strict
       protected def on_unknown_hcl_attribute(node, key, ctx)

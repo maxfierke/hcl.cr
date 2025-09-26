@@ -22,7 +22,7 @@ module HCL
         operator : String,
         left_operand : Node,
         right_operand : Node?,
-        **kwargs
+        **kwargs,
       )
         super(**kwargs)
 
