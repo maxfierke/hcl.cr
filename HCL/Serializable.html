@@ -57,11 +57,6 @@
   <div class="types-list">
     <ul>
   
-  <li class=" " data-id="hcl/toplevel" data-name="top level namespace">
-      <a href="../toplevel.html">Top Level Namespace</a>
-      
-    </li>
-  
   <li class=" " data-id="hcl/Array" data-name="array(t)">
       <a href="../Array.html">Array</a>
       
@@ -586,47 +581,86 @@
     <use href="#octicon-link"/>
   </svg>
 </a>Example</h3>
-<pre><code class="language-crystal">require &quot;hcl&quot;
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;hcl&quot;</span>
 
-class Location
-  include HCL::Serializable
+<span class="k">class</span> <span class="t">Location</span>
+  <span class="k">include</span> <span class="t">HCL</span><span class="t">::</span><span class="t">Serializable</span>
 
-  @[HCL::Attribute(key: &quot;lat&quot;)]
-  property latitude : Float64
+  @[<span class="t">HCL</span><span class="t">::</span><span class="t">Attribute</span>(key: <span class="s">&quot;lat&quot;</span>)]
+  property latitude : <span class="t">Float64</span>
 
-  @[HCL::Attribute(key: &quot;lng&quot;)]
-  property longitude : Float64
-end
+  @[<span class="t">HCL</span><span class="t">::</span><span class="t">Attribute</span>(key: <span class="s">&quot;lng&quot;</span>)]
+  property longitude : <span class="t">Float64</span>
+<span class="k">end</span>
 
-class House
-  include HCL::Serializable
+<span class="k">class</span> <span class="t">House</span>
+  <span class="k">include</span> <span class="t">HCL</span><span class="t">::</span><span class="t">Serializable</span>
 
-  @[HCL::Attribute]
-  property address : String
+  @[<span class="t">HCL</span><span class="t">::</span><span class="t">Label</span>]
+  property <span class="k">type</span> : <span class="t">String</span>
 
-  @[HCL::Block]
-  property location : Location?
-end
+  @[<span class="t">HCL</span><span class="t">::</span><span class="t">Attribute</span>]
+  property address : <span class="t">String</span>
 
-hcl_house = &lt;&lt;-HCL
-  address = &quot;Crystal Road 1234&quot;
-  location {
-    lat = 12.3
-    lng = 34.5
+  @[<span class="t">HCL</span><span class="t">::</span><span class="t">Block</span>]
+  property location : <span class="t">Location</span>?
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="t">EmailAddress</span>
+  <span class="k">include</span> <span class="t">HCL</span><span class="t">::</span><span class="t">Serializable</span>
+
+  @[<span class="t">HCL</span><span class="t">::</span><span class="t">Label</span>]
+  property <span class="k">type</span> : <span class="t">String</span>
+
+  @[<span class="t">HCL</span><span class="t">::</span><span class="t">Attribute</span>]
+  property email : <span class="t">String</span>
+<span class="k">end</span>
+
+<span class="k">class</span> <span class="t">Contact</span>
+  <span class="k">include</span> <span class="t">HCL</span><span class="t">::</span><span class="t">Serializable</span>
+
+  @[<span class="t">HCL</span><span class="t">::</span><span class="t">Attribute</span>]
+  property name : <span class="t">String</span>
+
+  @[<span class="t">HCL</span><span class="t">::</span><span class="t">Block</span>(key: <span class="s">&quot;email_address&quot;</span>)]
+  property email_addresses : <span class="t">Array</span>(<span class="t">EmailAddress</span>)
+
+  @[<span class="t">HCL</span><span class="t">::</span><span class="t">Block</span>(key: <span class="s">&quot;house&quot;</span>)]
+  property homes : <span class="t">Hash</span>(<span class="t">String</span>, <span class="t">House</span>)
+<span class="k">end</span>
+
+hcl_contact <span class="o">=</span> <span class="s">&lt;&lt;-HCL</span>
+<span class="s">  name = &quot;Kelly Exampleton&quot;
+
+  email_address &quot;personal&quot; {
+    email = &quot;kelly@example.com&quot;
   }
 
-HCL
-house = House.from_hcl(hcl_house)
-house.address  # =&gt; &quot;Crystal Road 1234&quot;
-house.location # =&gt; #&lt;Location:0x10cd93d80 @latitude=12.3, @longitude=34.5&gt;
-house.to_hcl  # =&gt; &quot;
-  address = \&quot;Crystal Road 1234\&quot;
-
-  location {
-    lat = 12.3
-    lng = 34.5
+  email_address &quot;bizness&quot; {
+    email = &quot;kexampleton@example.biz&quot;
   }
-&quot;</code></pre>
+
+  house &quot;primary&quot; {
+    address = &quot;Crystal Road 1234&quot;
+    location {
+      lat = 12.3
+      lng = 34.5
+    }
+  }
+
+HCL</span>
+contact <span class="o">=</span> <span class="t">Contact</span>.from_hcl(hcl_contact)
+house <span class="o">=</span> contact.house[<span class="s">&quot;primary&quot;</span>]
+house.address  <span class="c"># =&gt; &quot;Crystal Road 1234&quot;</span>
+house.location <span class="c"># =&gt; #&lt;Location:0x10cd93d80 @latitude=12.3, @longitude=34.5&gt;</span>
+house.to_hcl  <span class="c"># =&gt; &quot;</span>
+<span class="c">#  address = \&quot;Crystal Road 1234\&quot;</span>
+<span class="c">#</span>
+<span class="c">#  location {</span>
+<span class="c">#    lat = 12.3</span>
+<span class="c">#    lng = 34.5</span>
+<span class="c">#  }</span>
+<span class="c"># &quot;</span></code></pre>
 <h3><a id="usage" class="anchor" href="#usage">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -742,7 +776,7 @@ a.to_hcl                         <span class="c"># =&gt; &quot;a = 1\nb = 2\n&qu
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/serializable.cr#L166" target="_blank">
+      <a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L205" target="_blank">
         hcl/serializable.cr
       </a>
     
@@ -754,23 +788,6 @@ a.to_hcl                         <span class="c"># =&gt; &quot;a = 1\nb = 2\n&qu
 
 
   
-  <h2>
-    <a id="constructors" class="anchor" href="#constructors">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructors
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#new%28%2A%2C__node_from_hcl%3AHCL%3A%3AAST%3A%3ABody%2C__ctx_from_hcl%3AHCL%3A%3AExpressionContext%29-class-method" class="signature"><strong>.new</strong>(*, __node_from_hcl : HCL::AST::Body, __ctx_from_hcl : HCL::ExpressionContext)</a>
-        
-      </li>
-    
-  </ul>
-
 
   
 
@@ -804,7 +821,7 @@ a.to_hcl                         <span class="c"># =&gt; &quot;a = 1\nb = 2\n&qu
       <li class="entry-summary">
         <a href="#to_hcl-instance-method" class="signature"><strong>#to_hcl</strong></a>
         
-          <div class="summary"><p>Returns HCL serialization as a String</p></div>
+          <div class="summary"><p>Returns HCL serialization as a <code><a href="../String.html">String</a></code></p></div>
         
       </li>
     
@@ -817,32 +834,6 @@ a.to_hcl                         <span class="c"># =&gt; &quot;a = 1\nb = 2\n&qu
   </div>
 
   
-  <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructor Detail
-  </h2>
-  
-    <div class="entry-detail" id="new(*,__node_from_hcl:HCL::AST::Body,__ctx_from_hcl:HCL::ExpressionContext)-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(*, __node_from_hcl : <a href="../HCL/AST/Body.html">HCL::AST::Body</a>, __ctx_from_hcl : <a href="../HCL/ExpressionContext.html">HCL::ExpressionContext</a>)
-
-        <a class="method-permalink" href="#new%28%2A%2C__node_from_hcl%3AHCL%3A%3AAST%3A%3ABody%2C__ctx_from_hcl%3AHCL%3A%3AExpressionContext%29-class-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/serializable.cr#L195" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
   
 
@@ -875,7 +866,7 @@ building can be specified by <code>node</code> argument. Defaults to <code><a hr
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/serializable.cr#L464" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L506" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -897,7 +888,7 @@ building can be specified by <code>node</code> argument. Defaults to <code><a hr
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/serializable.cr#L471" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L513" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -912,13 +903,13 @@ building can be specified by <code>node</code> argument. Defaults to <code><a hr
       
         <div class="doc">
           
-          <p>Returns HCL serialization as a String</p>
+          <p>Returns HCL serialization as a <code><a href="../String.html">String</a></code></p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/serializable.cr#L554" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L596" target="_blank">View source</a>]
         
       </div>
     </div>

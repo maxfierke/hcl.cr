@@ -57,11 +57,6 @@
   <div class="types-list">
     <ul>
   
-  <li class=" " data-id="hcl/toplevel" data-name="top level namespace">
-      <a href="../toplevel.html">Top Level Namespace</a>
-      
-    </li>
-  
   <li class=" " data-id="hcl/Array" data-name="array(t)">
       <a href="../Array.html">Array</a>
       
@@ -598,7 +593,7 @@
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/parser.cr#L2" target="_blank">
+      <a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/parser.cr#L2" target="_blank">
         hcl/parser.cr
       </a>
     
@@ -623,6 +618,8 @@
       <li class="entry-summary">
         <a href="#new%28source%3AString%7CIO%2Coffset%3AInt32%3D0%2Cio%3AIO%7CNil%3Dnil%2Cpath%3AString%7CNil%3Dnil%29-class-method" class="signature"><strong>.new</strong>(source : String | IO, offset : Int32 = <span class="n">0</span>, io : IO | Nil = <span class="n">nil</span>, path : String | Nil = <span class="n">nil</span>)</a>
         
+          <div class="summary"><p>Initialize parser for a given HCL source</p></div>
+        
       </li>
     
   </ul>
@@ -641,6 +638,8 @@
     
       <li class="entry-summary">
         <a href="#parse%21%28%2Aargs%2C%2A%2Akwargs%29-class-method" class="signature"><strong>.parse!</strong>(*args, **kwargs)</a>
+        
+          <div class="summary"><p>Parse and return an <code>HCL::Document</code> for a given HCL source</p></div>
         
       </li>
     
@@ -667,6 +666,8 @@
     
       <li class="entry-summary">
         <a href="#parse%21-instance-method" class="signature"><strong>#parse!</strong></a>
+        
+          <div class="summary"><p>Parse and return an <code>HCL::Document</code></p></div>
         
       </li>
     
@@ -759,10 +760,18 @@
         <a class="method-permalink" href="#new%28source%3AString%7CIO%2Coffset%3AInt32%3D0%2Cio%3AIO%7CNil%3Dnil%2Cpath%3AString%7CNil%3Dnil%29-class-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Initialize parser for a given HCL source</p>
+<p><strong>offset</strong>:  optionally be specified to start parsing at a particular offset
+<strong>io</strong>: optionally be specified to tracing the parsing
+<strong>path</strong>: specify path for parse exceptions</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/parser.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/parser.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -787,10 +796,19 @@
         <a class="method-permalink" href="#parse%21%28%2Aargs%2C%2A%2Akwargs%29-class-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Parse and return an <code>HCL::Document</code> for a given HCL source</p>
+<p><strong>offset</strong>:  optionally be specified to start parsing at a particular offset
+<strong>io</strong>: optionally be specified to tracing the parsing
+<strong>path</strong>: specify path for parse exceptions</p>
+<p>Raises <code><a href="../HCL/ParseException.html">HCL::ParseException</a></code> for any parsing errors</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/parser.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/parser.cr#L18" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -820,7 +838,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/parser.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/parser.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -833,10 +851,16 @@
         <a class="method-permalink" href="#parse%21-instance-method">#</a>
       </div>
       
+        <div class="doc">
+          
+          <p>Parse and return an <code>HCL::Document</code></p>
+<p>Raises <code><a href="../HCL/ParseException.html">HCL::ParseException</a></code> for any parsing errors</p>
+        </div>
+      
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/parser.cr#L22" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/parser.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -852,7 +876,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/parser.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/parser.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -868,7 +892,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/parser.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/parser.cr#L9" target="_blank">View source</a>]
         
       </div>
     </div>

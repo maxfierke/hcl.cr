@@ -57,11 +57,6 @@
   <div class="types-list">
     <ul>
   
-  <li class=" " data-id="hcl/toplevel" data-name="top level namespace">
-      <a href="../../toplevel.html">Top Level Namespace</a>
-      
-    </li>
-  
   <li class=" " data-id="hcl/Array" data-name="array(t)">
       <a href="../../Array.html">Array</a>
       
@@ -582,12 +577,13 @@
 
   <p>Modifies behavior of <code><a href="../../HCL/Serializable.html">HCL::Serializable</a></code> such that unknown attributes and
 blocks in the HCL document will be stored in respective
-<code><a href="../../Hash.html">Hash</a>(<a href="../../String.html">String</a>, <a href="../../HCL/AST/Node.html">HCL::AST::Node</a>)</code>. For classes/structs representing blocks,
-any unmapped labels will be stored in a <code><a href="../../Hash.html">Hash</a>(Int32, <a href="../../HCL/AST/Node.html">HCL::AST::Node</a>)</code>, where
-the key is the label index. On serialization, any keys inside
-<code><a href="../../HCL/Serializable/Unmapped.html#hcl_unmapped_attributes-instance-method">#hcl_unmapped_attributes</a></code>, <code><a href="../../HCL/Serializable/Unmapped.html#hcl_unmapped_blocks-instance-method">#hcl_unmapped_blocks</a></code>, and <code><a href="../../HCL/Serializable/Unmapped.html#hcl_unmapped_labels-instance-method">#hcl_unmapped_labels</a></code>
-will be serialized and appended to the current HCL block or document.
-The deserialied values are AST nodes in order to allow for later evaluation,
+<code><a href="../../Hash.html">Hash</a>(<a href="../../String.html">String</a>, <a href="../../HCL/AST/Node.html">HCL::AST::Node</a>)</code>.</p>
+<p>For classes/structs representing blocks, any unmapped labels will be stored
+in a <code><a href="../../Hash.html">Hash</a>(Int32, <a href="../../HCL/AST/Node.html">HCL::AST::Node</a>)</code>, where the key is the label index.</p>
+<p>On serialization, any keys inside <code><a href="../../HCL/Serializable/Unmapped.html#hcl_unmapped_attributes%3AHash%28String%2CHCL%3A%3AAST%3A%3ANode%29-instance-method">#hcl_unmapped_attributes</a></code>,
+<code><a href="../../HCL/Serializable/Unmapped.html#hcl_unmapped_blocks%3AHash%28String%2CHCL%3A%3AAST%3A%3ABlock%29-instance-method">#hcl_unmapped_blocks</a></code>, and <code><a href="../../HCL/Serializable/Unmapped.html#hcl_unmapped_labels%3AHash%28Int32%2CHCL%3A%3AAST%3A%3ANode%29-instance-method">#hcl_unmapped_labels</a></code> will be serialized and
+appended to the current HCL block or document.</p>
+<p>The deserialized values are AST nodes in order to allow for later evaluation,
 perhaps with a different expression context than the original document.</p>
 
 
@@ -615,7 +611,7 @@ perhaps with a different expression context than the original document.</p>
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/serializable.cr#L619" target="_blank">
+      <a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L665" target="_blank">
         hcl/serializable.cr
       </a>
     
@@ -644,42 +640,42 @@ perhaps with a different expression context than the original document.</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#hcl_unmapped_attributes-instance-method" class="signature"><strong>#hcl_unmapped_attributes</strong></a>
+        <a href="#hcl_unmapped_attributes%3AHash%28String%2CHCL%3A%3AAST%3A%3ANode%29-instance-method" class="signature"><strong>#hcl_unmapped_attributes</strong> : Hash(String, HCL::AST::Node)</a>
         
           <div class="summary"><p>Unmapped attribute nodes.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#hcl_unmapped_attributes%3D%28hcl_unmapped_attributes%29-instance-method" class="signature"><strong>#hcl_unmapped_attributes=</strong>(hcl_unmapped_attributes)</a>
+        <a href="#hcl_unmapped_attributes%3D%28hcl_unmapped_attributes%3AHash%28String%2CHCL%3A%3AAST%3A%3ANode%29%29-instance-method" class="signature"><strong>#hcl_unmapped_attributes=</strong>(hcl_unmapped_attributes : Hash(String, HCL::AST::Node))</a>
         
           <div class="summary"><p>Unmapped attribute nodes.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#hcl_unmapped_blocks-instance-method" class="signature"><strong>#hcl_unmapped_blocks</strong></a>
+        <a href="#hcl_unmapped_blocks%3AHash%28String%2CHCL%3A%3AAST%3A%3ABlock%29-instance-method" class="signature"><strong>#hcl_unmapped_blocks</strong> : Hash(String, HCL::AST::Block)</a>
         
           <div class="summary"><p>Unmapped block node groups.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#hcl_unmapped_blocks%3D%28hcl_unmapped_blocks%29-instance-method" class="signature"><strong>#hcl_unmapped_blocks=</strong>(hcl_unmapped_blocks)</a>
+        <a href="#hcl_unmapped_blocks%3D%28hcl_unmapped_blocks%3AHash%28String%2CHCL%3A%3AAST%3A%3ABlock%29%29-instance-method" class="signature"><strong>#hcl_unmapped_blocks=</strong>(hcl_unmapped_blocks : Hash(String, HCL::AST::Block))</a>
         
           <div class="summary"><p>Unmapped block node groups.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#hcl_unmapped_labels-instance-method" class="signature"><strong>#hcl_unmapped_labels</strong></a>
+        <a href="#hcl_unmapped_labels%3AHash%28Int32%2CHCL%3A%3AAST%3A%3ANode%29-instance-method" class="signature"><strong>#hcl_unmapped_labels</strong> : Hash(Int32, HCL::AST::Node)</a>
         
           <div class="summary"><p>Unmapped label nodes.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#hcl_unmapped_labels%3D%28hcl_unmapped_labels%29-instance-method" class="signature"><strong>#hcl_unmapped_labels=</strong>(hcl_unmapped_labels)</a>
+        <a href="#hcl_unmapped_labels%3D%28hcl_unmapped_labels%3AHash%28Int32%2CHCL%3A%3AAST%3A%3ANode%29%29-instance-method" class="signature"><strong>#hcl_unmapped_labels=</strong>(hcl_unmapped_labels : Hash(Int32, HCL::AST::Node))</a>
         
           <div class="summary"><p>Unmapped label nodes.</p></div>
         
@@ -709,12 +705,12 @@ perhaps with a different expression context than the original document.</p>
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="hcl_unmapped_attributes-instance-method">
+    <div class="entry-detail" id="hcl_unmapped_attributes:Hash(String,HCL::AST::Node)-instance-method">
       <div class="signature">
         
-        def <strong>hcl_unmapped_attributes</strong>
+        def <strong>hcl_unmapped_attributes</strong> : <a href="../../Hash.html">Hash</a>(<a href="../../String.html">String</a>, <a href="../../HCL/AST/Node.html">HCL::AST::Node</a>)
 
-        <a class="method-permalink" href="#hcl_unmapped_attributes-instance-method">#</a>
+        <a class="method-permalink" href="#hcl_unmapped_attributes%3AHash%28String%2CHCL%3A%3AAST%3A%3ANode%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -726,17 +722,17 @@ AST node</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/serializable.cr#L622" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L668" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="hcl_unmapped_attributes=(hcl_unmapped_attributes)-instance-method">
+    <div class="entry-detail" id="hcl_unmapped_attributes=(hcl_unmapped_attributes:Hash(String,HCL::AST::Node))-instance-method">
       <div class="signature">
         
-        def <strong>hcl_unmapped_attributes=</strong>(hcl_unmapped_attributes)
+        def <strong>hcl_unmapped_attributes=</strong>(hcl_unmapped_attributes : <a href="../../Hash.html">Hash</a>(<a href="../../String.html">String</a>, <a href="../../HCL/AST/Node.html">HCL::AST::Node</a>))
 
-        <a class="method-permalink" href="#hcl_unmapped_attributes%3D%28hcl_unmapped_attributes%29-instance-method">#</a>
+        <a class="method-permalink" href="#hcl_unmapped_attributes%3D%28hcl_unmapped_attributes%3AHash%28String%2CHCL%3A%3AAST%3A%3ANode%29%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -748,17 +744,17 @@ AST node</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/serializable.cr#L622" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L668" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="hcl_unmapped_blocks-instance-method">
+    <div class="entry-detail" id="hcl_unmapped_blocks:Hash(String,HCL::AST::Block)-instance-method">
       <div class="signature">
         
-        def <strong>hcl_unmapped_blocks</strong>
+        def <strong>hcl_unmapped_blocks</strong> : <a href="../../Hash.html">Hash</a>(<a href="../../String.html">String</a>, <a href="../../HCL/AST/Block.html">HCL::AST::Block</a>)
 
-        <a class="method-permalink" href="#hcl_unmapped_blocks-instance-method">#</a>
+        <a class="method-permalink" href="#hcl_unmapped_blocks%3AHash%28String%2CHCL%3A%3AAST%3A%3ABlock%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -770,17 +766,17 @@ AST node.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/serializable.cr#L626" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L672" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="hcl_unmapped_blocks=(hcl_unmapped_blocks)-instance-method">
+    <div class="entry-detail" id="hcl_unmapped_blocks=(hcl_unmapped_blocks:Hash(String,HCL::AST::Block))-instance-method">
       <div class="signature">
         
-        def <strong>hcl_unmapped_blocks=</strong>(hcl_unmapped_blocks)
+        def <strong>hcl_unmapped_blocks=</strong>(hcl_unmapped_blocks : <a href="../../Hash.html">Hash</a>(<a href="../../String.html">String</a>, <a href="../../HCL/AST/Block.html">HCL::AST::Block</a>))
 
-        <a class="method-permalink" href="#hcl_unmapped_blocks%3D%28hcl_unmapped_blocks%29-instance-method">#</a>
+        <a class="method-permalink" href="#hcl_unmapped_blocks%3D%28hcl_unmapped_blocks%3AHash%28String%2CHCL%3A%3AAST%3A%3ABlock%29%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -792,17 +788,17 @@ AST node.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/serializable.cr#L626" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L672" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="hcl_unmapped_labels-instance-method">
+    <div class="entry-detail" id="hcl_unmapped_labels:Hash(Int32,HCL::AST::Node)-instance-method">
       <div class="signature">
         
-        def <strong>hcl_unmapped_labels</strong>
+        def <strong>hcl_unmapped_labels</strong> : <a href="../../Hash.html">Hash</a>(Int32, <a href="../../HCL/AST/Node.html">HCL::AST::Node</a>)
 
-        <a class="method-permalink" href="#hcl_unmapped_labels-instance-method">#</a>
+        <a class="method-permalink" href="#hcl_unmapped_labels%3AHash%28Int32%2CHCL%3A%3AAST%3A%3ANode%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -815,17 +811,17 @@ blocks in another class/struct implementing <code><a href="../../HCL/Serializabl
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/serializable.cr#L631" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L677" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="hcl_unmapped_labels=(hcl_unmapped_labels)-instance-method">
+    <div class="entry-detail" id="hcl_unmapped_labels=(hcl_unmapped_labels:Hash(Int32,HCL::AST::Node))-instance-method">
       <div class="signature">
         
-        def <strong>hcl_unmapped_labels=</strong>(hcl_unmapped_labels)
+        def <strong>hcl_unmapped_labels=</strong>(hcl_unmapped_labels : <a href="../../Hash.html">Hash</a>(Int32, <a href="../../HCL/AST/Node.html">HCL::AST::Node</a>))
 
-        <a class="method-permalink" href="#hcl_unmapped_labels%3D%28hcl_unmapped_labels%29-instance-method">#</a>
+        <a class="method-permalink" href="#hcl_unmapped_labels%3D%28hcl_unmapped_labels%3AHash%28Int32%2CHCL%3A%3AAST%3A%3ANode%29%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -838,7 +834,7 @@ blocks in another class/struct implementing <code><a href="../../HCL/Serializabl
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/860b6ae545c6ce9ad566def92ab325bd5bc77759/src/hcl/serializable.cr#L631" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L677" target="_blank">View source</a>]
         
       </div>
     </div>
