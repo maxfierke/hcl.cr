@@ -1,5 +1,6 @@
 require "./hcl"
 
+# :nodoc:
 SRC_TEXT = <<-'HEREDOC'
 document_attr = "i am here at the top"
 

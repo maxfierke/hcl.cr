@@ -1,6 +1,5 @@
 CRYSTAL_BIN ?= $(shell which crystal)
 SHARDS_BIN  ?= $(shell which shards)
-FINCHER_BIN ?= $(shell which fincher)
 PREFIX      ?= /usr/local
 RELEASE     ?=
 STATIC      ?=

@@ -6,6 +6,7 @@ module HCL
 
     getter :line_number, :path
 
+    # :nodoc:
     def initialize(message, source : String? = nil, token : Pegmatite::Token? = nil, offset : Int32? = nil, path : String? = nil)
       if token && source
         line_number = source[0...token[1]].count('\n') + 1

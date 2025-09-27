@@ -8,10 +8,22 @@ module HCL
 
     getter :document, :source, :source_path
 
+    # Parse and return an `HCL::Document` for a given HCL source
+    #
+    # **offset**:  optionally be specified to start parsing at a particular offset
+    # **io**: optionally be specified to tracing the parsing
+    # **path**: specify path for parse exceptions
+    #
+    # Raises `HCL::ParseException` for any parsing errors
     def self.parse!(*args, **kwargs)
       new(*args, **kwargs).parse!
     end
 
+    # Initialize parser for a given HCL source
+    #
+    # **offset**:  optionally be specified to start parsing at a particular offset
+    # **io**: optionally be specified to tracing the parsing
+    # **path**: specify path for parse exceptions
     def initialize(source : String | IO, offset = 0, io : IO? = nil, path : String? = nil)
       @source = source.is_a?(IO) ? source.gets_to_end : source
       @source_offset = offset
@@ -19,6 +31,9 @@ module HCL
       @parse_trace_io = io
     end
 
+    # Parse and return an `HCL::Document`
+    #
+    # Raises `HCL::ParseException` for any parsing errors
     def parse!
       @document ||= begin
         peg_tokens = Pegmatite.tokenize(

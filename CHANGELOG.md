@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Enhancements
+- Add support for parsing single-label blocks into hashes with `HCL::Serializable` (#16, fixes #13)
+- Correct some docs
+
 ## [0.2.2] - 2024-05-11
 
 ### Enhancements

@@ -30,6 +30,11 @@ module HCL
     def initialize(@raw)
     end
 
+    # Unwrap `HCL::Any` into a `HCL::Any::RawType` that can be casted
+    # `Array` and `Hash` values are traversed.
+    #
+    # NOTE: You should prefer the `as_*` methods instead for getting at raw
+    # values
     def unwrap : RawType
       val = raw
 
