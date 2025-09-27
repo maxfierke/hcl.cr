@@ -235,19 +235,35 @@ module HCL
           right_op_val = right_operand.accept(self).raw
           result = case op
                    when AST::OpExpr::ADDITION
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
-                     left_op_val + right_op_val
+                     left_op_val, right_op_val = assert_math_op_types!(op, left_op_val, right_op_val)
+                     if left_op_val.is_a?(BigDecimal) || right_op_val.is_a?(BigDecimal)
+                       left_op_val.to_big_d + right_op_val.to_big_d
+                     else
+                       left_op_val + right_op_val
+                     end
                    when AST::OpExpr::SUBTRACTION
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
-                     left_op_val - right_op_val
+                     left_op_val, right_op_val = assert_math_op_types!(op, left_op_val, right_op_val)
+                     if left_op_val.is_a?(BigDecimal) || right_op_val.is_a?(BigDecimal)
+                       left_op_val.to_big_d - right_op_val.to_big_d
+                     else
+                       left_op_val - right_op_val
+                     end
                    when AST::OpExpr::MULTIPLY
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
-                     left_op_val * right_op_val
+                     left_op_val, right_op_val = assert_math_op_types!(op, left_op_val, right_op_val)
+                     if left_op_val.is_a?(BigDecimal) || right_op_val.is_a?(BigDecimal)
+                       left_op_val.to_big_d * right_op_val.to_big_d
+                     else
+                       left_op_val * right_op_val
+                     end
                    when AST::OpExpr::DIVIDE
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
-                     left_op_val / right_op_val
+                     left_op_val, right_op_val = assert_math_op_types!(op, left_op_val, right_op_val)
+                     if left_op_val.is_a?(BigDecimal) || right_op_val.is_a?(BigDecimal)
+                       left_op_val.to_big_d / right_op_val.to_big_d
+                     else
+                       left_op_val / right_op_val
+                     end
                    when AST::OpExpr::MOD
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_math_op_types!(op, left_op_val, right_op_val)
                      if left_op_val.is_a?(Float64) && right_op_val.is_a?(Float64)
                        left_op_val % right_op_val
                      elsif left_op_val.is_a?(Int64) && right_op_val.is_a?(Int64)
@@ -256,22 +272,22 @@ module HCL
                        raise "Parser bug: Cannot perform modulo operation on different types"
                      end
                    when AST::OpExpr::EQ
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_eq_types!(op, left_op_val, right_op_val)
                      left_op_val == right_op_val
                    when AST::OpExpr::NEQ
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_eq_types!(op, left_op_val, right_op_val)
                      left_op_val != right_op_val
                    when AST::OpExpr::LT
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_comp_types!(op, left_op_val, right_op_val)
                      left_op_val < right_op_val
                    when AST::OpExpr::GT
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_comp_types!(op, left_op_val, right_op_val)
                      left_op_val > right_op_val
                    when AST::OpExpr::LTE
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_comp_types!(op, left_op_val, right_op_val)
                      left_op_val <= right_op_val
                    when AST::OpExpr::GTE
-                     left_op_val, right_op_val = assert_op_types!(op, left_op_val, right_op_val)
+                     left_op_val, right_op_val = assert_comp_types!(op, left_op_val, right_op_val)
                      left_op_val >= right_op_val
                    when AST::OpExpr::AND
                      left_op_val && right_op_val
@@ -358,14 +374,53 @@ module HCL
         raise "Unreachable"
       end
 
-      private def assert_op_types!(op, left_op_val, right_op_val)
-        raise "Parser bug: Cannot perform #{op} operation on array" if left_op_val.responds_to?(:[])
-        raise "Parser bug: Cannot perform #{op} operation on array" if right_op_val.responds_to?(:[])
+      private def assert_math_op_types!(op, left_op_val, right_op_val)
+        raise "Parser bug: Cannot perform #{op} operation on array" if left_op_val.is_a?(Array)
+        raise "Parser bug: Cannot perform #{op} operation on array" if right_op_val.is_a?(Array)
         raise "Parser bug: Cannot perform #{op} operation on boolean" if left_op_val.is_a?(Bool)
         raise "Parser bug: Cannot perform #{op} operation on boolean" if right_op_val.is_a?(Bool)
+        raise "Parser bug: Cannot perform #{op} operation on hash" if left_op_val.is_a?(Hash)
+        raise "Parser bug: Cannot perform #{op} operation on hash" if right_op_val.is_a?(Hash)
+        raise "Parser bug: Cannot perform #{op} operation on string" if left_op_val.is_a?(String)
+        raise "Parser bug: Cannot perform #{op} operation on string" if right_op_val.is_a?(String)
         raise "Parser bug: Cannot perform #{op} operation on nil" if left_op_val.nil?
         raise "Parser bug: Cannot perform #{op} operation on nil" if right_op_val.nil?
         {left_op_val, right_op_val}
+      end
+
+      private def assert_eq_types!(op, left_op_val, right_op_val)
+        raise "Parser bug: Cannot perform #{op} operation on array" if left_op_val.is_a?(Array)
+        raise "Parser bug: Cannot perform #{op} operation on array" if right_op_val.is_a?(Array)
+        raise "Parser bug: Cannot perform #{op} operation on hash" if left_op_val.is_a?(Hash)
+        raise "Parser bug: Cannot perform #{op} operation on hash" if right_op_val.is_a?(Hash)
+        {left_op_val, right_op_val}
+      end
+
+      private def assert_comp_types!(op, left_op_val, right_op_val)
+        raise "Parser bug: Cannot perform #{op} comparision on bool" if left_op_val.is_a?(Bool) || right_op_val.is_a?(Bool)
+        raise "Parser bug: Cannot perform #{op} comparision on string" if left_op_val.is_a?(String) || right_op_val.is_a?(String)
+        raise "Parser bug: Cannot perform #{op} comparision on null" if left_op_val.nil? || right_op_val.nil?
+        assert_eq_types!(op, left_op_val, right_op_val)
+      end
+
+      protected def deep_merge_blocks!(dict, other_dict)
+        dict.merge!(other_dict) do |key, v1, v2|
+          if (v1_arr = v1.as_a?) && (v2_arr = v2.as_a?)
+            Any.new(v1_arr + v2_arr)
+          elsif v1_arr = v1.as_a?
+            v1_arr << v2
+            Any.new(v1_arr)
+          elsif v2_arr = v2.as_a?
+            v2_arr.unshift(v1)
+            Any.new(v2_arr)
+          elsif (v1_hsh = v1.as_h?) && (v2_hsh = v2.as_h?)
+            Any.new(
+              deep_merge_blocks!(v1_hsh, v2_hsh)
+            )
+          else
+            v2
+          end
+        end
       end
 
       # TODO: Verify these invariants
@@ -390,7 +445,7 @@ module HCL
 
         node.blocks.each do |block|
           block_dict = block.accept(self).as_h
-          dict.merge!(block_dict)
+          deep_merge_blocks!(dict, block_dict)
         end
 
         Any.new(dict)

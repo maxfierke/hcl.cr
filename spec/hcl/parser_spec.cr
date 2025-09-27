@@ -159,6 +159,28 @@ describe HCL::Parser do
       })
     end
 
+    it "can parse multi-byte unicode" do
+      hcl_string = <<-HCL
+        name = "hot dog generator"
+        description = "Я хотів би хот-дог"
+
+        dependencies = {
+          left-pad = "1.2.0"
+        }
+
+      HCL
+
+      parser = HCL::Parser.new(hcl_string)
+      doc = parser.parse!
+      doc.evaluate.should eq({
+        "name"         => "hot dog generator",
+        "description"  => "Я хотів би хот-дог",
+        "dependencies" => {
+          "left-pad" => "1.2.0",
+        },
+      })
+    end
+
     it "can parse operators" do
       hcl_string = <<-HCL
         provider "foo" {
@@ -178,6 +200,8 @@ describe HCL::Parser do
           eq = 0 == 0
           neq = 12 != 12
           double_not = !(!false)
+          type_mismatch_number = "${1}" == 1
+          type_mismatch_bool   = "${true}" == true
         }
 
       HCL
@@ -187,22 +211,24 @@ describe HCL::Parser do
       doc.evaluate.should eq({
         "provider" => {
           "foo" => {
-            "foo"        => 0.1_f64 * 0.5_f64,
-            "bar"        => 9_i64,
-            "baz"        => 1_i64,
-            "biz"        => 6_i64,
-            "boingo"     => 3_f64,
-            "flim"       => 9.0_f64 / 4.0_f64,
-            "flam"       => true,
-            "bim"        => true,
-            "bam"        => nil,
-            "gt"         => true,
-            "gte"        => true,
-            "lt"         => true,
-            "lte"        => false,
-            "eq"         => true,
-            "neq"        => false,
-            "double_not" => false,
+            "foo"                  => 0.1_f64 * 0.5_f64,
+            "bar"                  => 9_i64,
+            "baz"                  => 1_i64,
+            "biz"                  => 6_i64,
+            "boingo"               => 3_f64,
+            "flim"                 => 9.0_f64 / 4.0_f64,
+            "flam"                 => true,
+            "bim"                  => true,
+            "bam"                  => nil,
+            "gt"                   => true,
+            "gte"                  => true,
+            "lt"                   => true,
+            "lte"                  => false,
+            "eq"                   => true,
+            "neq"                  => false,
+            "double_not"           => false,
+            "type_mismatch_number" => true,
+            "type_mismatch_bool"   => true,
           },
         },
       })
@@ -398,6 +424,29 @@ describe HCL::Parser do
                     "foo" => "bar",
                   },
                 },
+              },
+            },
+          },
+        },
+      })
+    end
+
+    it "can parse blocks with labels that would otherwise be coerced to non-strings" do
+      hcl_string = <<-HEREDOC
+        some_block "null" "true" "false" {
+          hello = "woo"
+        }
+
+      HEREDOC
+
+      parser = HCL::Parser.new(hcl_string)
+      doc = parser.parse!
+      doc.evaluate.should eq({
+        "some_block" => {
+          "null" => {
+            "true" => {
+              "false" => {
+                "hello" => "woo",
               },
             },
           },

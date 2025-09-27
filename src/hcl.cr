@@ -1,3 +1,5 @@
+require "big"
+require "option_parser"
 require "pegmatite"
 require "json"
 
@@ -28,5 +30,9 @@ module HCL
         yield builder
       end
     end
+  end
+
+  def self.parse(io)
+    HCL::Parser.parse!(io)
   end
 end

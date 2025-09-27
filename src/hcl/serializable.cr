@@ -99,7 +99,7 @@ module HCL
   # house = contact.house["primary"]
   # house.address  # => "Crystal Road 1234"
   # house.location # => #<Location:0x10cd93d80 @latitude=12.3, @longitude=34.5>
-  # house.to_hcl  # => "
+  # house.to_hcl   # => "
   # #  address = \"Crystal Road 1234\"
   # #
   # #  location {
@@ -292,6 +292,14 @@ module HCL
           {% for name, value in attributes %}
             when {{value[:key]}}
               %found{name} = true
+
+              {% if value[:type] <= ::HCL::AST::Node %}
+              if attr_node.is_a?({{value[:type]}})
+                %var{name} = attr_node
+                next
+              end
+              {% end %}
+
               node_val = attr_node.evaluate(__ctx_from_hcl).raw
               %var{name} = begin
                 case node_val
@@ -324,9 +332,13 @@ module HCL
                     )
                   {% end %}
                 else
-                  raise ::HCL::ParseException.new(
+                  {% if value[:type] == HCL::Any %}
+                    ::HCL::Any.new(node_val)
+                  {% else %}
+                    raise ::HCL::ParseException.new(
                       "HCL deserialized #{node_val.class} but it was not expected. Expected {{value[:type]}}."
                     )
+                  {% end %}
                 end
               end.as({{value[:type]}})
           {% end %}
@@ -654,7 +666,7 @@ module HCL
     # `Hash(String, HCL::AST::Node)`.
     #
     # For classes/structs representing blocks, any unmapped labels will be stored
-    # in a `Hash(Int32, HCL::AST::Node)`, where the key is the label index.
+    # in a `Hash(Int32, HCL::AST::BlockLabel)`, where the key is the label index.
     #
     # On serialization, any keys inside `hcl_unmapped_attributes`,
     # `hcl_unmapped_blocks`, and `hcl_unmapped_labels` will be serialized and
@@ -669,12 +681,12 @@ module HCL
 
       # Unmapped block node groups. Key is the ID/type of the block. Value is the
       # AST node.
-      property hcl_unmapped_blocks : Hash(String, ::HCL::AST::Block) = Hash(String, Array(::HCL::AST::Block)).new
+      property hcl_unmapped_blocks : Hash(String, Array(::HCL::AST::Block)) = Hash(String, Array(::HCL::AST::Block)).new
 
       # Unmapped label nodes. Key is the index of the label. Value is the AST
       # node. This will only be populated for classes/structs represented as
       # blocks in another class/struct implementing `HCL::Serializable`.
-      property hcl_unmapped_labels : Hash(Int32, ::HCL::AST::Node) = Hash(Int32, ::HCL::AST::Node).new
+      property hcl_unmapped_labels : Hash(Int32, ::HCL::AST::BlockLabel) = Hash(Int32, ::HCL::AST::BlockLabel).new
 
       protected def on_unknown_hcl_attribute(node, key, ctx)
         hcl_unmapped_attributes[key] = node.attributes[key]

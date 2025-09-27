@@ -38,12 +38,12 @@ module HCL
       @document ||= begin
         peg_tokens = Pegmatite.tokenize(
           HCL::Grammar,
-          @source,
+          source,
           @source_offset,
           @parse_trace_io
         )
         peg_iter = Pegmatite::TokenIterator.new(peg_tokens)
-        build_document(peg_iter, @source)
+        build_document(peg_iter, source)
       rescue e : Pegmatite::Pattern::MatchError
         raise ParseException.new(e.message, source: source, offset: e.offset, path: source_path)
       end
@@ -112,11 +112,11 @@ module HCL
         when :heredoc                then build_heredoc(main, iter, source)
         when :identifier             then build_identifier(main, iter, source)
         when :index                  then build_index(main, iter, source)
-        when :literal                then AST::Literal.new(token: main, source: source[start...finish])
-        when :number                 then AST::Number.new(token: main, source: source[start...finish])
+        when :literal                then AST::Literal.new(token: main, source: token_source(main))
+        when :number                 then AST::Number.new(token: main, source: token_source(main))
         when :object                 then build_map(main, iter, source)
         when :operation              then build_operation(main, iter, source)
-        when :splat                  then AST::SplatExpr.new(token: main, source: source[start...finish])
+        when :splat                  then AST::SplatExpr.new(token: main, source: token_source(main))
         when :string                 then build_string(main, iter, source)
         when :template               then build_template(main, iter, source)
         when :template_for           then build_template_for_expr(main, iter, source)
@@ -133,8 +133,6 @@ module HCL
     end
 
     private def build_conditional(main, iter, source) : AST::CondExpr
-      _, start, finish = main
-
       predicate = iter.next_as_child_of(main)
       predicate_node = build_expression(predicate, iter, source)
 
@@ -149,13 +147,11 @@ module HCL
         true_expr_node,
         false_expr_node,
         token: main,
-        source: source[start...finish],
+        source: token_source(main),
       )
     end
 
     private def build_expression(main, iter, source) : AST::Expression
-      _, start, finish = main
-
       exp_terms = [] of AST::Node
 
       iter.while_next_is_child_of(main) do |child|
@@ -169,7 +165,7 @@ module HCL
       AST::Expression.new(
         exp_terms,
         token: main,
-        source: source[start...finish],
+        source: token_source(main),
       )
     end
 
@@ -224,7 +220,7 @@ module HCL
         key_expr: key_expr_node,
         cond_expr: cond_expr_node,
         token: main,
-        source: source[start...finish],
+        source: token_source(main),
       )
     end
 
@@ -239,7 +235,7 @@ module HCL
       AST::GetAttrExpr.new(
         identifier_node,
         token: main,
-        source: source[start...finish],
+        source: token_source(main),
       )
     end
 
@@ -262,18 +258,15 @@ module HCL
         start_ident,
         content,
         token: main,
-        source: source[start...finish],
+        source: token_source(main),
       )
     end
 
     private def build_identifier(main, iter, source) : AST::Identifier
-      kind, start, finish = main
-      AST::Identifier.new(token: main, source: source[start...finish])
+      AST::Identifier.new(token: main, source: token_source(main))
     end
 
     private def build_index(main, iter, source) : AST::IndexExpr
-      _, start, finish = main
-
       next_token = iter.next_as_child_of(main)
       assert_token_kind!(next_token, :expression)
 
@@ -282,13 +275,11 @@ module HCL
       AST::IndexExpr.new(
         expr_node,
         token: main,
-        source: source[start...finish],
+        source: token_source(main),
       )
     end
 
     private def build_operation(main, iter, source) : AST::OpExpr
-      _, start, finish = main
-
       next_token = iter.peek_as_child_of(main)
 
       unless next_token
@@ -302,35 +293,30 @@ module HCL
         left_operand = iter.next_as_child_of(main)
         left_operand_node = build_node(left_operand, iter, source)
         right_operand_node = nil
-      elsif kind == :identifier || kind == :number || kind == :literal
+      elsif kind == :identifier || kind == :number || kind == :literal || kind == :template
         left_operand = iter.next_as_child_of(main)
         left_operand_node = build_node(left_operand, iter, source)
         operator = iter.next_as_child_of(main)
         right_operand = iter.next_as_child_of(main)
         right_operand_node = build_node(right_operand, iter, source)
       else
-        raise "BUG: Expected operator, number, or literal, but got #{kind}"
+        raise "BUG: Expected operator, number, literal, or template, but got #{kind}"
       end
 
-      _, op_start, op_finish = operator
-
       AST::OpExpr.new(
-        source[op_start...op_finish],
+        token_source(operator),
         left_operand_node,
         right_operand_node,
         token: main,
-        source: source[start...finish],
+        source: token_source(main),
       )
     end
 
     private def build_string(main, iter, source) : AST::Literal
-      kind, start, finish = main
-      AST::Literal.new(token: main, source: source[start...finish])
+      AST::Literal.new(token: main, source: token_source(main), literal_type: AST::LiteralType::String)
     end
 
     private def build_template(main, iter, source) : AST::Template
-      _, start, finish = main
-
       template_nodes = [] of AST::Node
 
       iter.while_next_is_child_of(main) do |child|
@@ -344,13 +330,11 @@ module HCL
       AST::Template.new(
         template_nodes,
         token: main,
-        source: source[start...finish]
+        source: token_source(main)
       )
     end
 
     private def build_template_for_expr(main, iter, source) : AST::TemplateForExpr
-      _, start, finish = main
-
       key_name_token = iter.next_as_child_of(main)
       assert_token_kind!(key_name_token, :identifier)
       key_name_node = build_identifier(key_name_token, iter, source)
@@ -378,13 +362,11 @@ module HCL
         tpl_expr_node,
         key_name: key_name_node,
         token: main,
-        source: source[start...finish],
+        source: token_source(main),
       )
     end
 
     private def build_template_if(main, iter, source) : AST::TemplateIf
-      _, start, finish = main
-
       predicate = iter.next_as_child_of(main)
       assert_token_kind!(predicate, :expression)
       predicate_node = build_expression(predicate, iter, source)
@@ -405,13 +387,11 @@ module HCL
         true_tpl_node,
         false_tpl_node,
         token: main,
-        source: source[start...finish],
+        source: token_source(main),
       )
     end
 
     private def build_template_interpolation(main, iter, source) : AST::TemplateInterpolation
-      _, start, finish = main
-
       next_token = iter.next_as_child_of(main)
       assert_token_kind!(next_token, :expression)
 
@@ -420,13 +400,12 @@ module HCL
       AST::TemplateInterpolation.new(
         expr_node,
         token: main,
-        source: source[start...finish]
+        source: token_source(main)
       )
     end
 
     private def build_list(main, iter, source) : AST::List
-      _, start, finish = main
-      list = AST::List.new(token: main, source: source[start...finish])
+      list = AST::List.new(token: main, source: token_source(main))
 
       # Gather children as values into the list.
       iter.while_next_is_child_of(main) do |child|
@@ -441,7 +420,7 @@ module HCL
 
       _, start, finish = main
 
-      source[start...finish]
+      token_source(main)
     end
 
     private def build_map(main, iter, source) : AST::Map
@@ -464,12 +443,11 @@ module HCL
       AST::Map.new(
         values,
         token: main,
-        source: source[start...finish],
+        source: token_source(main),
       )
     end
 
     private def build_block(main, iter, source) : AST::Block
-      _, start, finish = main
       block_attributes = {} of String => AST::Node
       block_labels = [] of AST::BlockLabel
       blocks = [] of AST::Block
@@ -508,6 +486,12 @@ module HCL
             elsif kind == :string
               label_node = build_string(token, iter, source)
               block_labels << label_node
+            else
+              raise ParseException.new(
+                "BUG: Found '#{kind}' but only string literals or identifiers are supported as block labels.",
+                source: source,
+                token: token
+              )
             end
           end
         else
@@ -526,12 +510,11 @@ module HCL
         block_attributes,
         blocks,
         token: main,
-        source: source[start...finish],
+        source: token_source(main),
       )
     end
 
     private def build_call(main, iter, source) : AST::CallExpr
-      _, start, finish = main
       args = [] of AST::Node
 
       function_id = extract_identifier(iter.next_as_child_of(main), iter, source)
@@ -562,8 +545,17 @@ module HCL
         args,
         varadic,
         token: main,
-        source: source[start...finish],
+        source: token_source(main),
       )
+    end
+
+    private def token_source(token)
+      kind, byte_start, byte_finish = token
+
+      start = source.byte_index_to_char_index(byte_start)
+      finish = source.byte_index_to_char_index(byte_finish)
+
+      source[start...finish]
     end
   end
 end

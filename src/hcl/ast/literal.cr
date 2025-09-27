@@ -5,20 +5,29 @@ module HCL
       TRUE_STR  = "true"
       FALSE_STR = "false"
 
+      @literal_type : LiteralType
+
+      private getter :literal_type
+
+      def initialize(source : String = "", token : Pegmatite::Token? = nil, literal_type : LiteralType? = nil)
+        super(source, token)
+        @literal_type = literal_type || LiteralType::Unknown
+      end
+
       def true?
-        source == TRUE_STR
+        !literal_type.string? && source == TRUE_STR
       end
 
       def false?
-        source == FALSE_STR
+        !literal_type.string? && source == FALSE_STR
       end
 
       def null?
-        source == NULL_STR
+        !literal_type.string? && source == NULL_STR
       end
 
       def string?
-        ![NULL_STR, TRUE_STR, FALSE_STR].includes?(source)
+        literal_type.string? || (literal_type.unknown? && ![NULL_STR, TRUE_STR, FALSE_STR].includes?(source))
       end
 
       def value

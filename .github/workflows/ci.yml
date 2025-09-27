@@ -13,7 +13,21 @@ jobs:
         crystal: 1.17
     - name: Install dependencies
       run: shards install
-    - name: Run tests
-      run: make spec
     - name: Validate formatting
       run: crystal tool format --check
+    - name: Run tests
+      run: make spec
+    - name: Install specsuite dependencies
+      uses: actions/setup-go@v3
+      with:
+        go-version: '^1.19.4'
+    - name: Download specsuite tests
+      uses: actions/checkout@v3
+      with:
+        repository: hashicorp/hcl
+        ref: v2.15.0
+        path: go-hcl
+    - name: Run specsuite
+      env:
+        SPECSUITE_TESTS: go-hcl/specsuite/tests
+      run: make specsuite
