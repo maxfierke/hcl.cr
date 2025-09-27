@@ -669,7 +669,7 @@ module HCL
 
       # Unmapped block node groups. Key is the ID/type of the block. Value is the
       # AST node.
-      property hcl_unmapped_blocks : Hash(String, ::HCL::AST::Block) = Hash(String, Array(::HCL::AST::Block)).new
+      property hcl_unmapped_blocks : Hash(String, Array(::HCL::AST::Block)) = Hash(String, Array(::HCL::AST::Block)).new
 
       # Unmapped label nodes. Key is the index of the label. Value is the AST
       # node. This will only be populated for classes/structs represented as
