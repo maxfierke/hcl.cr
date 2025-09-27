@@ -581,7 +581,7 @@ blocks in the HCL document will be stored in respective
 <p>For classes/structs representing blocks, any unmapped labels will be stored
 in a <code><a href="../../Hash.html">Hash</a>(Int32, <a href="../../HCL/AST/Node.html">HCL::AST::Node</a>)</code>, where the key is the label index.</p>
 <p>On serialization, any keys inside <code><a href="../../HCL/Serializable/Unmapped.html#hcl_unmapped_attributes%3AHash%28String%2CHCL%3A%3AAST%3A%3ANode%29-instance-method">#hcl_unmapped_attributes</a></code>,
-<code><a href="../../HCL/Serializable/Unmapped.html#hcl_unmapped_blocks%3AHash%28String%2CHCL%3A%3AAST%3A%3ABlock%29-instance-method">#hcl_unmapped_blocks</a></code>, and <code><a href="../../HCL/Serializable/Unmapped.html#hcl_unmapped_labels%3AHash%28Int32%2CHCL%3A%3AAST%3A%3ANode%29-instance-method">#hcl_unmapped_labels</a></code> will be serialized and
+<code><a href="../../HCL/Serializable/Unmapped.html#hcl_unmapped_blocks%3AHash%28String%2CArray%28HCL%3A%3AAST%3A%3ABlock%29%29-instance-method">#hcl_unmapped_blocks</a></code>, and <code><a href="../../HCL/Serializable/Unmapped.html#hcl_unmapped_labels%3AHash%28Int32%2CHCL%3A%3AAST%3A%3ANode%29-instance-method">#hcl_unmapped_labels</a></code> will be serialized and
 appended to the current HCL block or document.</p>
 <p>The deserialized values are AST nodes in order to allow for later evaluation,
 perhaps with a different expression context than the original document.</p>
@@ -611,7 +611,7 @@ perhaps with a different expression context than the original document.</p>
   </h2>
   
     
-      <a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L665" target="_blank">
+      <a href="https://github.com/maxfierke/hcl.cr/blob/e0fa574814b0705a26db4062354a38646189129a/src/hcl/serializable.cr#L665" target="_blank">
         hcl/serializable.cr
       </a>
     
@@ -654,14 +654,14 @@ perhaps with a different expression context than the original document.</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#hcl_unmapped_blocks%3AHash%28String%2CHCL%3A%3AAST%3A%3ABlock%29-instance-method" class="signature"><strong>#hcl_unmapped_blocks</strong> : Hash(String, HCL::AST::Block)</a>
+        <a href="#hcl_unmapped_blocks%3AHash%28String%2CArray%28HCL%3A%3AAST%3A%3ABlock%29%29-instance-method" class="signature"><strong>#hcl_unmapped_blocks</strong> : Hash(String, Array(HCL::AST::Block))</a>
         
           <div class="summary"><p>Unmapped block node groups.</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#hcl_unmapped_blocks%3D%28hcl_unmapped_blocks%3AHash%28String%2CHCL%3A%3AAST%3A%3ABlock%29%29-instance-method" class="signature"><strong>#hcl_unmapped_blocks=</strong>(hcl_unmapped_blocks : Hash(String, HCL::AST::Block))</a>
+        <a href="#hcl_unmapped_blocks%3D%28hcl_unmapped_blocks%3AHash%28String%2CArray%28HCL%3A%3AAST%3A%3ABlock%29%29%29-instance-method" class="signature"><strong>#hcl_unmapped_blocks=</strong>(hcl_unmapped_blocks : Hash(String, Array(HCL::AST::Block)))</a>
         
           <div class="summary"><p>Unmapped block node groups.</p></div>
         
@@ -722,7 +722,7 @@ AST node</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L668" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/e0fa574814b0705a26db4062354a38646189129a/src/hcl/serializable.cr#L668" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -744,17 +744,17 @@ AST node</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L668" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/e0fa574814b0705a26db4062354a38646189129a/src/hcl/serializable.cr#L668" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="hcl_unmapped_blocks:Hash(String,HCL::AST::Block)-instance-method">
+    <div class="entry-detail" id="hcl_unmapped_blocks:Hash(String,Array(HCL::AST::Block))-instance-method">
       <div class="signature">
         
-        def <strong>hcl_unmapped_blocks</strong> : <a href="../../Hash.html">Hash</a>(<a href="../../String.html">String</a>, <a href="../../HCL/AST/Block.html">HCL::AST::Block</a>)
+        def <strong>hcl_unmapped_blocks</strong> : <a href="../../Hash.html">Hash</a>(<a href="../../String.html">String</a>, <a href="../../Array.html">Array</a>(<a href="../../HCL/AST/Block.html">HCL::AST::Block</a>))
 
-        <a class="method-permalink" href="#hcl_unmapped_blocks%3AHash%28String%2CHCL%3A%3AAST%3A%3ABlock%29-instance-method">#</a>
+        <a class="method-permalink" href="#hcl_unmapped_blocks%3AHash%28String%2CArray%28HCL%3A%3AAST%3A%3ABlock%29%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -766,17 +766,17 @@ AST node.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L672" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/e0fa574814b0705a26db4062354a38646189129a/src/hcl/serializable.cr#L672" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="hcl_unmapped_blocks=(hcl_unmapped_blocks:Hash(String,HCL::AST::Block))-instance-method">
+    <div class="entry-detail" id="hcl_unmapped_blocks=(hcl_unmapped_blocks:Hash(String,Array(HCL::AST::Block)))-instance-method">
       <div class="signature">
         
-        def <strong>hcl_unmapped_blocks=</strong>(hcl_unmapped_blocks : <a href="../../Hash.html">Hash</a>(<a href="../../String.html">String</a>, <a href="../../HCL/AST/Block.html">HCL::AST::Block</a>))
+        def <strong>hcl_unmapped_blocks=</strong>(hcl_unmapped_blocks : <a href="../../Hash.html">Hash</a>(<a href="../../String.html">String</a>, <a href="../../Array.html">Array</a>(<a href="../../HCL/AST/Block.html">HCL::AST::Block</a>)))
 
-        <a class="method-permalink" href="#hcl_unmapped_blocks%3D%28hcl_unmapped_blocks%3AHash%28String%2CHCL%3A%3AAST%3A%3ABlock%29%29-instance-method">#</a>
+        <a class="method-permalink" href="#hcl_unmapped_blocks%3D%28hcl_unmapped_blocks%3AHash%28String%2CArray%28HCL%3A%3AAST%3A%3ABlock%29%29%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -788,7 +788,7 @@ AST node.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L672" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/e0fa574814b0705a26db4062354a38646189129a/src/hcl/serializable.cr#L672" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -811,7 +811,7 @@ blocks in another class/struct implementing <code><a href="../../HCL/Serializabl
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L677" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/e0fa574814b0705a26db4062354a38646189129a/src/hcl/serializable.cr#L677" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -834,7 +834,7 @@ blocks in another class/struct implementing <code><a href="../../HCL/Serializabl
       <br/>
       <div>
         
-          [<a href="https://github.com/maxfierke/hcl.cr/blob/1a73d646f05221c05e4ff072f79403155a402ed4/src/hcl/serializable.cr#L677" target="_blank">View source</a>]
+          [<a href="https://github.com/maxfierke/hcl.cr/blob/e0fa574814b0705a26db4062354a38646189129a/src/hcl/serializable.cr#L677" target="_blank">View source</a>]
         
       </div>
     </div>
