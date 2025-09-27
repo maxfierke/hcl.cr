@@ -1,5 +1,6 @@
 require "./hcl"
 
+# :nodoc:
 SRC_TEXT = <<-'HEREDOC'
 document_attr = "i am here at the top"
 
@@ -54,6 +55,8 @@ variable "list_of_things" {
 block {
   cond = "%{ if true ~} hello %{~ endif }"
   for_expr = "%{ for i, v in [true, 1, "hello"] }${i}: ${v}\n%{ endfor }"
+  some_property = [] # i am commenting about it
+  another_prop = true
 }
 
 HEREDOC

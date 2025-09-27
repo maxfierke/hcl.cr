@@ -1,36 +1,29 @@
 module HCL
   # Base error class for HCL parsing exceptions
   class ParseException < Exception
-    getter filename : String
-    getter line_start : Int32
-    getter line_end : Int32
+    getter line_number : Int32
+    getter end_line_number : Int32
     getter start_offset : Int32
     getter end_offset : Int32
+    getter path : Path?
 
-    def initialize(
-      message,
-      source : String? = nil,
-      filename : String? = nil,
-      match_error : Pegmatite::Pattern::MatchError? = nil,
-      token : Pegmatite::Token? = nil
-    )
-      @filename = filename || ""
-
+    # :nodoc:
+    def initialize(message, source : String? = nil, token : Pegmatite::Token? = nil, offset : Int32? = nil, path : String? = nil)
       # Line matching is cribbed from Pegmatite::Pattern::MatchError
       # TODO: Get this added to public API
-      if match_error && source
-        @start_offset = [match_error.offset - 1, 0].max
-        @line_start = (source.rindex("\n", @start_offset) || -1) + 1
-        @line_end = (source.index("\n", match_error.offset) || source.size)
-        @end_offset = match_error.offset
+      if offset && source
+        @start_offset = [offset - 1, 0].max
+        @line_number = (source.rindex("\n", @start_offset) || -1) + 1
+        @end_line_number = (source.index("\n", offset) || source.size)
+        @end_offset = offset
       elsif token && source
-        @line_start = (source.rindex("\n", [token[1] - 1, 0].max) || -1) + 1
-        @line_end = (source.index("\n", token[2]) || source.size)
+        @line_number = (source.rindex("\n", [token[1] - 1, 0].max) || -1) + 1
+        @end_line_number = (source.index("\n", token[2]) || source.size)
         @start_offset = token[1]
         @end_offset = token[2]
       else
-        @line_start = 0_i32
-        @line_end = 0_i32
+        @line_number = 0_i32
+        @end_line_number = 0_i32
         @start_offset = 0_i32
         @end_offset = 0_i32
       end
@@ -38,13 +31,30 @@ module HCL
       start_char_offset = source ? source.byte_index_to_char_index(@start_offset) : nil
       finish_char_offset = source ? source.byte_index_to_char_index(@end_offset) : nil
 
-      if source && start_char_offset && finish_char_offset
-        super(<<-MSG.strip)
-        #{message}. At or near '#{source[start_char_offset...finish_char_offset]}'
-        MSG
-      else
-        super(message)
+      path = Path[path] if path
+
+      message = String.build do |msg|
+        msg << "Unable to parse HCL document"
+        if source && token
+          msg << " at or near '#{start_char_offset...finish_char_offset}'"
+        end
+        msg << ". Encountered "
+        msg << message
+
+        if path && line_number
+          msg << " (#{path.normalize}:#{line_number})"
+        elsif line_number
+          msg << " (line #{line_number})"
+        end
+
+        if source && offset == source.size
+          msg << "\nDid you forget to add a new line at the end?"
+        end
       end
+
+      @path = path
+
+      super(message)
     end
 
     def to_json

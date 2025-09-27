@@ -1,52 +1,61 @@
 module HCL
   class Parser
-    @filename = "???"
-    @source = ""
+    @source : String
     @source_offset = 0
+    @source_path : String?
     @document : AST::Document?
     @parse_trace_io : IO?
 
-    getter :document, :source
+    getter :document, :source, :source_path
 
+    # Parse and return an `HCL::Document` for a given HCL source
+    #
+    # **offset**:  optionally be specified to start parsing at a particular offset
+    # **io**: optionally be specified to tracing the parsing
+    # **path**: specify path for parse exceptions
+    #
+    # Raises `HCL::ParseException` for any parsing errors
     def self.parse!(*args, **kwargs)
       new(*args, **kwargs).parse!
     end
 
-    def initialize(source : IO, offset = 0, io : IO? = nil)
-      @filename = source.filename
-      super(source.gets_to_end, offset, io: io)
-    end
-
-    def initialize(source : String, offset = 0, io : IO? = nil)
-      @source = source
+    # Initialize parser for a given HCL source
+    #
+    # **offset**:  optionally be specified to start parsing at a particular offset
+    # **io**: optionally be specified to tracing the parsing
+    # **path**: specify path for parse exceptions
+    def initialize(source : String | IO, offset = 0, io : IO? = nil, path : String? = nil)
+      @source = source.is_a?(IO) ? source.gets_to_end : source
       @source_offset = offset
+      @source_path = source.responds_to?(:path) ? source.path : path
       @parse_trace_io = io
     end
 
+    # Parse and return an `HCL::Document`
+    #
+    # Raises `HCL::ParseException` for any parsing errors
     def parse!
       @document ||= begin
         peg_tokens = Pegmatite.tokenize(
           HCL::Grammar,
-          @source,
+          source,
           @source_offset,
           @parse_trace_io
         )
         peg_iter = Pegmatite::TokenIterator.new(peg_tokens)
-        build_document(peg_iter, @source)
+        build_document(peg_iter, source)
       rescue e : Pegmatite::Pattern::MatchError
-        raise ParseException.new(e.message, source: source, match_error: e)
+        raise ParseException.new(e.message, source: source, offset: e.offset, path: source_path)
       end
     end
 
     private def assert_token_kind!(token : Pegmatite::Token, expected_kind)
       kind, _, _ = token
-      assert_token_kind!(kind, expected_kind)
-    end
-
-    private def assert_token_kind!(kind : Symbol, expected_kind)
       raise ParseException.new(
         "Expected #{expected_kind}, but got #{kind}.",
-        source: source
+        source: source,
+        path: source_path,
+        token: token,
       ) unless kind == expected_kind
     end
 
@@ -74,6 +83,7 @@ module HCL
           raise ParseException.new(
             "Found '#{kind}' but expected an attribute assignment or block.",
             source: source,
+            path: source_path,
             token: token
           )
         end
@@ -406,21 +416,22 @@ module HCL
     end
 
     private def extract_identifier(main, iter, source)
-      kind, _, _ = main
-      assert_token_kind!(kind, :identifier)
+      assert_token_kind!(main, :identifier)
+
+      _, start, finish = main
 
       token_source(main)
     end
 
     private def build_map(main, iter, source) : AST::Map
-      kind, _, _ = main
-      assert_token_kind!(kind, :object)
+      assert_token_kind!(main, :object)
+
+      _, start, finish = main
 
       values = {} of String => AST::Node
 
       iter.while_next_is_child_of(main) do |token|
-        kind, _, _ = token
-        assert_token_kind!(kind, :attribute)
+        assert_token_kind!(token, :attribute)
 
         # Gather children as pairs of key/values into the object.
         key = build_node(iter.next_as_child_of(token), iter, source).to_s
@@ -465,6 +476,7 @@ module HCL
             raise ParseException.new(
               "Found '#{kind}' but expected an attribute assignment or block.",
               source: source,
+              path: source_path,
               token: token
             )
           else
@@ -486,6 +498,7 @@ module HCL
           raise ParseException.new(
             "'#{kind}' is not supported within blocks.",
             source: source,
+            path: source_path,
             token: token
           )
         end
@@ -520,6 +533,7 @@ module HCL
           raise ParseException.new(
             "Cannot specify additional arguments after a varadic argument (...)",
             source: source,
+            path: source_path,
             token: child
           ) if varadic
           args << build_node(child, iter, source)

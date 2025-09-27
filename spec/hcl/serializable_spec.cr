@@ -56,6 +56,9 @@ class TestDocument(TB, TBL)
   @[HCL::Block(key: "b_block")]
   property b_blocks : Array(TBL)
 
+  @[HCL::Block(key: "c_block")]
+  property c_blocks : Hash(String, TBL)
+
   @[HCL::Block]
   property empty_block : TestEmptyBlock
 end
@@ -149,6 +152,14 @@ describe "HCL::Serializable" do
     title = "The Second B Block"
   }
 
+  c_block "one" {
+    title = "The First C Block"
+  }
+
+  c_block "two" {
+    title = "The Second C Block"
+  }
+
   empty_block {}
 
   HCL
@@ -167,6 +178,12 @@ describe "HCL::Serializable" do
     parsed.b_blocks[1].title.should eq("The Second B Block")
     parsed.b_blocks[1].which.should eq("two")
     parsed.b_blocks[1].part.should eq("point-one")
+    parsed.c_blocks["one"].which.should eq("one")
+    parsed.c_blocks["one"].title.should eq("The First C Block")
+    parsed.c_blocks["one"].part.should be_nil
+    parsed.c_blocks["two"].which.should eq("two")
+    parsed.c_blocks["two"].part.should be_nil
+    parsed.c_blocks["two"].title.should eq("The Second C Block")
     parsed.empty_block.should be_a(TestEmptyBlock)
   end
 
@@ -295,6 +312,27 @@ describe "HCL::Serializable" do
       "Missing HCL label at index 0 for block 'some_block'"
     ) do
       TestBlockLabels.new(block_node, ctx)
+    end
+  end
+
+  it "raises an error on extra labels when a block is mapped to Hash" do
+    src_hcl = <<-HCL
+    #{valid_src_hcl}
+
+    c_block "one" "two" {
+      title = "I am a Block"
+    }
+
+    HCL
+
+    doc = HCL::Parser.parse!(src_hcl)
+    ctx = HCL::ExpressionContext.default_context
+
+    expect_raises(
+      HCL::ParseException,
+      "Expected 'c_block' block to have one label."
+    ) do
+      LaxTestDocument.new(doc, ctx)
     end
   end
 
@@ -437,6 +475,14 @@ describe "HCL::Serializable" do
         title = "The Second B Block"
       }
 
+      c_block "one" {
+        title = "The First C Block"
+      }
+
+      c_block "two" {
+        title = "The Second C Block"
+      }
+
       empty_block {}
 
       HCL
@@ -514,6 +560,14 @@ describe "HCL::Serializable" do
 
       b_block "one" "point-one" "undefined" {
         title = "I am a Block"
+      }
+
+      c_block "one" {
+        title = "The First C Block"
+      }
+
+      c_block "two" {
+        title = "The Second C Block"
       }
 
       empty_block {}

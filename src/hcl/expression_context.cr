@@ -36,6 +36,8 @@ module HCL
     property mode : Mode = Mode::FULL
     getter :parent, :functions, :mode, :variables
 
+    # The default HCL expression context with all built-in default functions
+    # registered
     def self.default_context
       ctx = new(nil)
 
@@ -47,11 +49,16 @@ module HCL
       ctx
     end
 
+    # Construct an empty expression context, optionally with a given parent
     def initialize(parent : ExpressionContext? = nil, mode : Mode? = Mode::FULL)
       @parent = parent
       @mode = (parent ? parent.mode : nil) || mode
     end
 
+    # Call a function defined within the current context or a parent context.
+    #
+    # Raises `HCL::FunctionUndefinedError` if function is not defined.
+    # Raises `HCL::ArityMismatchError` if function arity is not satisfied.
     def call_func(name, args)
       current_ctx = self
       func = nil
@@ -84,6 +91,10 @@ module HCL
       mode == Mode::LITERAL
     end
 
+    # Look up a variable starting with the current context, traversing parents
+    # until a match is found.
+    #
+    # Raises `HCL::VariableUndefinedError` if variable is not defined.
     def lookup_var(name)
       current_ctx = self
       var = nil

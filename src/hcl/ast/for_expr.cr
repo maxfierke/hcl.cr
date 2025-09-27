@@ -22,7 +22,7 @@ module HCL
         key_name : Identifier? = nil,
         key_expr : Expression? = nil,
         cond_expr : Expression? = nil,
-        **kwargs
+        **kwargs,
       )
         super(**kwargs)
         @for_type = for_type

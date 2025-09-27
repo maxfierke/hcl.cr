@@ -7,7 +7,7 @@ module HCL
         predicate : Expression,
         true_tpl : Template,
         false_tpl : Template? = nil,
-        **kwargs
+        **kwargs,
       )
         super(**kwargs)
         @predicate = predicate

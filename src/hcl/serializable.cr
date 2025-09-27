@@ -42,6 +42,9 @@ module HCL
   # class House
   #   include HCL::Serializable
   #
+  #   @[HCL::Label]
+  #   property type : String
+  #
   #   @[HCL::Attribute]
   #   property address : String
   #
@@ -49,25 +52,61 @@ module HCL
   #   property location : Location?
   # end
   #
-  # hcl_house = <<-HCL
-  #   address = "Crystal Road 1234"
-  #   location {
-  #     lat = 12.3
-  #     lng = 34.5
+  # class EmailAddress
+  #   include HCL::Serializable
+  #
+  #   @[HCL::Label]
+  #   property type : String
+  #
+  #   @[HCL::Attribute]
+  #   property email : String
+  # end
+  #
+  # class Contact
+  #   include HCL::Serializable
+  #
+  #   @[HCL::Attribute]
+  #   property name : String
+  #
+  #   @[HCL::Block(key: "email_address")]
+  #   property email_addresses : Array(EmailAddress)
+  #
+  #   @[HCL::Block(key: "house")]
+  #   property homes : Hash(String, House)
+  # end
+  #
+  # hcl_contact = <<-HCL
+  #   name = "Kelly Exampleton"
+  #
+  #   email_address "personal" {
+  #     email = "kelly@example.com"
+  #   }
+  #
+  #   email_address "bizness" {
+  #     email = "kexampleton@example.biz"
+  #   }
+  #
+  #   house "primary" {
+  #     address = "Crystal Road 1234"
+  #     location {
+  #       lat = 12.3
+  #       lng = 34.5
+  #     }
   #   }
   #
   # HCL
-  # house = House.from_hcl(hcl_house)
+  # contact = Contact.from_hcl(hcl_contact)
+  # house = contact.house["primary"]
   # house.address  # => "Crystal Road 1234"
   # house.location # => #<Location:0x10cd93d80 @latitude=12.3, @longitude=34.5>
-  # house.to_hcl  # => "
-  #   address = \"Crystal Road 1234\"
-  #
-  #   location {
-  #     lat = 12.3
-  #     lng = 34.5
-  #   }
-  # "
+  # house.to_hcl   # => "
+  # #  address = \"Crystal Road 1234\"
+  # #
+  # #  location {
+  # #    lat = 12.3
+  # #    lng = 34.5
+  # #  }
+  # # "
   # ```
   #
   # ### Usage
@@ -171,6 +210,7 @@ module HCL
       # Define a `new` directly in the included type,
       # so it overloads well with other possible initializes
 
+      # :nodoc:
       def self.new(node : ::HCL::AST::Body, ctx : ::HCL::ExpressionContext)
         new_from_hcl_ast_node(node, ctx)
       end
@@ -186,12 +226,14 @@ module HCL
       # so it can compete with other possible intializes
 
       macro inherited
+        # :nodoc:
         def self.new(node : ::HCL::AST::Body, ctx : ::HCL::ExpressionContext)
           new_from_hcl_ast_node(node, ctx)
         end
       end
     end
 
+    # :nodoc:
     def initialize(*, __node_from_hcl : ::HCL::AST::Body, __ctx_from_hcl : ::HCL::ExpressionContext)
       {% begin %}
         # Collect instance variable configuration
@@ -343,7 +385,7 @@ module HCL
           case block_node.id
           {% for name, value in blocks %}
             when {{value[:key]}}
-            {% unless value[:type] < Array %}
+            {% unless value[:type] < Array || value[:type] < Hash %}
               if %found{name}
                 raise ::HCL::ParseException.new(
                   "Only one '{{value[:key].id}}' block is allowed. Another was defined earlier."
@@ -357,6 +399,22 @@ module HCL
               %var{name} ||= {{value[:type]}}.new
               {% item_type = value[:type].type_vars.first %}
               %var{name} << {{item_type}}.new(block_node, __ctx_from_hcl)
+            {% elsif value[:type] <= Hash && !value[:type].type_vars.empty? %}
+              {% if value[:type].type_vars.first <= String %}
+                {% item_type = value[:type].type_vars[1] %}
+                if block_node.labels.size != 1
+                  raise ::HCL::ParseException.new(
+                    "Expected '{{value[:key].id}}' block to have one label."
+                  )
+                end
+                %var{name} ||= {{value[:type]}}.new
+                %key{name} = block_node.labels.first.evaluate(__ctx_from_hcl).raw.as(String)
+                %var{name}[%key{name}] = {{item_type}}.new(block_node, __ctx_from_hcl)
+              {% else %}
+                raise ::HCL::ParseException.new(
+                  "Expected '{{value[:key].id}}' block to be a Hash(String, {{value[:type].type_vars[1].id}})."
+                )
+              {% end %}
             {% else %}
               {% for t in value[:type].union_types %}
               {% unless t == Nil %}
@@ -364,7 +422,7 @@ module HCL
                 %var{name} = {{t}}.new(block_node, __ctx_from_hcl) rescue nil
               end
               {% end %}
-            {% end %}
+              {% end %}
             {% end %}
           {% end %}
           else
@@ -514,6 +572,12 @@ module HCL
                 block.to_hcl(block_builder)
               end
             end
+          elsif %var{name}.is_a?(Hash)
+            %var{name}.each do |key, block|
+              builder.block({{value[:key]}}) do |block_builder|
+                block.to_hcl(block_builder)
+              end
+            end
           elsif !%var{name}.nil?
             builder.block({{value[:key]}}) do |block_builder|
               %var{name}.to_hcl(block_builder)
@@ -540,7 +604,7 @@ module HCL
       builder
     end
 
-    # Returns HCL serialization as a String
+    # Returns HCL serialization as a `String`
     def to_hcl
       String.build do |builder|
         to_hcl(builder)
@@ -563,7 +627,7 @@ module HCL
     end
 
     # Modifies behavior of `HCL::Serializable` such that unknown properties in
-    # the HCLdocument will raise a parse exception. By default the unknown properties
+    # the HCL document will raise a parse exception. By default the unknown properties
     # are silently ignored.
     module Strict
       protected def on_unknown_hcl_attribute(node, key, ctx)
@@ -599,26 +663,30 @@ module HCL
 
     # Modifies behavior of `HCL::Serializable` such that unknown attributes and
     # blocks in the HCL document will be stored in respective
-    # `Hash(String, HCL::AST::Node)`. For classes/structs representing blocks,
-    # any unmapped labels will be stored in a `Hash(Int32, HCL::AST::BlockLabel)`, where
-    # the key is the label index. On serialization, any keys inside
-    # `hcl_unmapped_attributes`, `hcl_unmapped_blocks`, and `hcl_unmapped_labels`
-    # will be serialized and appended to the current HCL block or document.
-    # The deserialied values are AST nodes in order to allow for later evaluation,
+    # `Hash(String, HCL::AST::Node)`.
+    #
+    # For classes/structs representing blocks, any unmapped labels will be stored
+    # in a `Hash(Int32, HCL::AST::BlockLabel)`, where the key is the label index.
+    #
+    # On serialization, any keys inside `hcl_unmapped_attributes`,
+    # `hcl_unmapped_blocks`, and `hcl_unmapped_labels` will be serialized and
+    # appended to the current HCL block or document.
+    #
+    # The deserialized values are AST nodes in order to allow for later evaluation,
     # perhaps with a different expression context than the original document.
     module Unmapped
       # Unmapped attribute nodes. Key is the name of the attribute. Value is the
       # AST node
-      property hcl_unmapped_attributes = Hash(String, ::HCL::AST::Node).new
+      property hcl_unmapped_attributes : Hash(String, ::HCL::AST::Node) = Hash(String, ::HCL::AST::Node).new
 
       # Unmapped block node groups. Key is the ID/type of the block. Value is the
       # AST node.
-      property hcl_unmapped_blocks = Hash(String, Array(::HCL::AST::Block)).new
+      property hcl_unmapped_blocks : Hash(String, Array(::HCL::AST::Block)) = Hash(String, Array(::HCL::AST::Block)).new
 
       # Unmapped label nodes. Key is the index of the label. Value is the AST
       # node. This will only be populated for classes/structs represented as
       # blocks in another class/struct implementing `HCL::Serializable`.
-      property hcl_unmapped_labels = Hash(Int32, ::HCL::AST::BlockLabel).new
+      property hcl_unmapped_labels : Hash(Int32, ::HCL::AST::BlockLabel) = Hash(Int32, ::HCL::AST::BlockLabel).new
 
       protected def on_unknown_hcl_attribute(node, key, ctx)
         hcl_unmapped_attributes[key] = node.attributes[key]
@@ -640,7 +708,7 @@ module HCL
             .sort_by { |label_tuple| label_tuple[0] }
             .map { |label_tuple| label_tuple[1] }
             .each do |label|
-              builder_node.labels << label
+              builder_node.labels << label.as(::HCL::AST::BlockLabel)
             end
         end
 

@@ -14,14 +14,16 @@ require "./hcl/visitors/*"
 require "./hcl/*"
 
 module HCL
-  VERSION = "0.2.1"
+  VERSION = "0.2.2"
 
+  # Build a new HCL document using a DSL and output to the given `IO`
   def self.build(io : IO, &block)
     HCL::Builder.build do |builder|
       yield builder
     end.to_s(io)
   end
 
+  # Build a new HCL document using a DSL and return as a `String`
   def self.build(&block)
     String.build do |str|
       build(str) do |builder|

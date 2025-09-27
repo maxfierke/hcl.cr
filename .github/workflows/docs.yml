@@ -8,21 +8,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    container:
-      image: crystallang/crystal
-
+    permissions:
+      contents: write
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v4
+    - uses: crystal-lang/install-crystal@v1
+      with:
+        crystal: 1.17
     - name: Install dependencies
       run: shards install
     - name: Generate docs
       run: crystal docs
     - name: Deploy docs
-      uses: peaceiris/actions-gh-pages@v2.8.0
-      env:
-        ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        PUBLISH_BRANCH: gh-pages
-        PUBLISH_DIR: ./docs
+      uses: peaceiris/actions-gh-pages@v4
+      if: github.ref == 'refs/heads/master'
       with:
-        emptyCommits: false
+        allow_empty_commit: true
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs

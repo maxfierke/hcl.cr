@@ -7,7 +7,7 @@ module HCLDec
     def initialize(
       doc : ::HCL::AST::Document,
       spec : ::HCLDec::RootSpec,
-      ctx : ::HCL::ExpressionContext
+      ctx : ::HCL::ExpressionContext,
     )
       @doc = doc
       @spec = spec

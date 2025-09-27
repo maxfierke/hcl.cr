@@ -8,7 +8,7 @@ module HCL
         id : String,
         args : Array(Node),
         varadic : Bool,
-        **kwargs
+        **kwargs,
       )
         super(**kwargs)
 
