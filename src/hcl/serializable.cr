@@ -99,7 +99,7 @@ module HCL
   # house = contact.house["primary"]
   # house.address  # => "Crystal Road 1234"
   # house.location # => #<Location:0x10cd93d80 @latitude=12.3, @longitude=34.5>
-  # house.to_hcl  # => "
+  # house.to_hcl   # => "
   # #  address = \"Crystal Road 1234\"
   # #
   # #  location {
