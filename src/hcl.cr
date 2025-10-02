@@ -12,7 +12,7 @@ require "./hcl/visitors/*"
 require "./hcl/*"
 
 module HCL
-  VERSION = "0.2.2"
+  VERSION = "0.3.0"
 
   # Build a new HCL document using a DSL and output to the given `IO`
   def self.build(io : IO, &block)

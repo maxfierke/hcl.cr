@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2025-10-01
+
 ### Enhancements
 - Add support for parsing single-label blocks into hashes with `HCL::Serializable` (#16, fixes #13)
 - Correct some docs
@@ -32,7 +34,8 @@ Initial tagged release
 
 - Dropped support for Crystal < 1.0.0
 
-[Unreleased]: https://github.com/maxfierke/hcl.cr/compare/v0.2.2...HEAD
+[Unreleased]: https://github.com/maxfierke/hcl.cr/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/maxfierke/hcl.cr/releases/tag/v0.3.0
 [0.2.2]: https://github.com/maxfierke/hcl.cr/releases/tag/v0.2.2
 [0.2.1]: https://github.com/maxfierke/hcl.cr/releases/tag/v0.2.1
 [0.2.0]: https://github.com/maxfierke/hcl.cr/releases/tag/v0.2.0
